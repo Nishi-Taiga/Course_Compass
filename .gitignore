@@ -1,0 +1,14 @@
+# deps / build
+node_modules/
+dist/
+.wrangler/
+__pycache__/
+*.pyc
+
+# secrets
+.env
+.env.*
+.dev.vars
+
+# large raw downloads (station_database等の再取得可能データ)
+data/raw/

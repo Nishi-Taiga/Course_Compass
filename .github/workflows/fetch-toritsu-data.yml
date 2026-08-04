@@ -1,0 +1,30 @@
+name: fetch-toritsu-data
+
+# 都教委などの一次ソースをランナー経由でダウンロードしてコミットする。
+# （開発環境のプロキシによっては都庁系に直接届かないための迂回路）手動起動のみ。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Fetch sources
+        run: python3 scripts/fetch_sources.py
+      - name: Commit results
+        run: |
+          git config user.name "toritsu-data-bot"
+          git config user.email "actions@github.com"
+          git add data/fetched
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "data: fetch一次ソース (actions runner)"
+            git push
+          fi

@@ -1,0 +1,21 @@
+# 第3弾: 応募倍率の実ファイル（年度×4資料）
+ratio_r4_01 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/01_90
+ratio_r4_02 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/02_86
+ratio_r4_03 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/03_77
+ratio_r4_04 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/04_56
+ratio_r5_01 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/01_teisei_2
+ratio_r5_02 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/03_teisei_2
+ratio_r5_03 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/04_teisei_3
+ratio_r5_04 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/05_teisei_2
+ratio_r6_01 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/1_61
+ratio_r6_02 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/2_54
+ratio_r6_03 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/3_44
+ratio_r6_04 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/4_35
+ratio_r7_01 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/2025-02-13-001
+ratio_r7_02 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/2025-02-13-002
+ratio_r7_03 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/2025-02-13-003
+ratio_r7_04 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/2025-02-13-004
+ratio_r8_01 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/01-v2
+ratio_r8_02 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/03-3-v2
+ratio_r8_03 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/2026-02-13-182440-757
+ratio_r8_04 https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/2026-02-13-182442-923
