@@ -1,0 +1,33 @@
+name: fetch-odpt
+
+# ODPTから通学時間校正用のダイヤデータを取得してコミットする。手動起動のみ。
+# 事前準備: リポジトリの Settings → Secrets and variables → Actions に
+#           ODPT_TOKEN（開発者サイトで発行したアクセストークン）を登録すること。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Fetch ODPT data
+        env:
+          ODPT_TOKEN: ${{ secrets.ODPT_TOKEN }}
+        run: python3 scripts/fetch_odpt.py
+      - name: Commit results
+        run: |
+          git config user.name "toritsu-data-bot"
+          git config user.email "actions@github.com"
+          git add data/odpt
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "data: ODPT校正用ダイヤ取得 (actions runner)"
+            git push
+          fi
