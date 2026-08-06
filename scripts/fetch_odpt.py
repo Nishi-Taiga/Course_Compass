@@ -72,13 +72,19 @@ def main() -> int:
             rows.append((name, f"FAIL {type(e).__name__}"))
         time.sleep(1)
 
-    # 2) 校正対象路線の駅一覧と平日列車時刻表
-    for rw in CAL_RAILWAYS:
+    # 2) 校正対象路線: 列車時刻表はカレンダー指定なしで取得
+    #    （事業者によりCalendar IDが異なり、指定ミスで空が返るため）
+    #    比較用に地下鉄2路線（TrainTimetable提供が確実）も加える
+    probes = CAL_RAILWAYS + [
+        "odpt.Railway:TokyoMetro.Ginza",
+        "odpt.Railway:Toei.Asakusa",
+    ]
+    for rw in probes:
         key = rw.split(":")[1].replace(".", "_")
         for ep, suffix, params in [
             ("odpt:Station", "stations", {"odpt:railway": rw}),
-            ("odpt:TrainTimetable", "timetable",
-             {"odpt:railway": rw, "odpt:calendar": "odpt.Calendar:Weekday"}),
+            ("odpt:TrainTimetable", "timetable", {"odpt:railway": rw}),
+            ("odpt:StationTimetable", "sttimetable", {"odpt:railway": rw}),
         ]:
             try:
                 rows.append((f"{key}_{suffix}", save(f"{key}_{suffix}", fetch(ep, params))))
