@@ -33,9 +33,21 @@ def haversine_km(a, b):
     return 2 * 6371 * math.asin(math.sqrt(h))
 
 
+def load_speed_factors():
+    """急行補正係数（公称所要時間で校正）。無ければ全て1.0。"""
+    import csv
+    path = RAW.parent / "seed" / "line_speed_factors.csv"
+    factors = {}
+    if path.exists():
+        for r in csv.DictReader(open(path)):
+            factors[int(r["line_code"])] = float(r["factor"])
+    return factors
+
+
 def load_graph():
     """(駅,路線)ノードの隣接リストと駅メタを返す。"""
     stations = {s["code"]: s for s in json.load(open(RAW / "station.json"))}
+    factors = load_speed_factors()
     adj = defaultdict(list)  # (st,ln) -> [((st2,ln2), minutes)]
     lines_loaded = 0
     for f in sorted((RAW / "lines").glob("*.json")):
@@ -43,9 +55,10 @@ def load_graph():
         ln = d["code"]
         sl = [s for s in d["station_list"] if not s.get("closed")]
         lines_loaded += 1
+        fac = factors.get(ln, 1.0)
         for a, b in zip(sl, sl[1:]):
             km = haversine_km(a, b)
-            minutes = max(1.0, km / SPEED_KMPM + STOP_MIN)
+            minutes = max(1.0, (km / SPEED_KMPM + STOP_MIN) * fac)
             adj[(a["code"], ln)].append(((b["code"], ln), minutes))
             adj[(b["code"], ln)].append(((a["code"], ln), minutes))
     # 乗換エッジ: 同一駅codeの別路線ノード間
