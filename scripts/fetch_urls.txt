@@ -1,4 +1,5 @@
-# ハッカソン公式サイト（SPA。SSR/埋め込みJSONが取れるか確認）
-odh_issues https://odhackathon.metro.tokyo.lg.jp/issues/
-odh_judging https://odhackathon.metro.tokyo.lg.jp/judging/
-odh_recruitment https://odhackathon.metro.tokyo.lg.jp/recruitment/
+# 都民の声テーマ: 関連分野の個別ページ
+odh_c08_kodomo https://odhackathon.metro.tokyo.lg.jp/issues/c08/clusters/
+odh_c10_digital https://odhackathon.metro.tokyo.lg.jp/issues/c10/clusters/
+odh_c11_kotsu https://odhackathon.metro.tokyo.lg.jp/issues/c11/clusters/
+odh_c06_seikatsu https://odhackathon.metro.tokyo.lg.jp/issues/c06/clusters/
