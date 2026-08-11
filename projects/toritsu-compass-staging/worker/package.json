@@ -1,0 +1,18 @@
+{
+  "name": "toritsu-compass-staging-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "D1 / KV / Workers AI の疎通確認用 Worker（アプリ本体ではない）",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "seed:build": "python scripts/build_seed_sql.py",
+    "db:local": "wrangler d1 execute course-compass-db --local --file=./schema.sql && wrangler d1 execute course-compass-db --local --file=./seed.sql",
+    "db:remote": "wrangler d1 execute course-compass-db --remote -y --file=./schema.sql && wrangler d1 execute course-compass-db --remote -y --file=./seed.sql",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.28.0"
+  }
+}
