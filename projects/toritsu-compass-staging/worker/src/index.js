@@ -8,7 +8,11 @@
  *   GET /health/ai   … Workers AI を1回だけ呼ぶ（クレジット消費のため /health と分離）
  *   GET /api/schools … 学校一覧（ward / designation / q で絞り込み）
  *   GET /api/schools/:school_number … 学校詳細 + 応募倍率
+ *   POST /api/search … 対話から組み立てた条件で候補校を返す（LLMは使わない）
  */
+
+import { searchSchools, buildRelaxation } from "./search.js";
+import { SCALE, GAP, GAP_ROUGH } from "./scoring.js";
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -47,6 +51,12 @@ export default {
       if (path === "/health") return await handleHealth(env);
       if (path === "/health/ai") return await handleHealthAi(env);
       if (path === "/api/schools") return await handleSchoolList(env, url);
+      if (path === "/api/search") {
+        if (request.method !== "POST") {
+          return json({ error: "method_not_allowed", expected: "POST" }, 405);
+        }
+        return await handleSearch(env, request);
+      }
 
       const detail = path.match(/^\/api\/schools\/([^/]+)$/);
       if (detail) return await handleSchoolDetail(env, decodeURIComponent(detail[1]));
@@ -247,7 +257,7 @@ async function handleSchoolList(env, url) {
   const { results } = await env.DB.prepare(
     `SELECT school_number, name, name_kana, ward, address, course_types,
             departments, students_fulltime, designation, designation_rank,
-            level_band_draft
+            target_score, selection_type, score_layer
        FROM schools ${clause}
       ORDER BY school_number
       LIMIT ? OFFSET ?`
@@ -256,6 +266,91 @@ async function handleSchoolList(env, url) {
     .all();
 
   return json({ total, limit, offset, count: results.length, schools: results });
+}
+
+/* ------------------------------------------------------------------ */
+/* POST /api/search                                                    */
+/* ------------------------------------------------------------------ */
+
+async function handleSearch(env, request) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "invalid_json" }, 400);
+  }
+
+  const q = {
+    station: String(body.station ?? "").trim(),
+    commute_limit: Number(body.commute_limit ?? 60),
+    no_commute_limit: Boolean(body.no_commute_limit),
+    naishin: body.naishin == null ? null : Number(body.naishin),
+    sonai: body.sonai == null ? null : Number(body.sonai),
+    toujitsu: body.toujitsu == null ? null : Number(body.toujitsu),
+    esat: body.esat == null ? null : Number(body.esat),
+    wants: {
+      academic: Boolean(body.wants?.academic),
+      dept: body.wants?.dept ?? null,
+      clubs: Array.isArray(body.wants?.clubs) ? body.wants.clubs : [],
+    },
+    relaxations: Array.isArray(body.relaxations) ? body.relaxations : [],
+  };
+
+  if (!q.station) {
+    return json({ error: "station_required", hint: "出発駅を指定してください" }, 400);
+  }
+
+  // 駅名の打ち間違いを「0件」として返すと、緩和しても永遠に見つからない。
+  // 見つからないのが条件のせいなのか駅名のせいなのかを、ここで切り分ける。
+  const known = await env.DB.prepare(
+    "SELECT 1 FROM commute_times WHERE from_station = ? LIMIT 1"
+  ).bind(q.station).first();
+  if (!known) {
+    return json({
+      error: "unknown_station",
+      station: q.station,
+      hint: "その駅は通学時間データにありません。駅名をご確認ください（例: 練馬）",
+    }, 404);
+  }
+  if (!Number.isFinite(q.commute_limit) || q.commute_limit <= 0) q.commute_limit = 60;
+
+  const started = Date.now();
+  const { student, rows, all, mode } = await searchSchools(env.DB, q);
+
+  // 0件なら、何を緩めるかを明示して返す。黙って条件を外さない。
+  if (!rows.length) {
+    return json({
+      query: q,
+      student: {
+        ...student,
+        scale: SCALE.max,
+        thresholds: student.rough ? GAP_ROUGH : GAP,
+      },
+      mode: student.score == null ? "commute_only" : "scored",
+      count: 0,
+      schools: [],
+      relaxation: buildRelaxation(q),
+      ms: Date.now() - started,
+    });
+  }
+
+  return json({
+    query: q,
+    student: {
+      ...student,
+      scale: SCALE.max,
+      thresholds: student.rough ? GAP_ROUGH : GAP,
+    },
+    mode,             // scored = 点数判定あり / commute_only = 成績なし経路
+    count: rows.length,
+    candidates_before_pick: all.length,
+    schools: rows,
+    relaxation: null,
+    disclaimer:
+      "目安点は公開データをもとにした暫定値です。合否を保証するものではありません。"
+      + "最終的な判断は学校の募集要項と、塾・学校の先生にご相談ください。",
+    ms: Date.now() - started,
+  });
 }
 
 async function handleSchoolDetail(env, schoolNumber) {
