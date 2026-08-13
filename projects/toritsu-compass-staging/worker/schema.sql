@@ -23,14 +23,24 @@ CREATE TABLE schools (
   students_fulltime INTEGER,
   designation       TEXT,                 -- 進学指導重点校 等（29校のみ）
   designation_rank  INTEGER,              -- 指定区分のランク（1が最上位）
-  level_band_draft  INTEGER,              -- レベル帯ドラフト（西が8/10に確定予定・暫定値）
+
+  -- 判定モデル（1020点の差分方式）。レベル帯1〜5は廃止した。
+  -- 帯だと境界（内申39と40）で丸ごと1段ずれるうえ、帯ごとの校数を人手で
+  -- 均す必要があった。差分方式なら閾値1箇所の調整で済む。
+  target_score      INTEGER,              -- 合格の目安点（1020点満点）。NULLなら数値判定しない
+  selection_type    TEXT,                 -- std / jiko / keisha / fukasawa / ratio64 / no_exam
+  selection_note    TEXT,                 -- 区分の注意書き。表示するだけで計算式は分岐しない
+  score_layer       TEXT,                 -- 目安点の層ラベル（重点校 等）
+  no_hs_admission   INTEGER DEFAULT 0,    -- 1なら高校からの募集停止（中高一貫5校）
+
   source_master     TEXT,                 -- 出典（審査観点「出典の可視化」用）
-  source_designation TEXT
+  source_designation TEXT,
+  source_target_score TEXT
 );
 
 CREATE INDEX idx_schools_ward        ON schools(ward);
 CREATE INDEX idx_schools_designation ON schools(designation);
-CREATE INDEX idx_schools_band        ON schools(level_band_draft);
+CREATE INDEX idx_schools_target      ON schools(target_score);
 
 -- 応募倍率（R4〜R8 / 1,314行）。毎年更新されるのでマスタと分ける。
 CREATE TABLE school_stats (

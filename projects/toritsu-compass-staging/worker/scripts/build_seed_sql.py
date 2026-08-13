@@ -31,6 +31,10 @@ SOURCE_RATIO = {
     "r8": "東京都教育委員会 令和8年度 応募状況",
 }
 
+# 目安点は現時点では公開データの層別に置いた仮値。
+# 西が2026-08-14に実値を入れる予定で、そのとき出典もあわせて差し替える。
+SOURCE_TARGET_SCORE = "公開データの層別による暫定値（2026-08-14に実値へ差し替え予定）"
+
 # 1文あたりの VALUES 数。commute_times は3万行あるので大きめに束ねる。
 ROWS_PER_INSERT = 100
 ROWS_PER_INSERT_BULK = 250
@@ -99,7 +103,10 @@ def main() -> None:
 
     master = read_csv(seed_dir / "schools_master.csv")
     designations = read_csv(seed_dir / "designations.csv")
-    bands = read_csv(seed_dir / "level_bands_draft.csv")
+
+    # 判定モデル用の値。extract_prototype_data.py が prototype から取り出す。
+    scores_csv = seed_dir / "school_scores.csv"
+    scores = {r["name"].strip(): r for r in read_csv(scores_csv)} if scores_csv.is_file() else {}
 
     # --- name -> school_number（重複名があると名寄せが壊れるので検出する） ---
     name_to_number: dict[str, str] = {}
@@ -115,14 +122,10 @@ def main() -> None:
     # --- 補助データ（指定区分ランク / レベル帯ドラフト / 指定区分の出典） ---
     rank_by_name = {r["school_name"].strip(): r["designation_rank"] for r in designations}
     src_by_name = {r["school_name"].strip(): r.get("source", "") for r in designations}
-    band_by_name = {
-        r["school"].strip(): (r.get("band_final") or r.get("band_draft") or "")
-        for r in bands
-    }
 
-    unknown = sorted((set(rank_by_name) | set(band_by_name)) - set(name_to_number))
+    unknown = sorted((set(rank_by_name) | set(scores)) - set(name_to_number))
     if unknown:
-        sys.exit(f"マスタに存在しない学校名（designations/level_bands 側）: {unknown}")
+        sys.exit(f"マスタに存在しない学校名（designations/school_scores 側）: {unknown}")
 
     out: list[str] = [
         "-- 自動生成ファイル。直接編集しないこと。",
@@ -142,6 +145,7 @@ def main() -> None:
     school_rows = []
     for r in master:
         name = r["name"].strip()
+        sc = scores.get(name, {})
         school_rows.append([
             sql_str(r["school_number"]),
             sql_str(name),
@@ -155,15 +159,22 @@ def main() -> None:
             sql_int(r["students_fulltime"]),
             sql_str(r["designation"]),
             sql_int(rank_by_name.get(name)),
-            sql_int(band_by_name.get(name)),
+            sql_int(sc.get("target_score")),
+            sql_str(sc.get("selection_type")),
+            sql_str(sc.get("selection_note")),
+            sql_str(sc.get("score_layer")),
+            sql_int(sc.get("no_hs_admission") or 0),
             sql_str(SOURCE_MASTER),
             sql_str(src_by_name.get(name)),
+            sql_str(SOURCE_TARGET_SCORE if sc.get("target_score") else None),
         ])
     emit_inserts(out, "schools", [
         "school_number", "name", "name_kana", "ward", "postal_code", "address",
         "phone", "course_types", "departments", "students_fulltime",
-        "designation", "designation_rank", "level_band_draft",
-        "source_master", "source_designation",
+        "designation", "designation_rank",
+        "target_score", "selection_type", "selection_note", "score_layer",
+        "no_hs_admission",
+        "source_master", "source_designation", "source_target_score",
     ], school_rows)
 
     # --- school_stats（倍率 R4〜R8） ---
