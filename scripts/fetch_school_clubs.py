@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 import sys
 import time
 import urllib.error
@@ -35,6 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SITES_CSV = ROOT / "data" / "seed" / "school_sites.csv"
 OUT_DIR = ROOT / "data" / "fetched" / "clubs"
 FAILURES_CSV = OUT_DIR / "_failures.csv"
+RESOLVED_CSV = OUT_DIR / "_resolved.csv"   # iframe等で実際の取得先が変わった学校
 
 BASE = "https://www.metro.ed.jp/"
 
@@ -144,6 +146,23 @@ class Crawler:
         return fetch(url)
 
 
+IFRAME_RE = re.compile(rb"""<iframe\b[^>]*\bsrc=["']([^"']+)["']""", re.I)
+IFRAME_HINTS = ("bukatsu", "club", "katsudou", "katsudo")
+
+
+def find_club_iframe(body: bytes, page_url: str) -> str:
+    """部活一覧を埋め込んでいる iframe のURLを返す。無ければ空文字。
+
+    文字コードが Shift_JIS の学校があるため、デコードせずバイト列のまま探す
+    （src の値はASCIIなので、これで確実に拾える）。
+    """
+    for m in IFRAME_RE.findall(body):
+        src = m.decode("ascii", errors="ignore")
+        if any(k in src.lower() for k in IFRAME_HINTS):
+            return urllib.parse.urljoin(page_url, src)
+    return ""
+
+
 def slug_of(row: dict[str, str]) -> str:
     """保存ファイル名に使う短い識別子。top_url から作る。
 
@@ -180,6 +199,7 @@ def main() -> None:
     crawler = Crawler(args.delay)
 
     failures: list[dict[str, str]] = []
+    resolved: list[dict[str, str]] = []
     fetched = skipped = 0
 
     for t in targets:
@@ -218,9 +238,36 @@ def main() -> None:
             failures.append({"name": name, "url": url, "reason": f"HTTP {status}"})
             continue
 
+        # 部活一覧を iframe で外部に置いている学校がある（広尾・五日市。いずれも
+        # www.pweb.jp）。外側は枠だけで部活名が1つも書かれていないため、
+        # 中身のほうを保存する。どこから取ったかは _resolved.csv に残す。
+        inner = find_club_iframe(body, url)
+        if inner:
+            try:
+                inner_status, inner_body = crawler.get(inner)
+                if inner_status != 200:
+                    raise RuntimeError(f"HTTP {inner_status}")
+            except Exception as e:
+                print(f"  WARN  {name}: iframeを取れませんでした（{e}）。外側を保存します")
+                failures.append({"name": name, "url": inner,
+                                 "reason": f"iframeの取得に失敗: {e}"})
+            else:
+                resolved.append({"name": name, "clubs_url": url, "effective_url": inner,
+                                 "reason": "部活一覧がiframeで埋め込まれていた"})
+                body = inner_body
+                print(f"  IFRAME {name}: {inner}")
+
         dest.write_bytes(body)
         print(f"  OK    {name}: {len(body):,} bytes -> {dest.name}")
         fetched += 1
+
+    # 取得先が clubs_url と違う学校は出典として残す（出典の可視化）
+    if resolved:
+        with RESOLVED_CSV.open("w", encoding="utf-8", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=["name", "clubs_url", "effective_url", "reason"])
+            w.writeheader()
+            w.writerows(resolved)
+        print(f"\n取得先が変わった学校 {len(resolved)}件 -> {RESOLVED_CSV}")
 
     # 失敗校は理由付きで残す（安田の目視検証に回すため）
     if failures:

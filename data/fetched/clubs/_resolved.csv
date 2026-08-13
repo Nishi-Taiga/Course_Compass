@@ -1,0 +1,3 @@
+name,clubs_url,effective_url,reason
+広尾,https://hiroo-h.metro.ed.jp/03gakkou-seikatsu/bukatsu.html,https://www.pweb.jp/hiroo/cgibukatsudou/index.html,部活一覧がiframeで埋め込まれていた
+五日市,https://itsukaichi-h.metro.ed.jp/zen/02gakkou-seikatsu-bukatsudou.html,https://www.pweb.jp/itsukaichi/cgibukatsudou/club-dsp.php?syori=ichiran,部活一覧がiframeで埋め込まれていた
