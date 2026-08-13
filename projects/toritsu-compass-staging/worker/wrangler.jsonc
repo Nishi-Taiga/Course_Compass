@@ -3,6 +3,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "toritsu-compass-staging",
   "main": "src/index.js",
+  "account_id": "f26bb7b8b376e9d6bbe9978b5cb92c62",
   "compatibility_date": "2025-09-01",
   "compatibility_flags": ["nodejs_compat"],
 
@@ -16,7 +17,7 @@
       "binding": "DB",
       "database_name": "course-compass-db",
       // ↓ `npx wrangler d1 create course-compass-db` の出力 database_id を貼る
-      "database_id": "REPLACE_ME_AFTER_CREATE"
+      "database_id": "890e56ec-d73e-47fe-99a7-a4e37580555b"
     }
   ],
 
@@ -24,7 +25,7 @@
     {
       "binding": "SESSIONS",
       // ↓ `npx wrangler kv namespace create SESSIONS` の出力 id を貼る
-      "id": "REPLACE_ME_AFTER_CREATE"
+      "id": "c2a14c7334b24749b1ebf172f3deda60"
     }
   ],
 
