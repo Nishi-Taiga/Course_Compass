@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>疎通確認 — 都立進路コンパス（staging）</title>
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --fg: #1c1f23;
+        --muted: #5d646d;
+        --card: #ffffff;
+        --border: #d9dde2;
+        --ok: #147a3d;
+        --ng: #b3261e;
+        --accent: #1f4fd8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #14171a;
+          --fg: #e8eaed;
+          --muted: #9aa2ab;
+          --card: #1d2126;
+          --border: #333941;
+          --ok: #5cc98a;
+          --ng: #ef8c86;
+          --accent: #7fa4ff;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 2rem 1rem 4rem;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN",
+          "Noto Sans JP", sans-serif;
+        line-height: 1.7;
+      }
+      main { max-width: 46rem; margin: 0 auto; }
+      h1 { font-size: 1.35rem; margin: 0 0 0.25rem; }
+      .sub { color: var(--muted); font-size: 0.9rem; margin: 0 0 2rem; }
+      section {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      h2 { font-size: 1rem; margin: 0 0 0.5rem; }
+      p.desc { color: var(--muted); font-size: 0.875rem; margin: 0 0 1rem; }
+      button {
+        font: inherit;
+        font-weight: 600;
+        color: #fff;
+        background: var(--accent);
+        border: 0;
+        border-radius: 6px;
+        padding: 0.55rem 1.1rem;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.5; cursor: progress; }
+      button.warn { background: #8a5a00; }
+      .verdict { font-weight: 700; margin: 1rem 0 0.5rem; }
+      .verdict.ok { color: var(--ok); }
+      .verdict.ng { color: var(--ng); }
+      pre {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.75rem;
+        overflow-x: auto;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .note {
+        font-size: 0.8rem;
+        color: var(--muted);
+        border-left: 3px solid var(--border);
+        padding-left: 0.75rem;
+        margin-top: 1rem;
+      }
+      code { font-size: 0.85em; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>疎通確認ページ</h1>
+      <p class="sub">
+        都立進路コンパス（staging）— D1 / KV / Workers AI が本番アカウントで動くかを確認するためだけのページ。
+      </p>
+
+      <section>
+        <h2>1. D1 + KV</h2>
+        <p class="desc">
+          D1 に実クエリを投げて件数を数え、KV に書いて読んで消す往復をします。
+          <strong>ok: true かつ schools: 187</strong> なら合格。
+        </p>
+        <button id="btn-health">/health を叩く</button>
+        <div id="verdict-health"></div>
+        <pre id="out-health">未実行</pre>
+      </section>
+
+      <section>
+        <h2>2. Workers AI</h2>
+        <p class="desc">
+          Qwen3 30B に日本語で1回だけ質問します。応答内容は
+          <strong>LLM選定ゲート（8/13）の判断材料</strong>になるので、結果をコピーして残してください。
+        </p>
+        <button id="btn-ai" class="warn">/health/ai を1回だけ叩く</button>
+        <div id="verdict-ai"></div>
+        <pre id="out-ai">未実行</pre>
+        <p class="note">⚠️ クレジットを消費します。連打しないこと。</p>
+      </section>
+
+      <section>
+        <h2>3. データAPI（おまけ）</h2>
+        <p class="desc">D1 から実データが引けることの確認。</p>
+        <button id="btn-list">進学指導重点校を引く</button>
+        <pre id="out-list">未実行</pre>
+      </section>
+
+      <p class="note">
+        件数が合わないときは <code>--local</code> と <code>--remote</code> の取り違えを疑ってください。
+        本番DBへの投入は <code>npm run db:remote</code> です。
+      </p>
+    </main>
+
+    <script>
+      async function call(url, outId, btn, verdictId) {
+        const out = document.getElementById(outId);
+        const verdict = verdictId ? document.getElementById(verdictId) : null;
+        btn.disabled = true;
+        out.textContent = "実行中...";
+        if (verdict) verdict.textContent = "";
+        try {
+          const res = await fetch(url);
+          const body = await res.json();
+          out.textContent = JSON.stringify(body, null, 2);
+          if (verdict) {
+            const ok = body.ok === true;
+            verdict.className = "verdict " + (ok ? "ok" : "ng");
+            verdict.textContent = ok ? "✅ 通りました" : "❌ 通っていません（下の error / hint を読む）";
+          }
+        } catch (err) {
+          out.textContent = "リクエスト失敗: " + err;
+          if (verdict) {
+            verdict.className = "verdict ng";
+            verdict.textContent = "❌ 通っていません";
+          }
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      const bh = document.getElementById("btn-health");
+      bh.onclick = () => call("/health", "out-health", bh, "verdict-health");
+
+      const ba = document.getElementById("btn-ai");
+      ba.onclick = () => {
+        if (!confirm("Workers AI を1回呼びます（クレジットを消費します）。実行しますか？")) return;
+        call("/health/ai", "out-ai", ba, "verdict-ai");
+      };
+
+      const bl = document.getElementById("btn-list");
+      bl.onclick = () =>
+        call("/api/schools?designation=" + encodeURIComponent("進学指導重点校"), "out-list", bl);
+    </script>
+  </body>
+</html>

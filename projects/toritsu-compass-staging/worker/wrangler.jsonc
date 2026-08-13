@@ -1,0 +1,47 @@
+{
+  // 疎通確認用 Worker。Pages ではなく Workers（事務局マニュアルが新規は Workers 推奨）。
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "toritsu-compass-staging",
+  "main": "src/index.js",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // 静的配信。public/ にファイルが無いパスは Worker(src/index.js) が処理する
+  "assets": {
+    "directory": "./public"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "course-compass-db",
+      // ↓ `npx wrangler d1 create course-compass-db` の出力 database_id を貼る
+      "database_id": "REPLACE_ME_AFTER_CREATE"
+    }
+  ],
+
+  "kv_namespaces": [
+    {
+      "binding": "SESSIONS",
+      // ↓ `npx wrangler kv namespace create SESSIONS` の出力 id を貼る
+      "id": "REPLACE_ME_AFTER_CREATE"
+    }
+  ],
+
+  // ⚠️ 招待が来るまでコメントアウト。有効なままだと wrangler が未認証で
+  // リモートプロキシセッションを張ろうとし、`wrangler dev` が
+  // "Failed to start the remote proxy session" で起動しない。
+  // チーム招待を承認したらこの3行を戻すこと（/health/ai のコードは残してある）。
+  // "ai": {
+  //   "binding": "AI"
+  // },
+
+  "vars": {
+    // Workers AI のモデルID。ダッシュボードの Model Catalog と食い違ったらここを直す
+    "AI_MODEL": "@cf/qwen/qwen3-30b-a3b-fp8"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
