@@ -356,12 +356,16 @@ function scrollBottom(){ $chat.scrollTop = $chat.scrollHeight; }
 function userSay(t){ const w=el('div','user'); w.appendChild(el('div','msg')).textContent=t; $chat.appendChild(w); scrollBottom(); }
 function sysSay(t){ $chat.appendChild(el('div','sys')).textContent=t; scrollBottom(); }
 let queue=Promise.resolve();
+/* 吹き出しは <b> だけ効かせたい。textContent だと <b> がそのまま文字として出てしまい、
+   innerHTML だと入力値が混ざったときに危ない。いったん全部エスケープしてから <b> だけ戻す。*/
+function fmtMsg(t){ const d=document.createElement('div'); d.textContent=t;
+  return d.innerHTML.replace(/&lt;(\/?)b&gt;/g,'<$1b>'); }
 function aiSay(t, delay){ queue=queue.then(()=>new Promise(res=>{
   const ty=el('div','typing',`<span class="avatar">${AVATAR}</span><span class="tdots"><i></i><i></i><i></i></span>`);
   $chat.appendChild(ty); scrollBottom();
   setTimeout(()=>{ ty.remove();
     const row=el('div','row-ai',`<span class="avatar">${AVATAR}</span>`);
-    const m=el('div','ai'); m.appendChild(el('div','msg')).textContent=t; row.appendChild(m);
+    const m=el('div','ai'); m.appendChild(el('div','msg')).innerHTML=fmtMsg(t); row.appendChild(m);
     $chat.appendChild(row); scrollBottom(); res(); }, REDUCED?0:(delay??620));
 })); return queue; }
 function aiNode(node){ queue=queue.then(()=>{ $chat.appendChild(node); scrollBottom(); }); return queue; }
@@ -374,7 +378,8 @@ function setStep(n,label){ const sp=document.getElementById('stepper');
 
 // ---------- 状態 ----------
 const S={ state:'S1', station:null, limit:null, noCommuteLimit:false,
-  naishin:null, toujitsu:null, score:null, scoreRough:false, level:null,
+  naishin:null, naishin5:null, naishinJ:null, naishinRough:false,
+  toujitsu:null, score:null, scoreRough:false, level:null,
   wants:{dept:null, academic:false, club:null}, shown:[], compare:new Set() };
 
 /* === 合否の目安（令和8年度実施要綱 第2-10-1） ==========================
@@ -405,7 +410,9 @@ function estimateScore(){
   if(kansan==null) return null;
   return Math.round(touj*SCALE.exam + kansan*SCALE.naishinToScore + SCALE.esatDefault);
 }
-const gapSet=()=> S.scoreRough ? GAP_ROUGH : GAP;
+/* 当日点だけでなく、内申が概算（9教科合計しか分からない）のときも幅を広げる。
+   実技の内訳が分からないと換算内申は最大で7点ほどずれ、1020点満点では30点超に効く。*/
+const gapSet=()=> (S.scoreRough||S.naishinRough) ? GAP_ROUGH : GAP;
 function tierOf(school){
   if(school.st==='no_exam' || school.t==null || S.score==null) return null;
   const g=gapSet(), d=S.score - school.t;
@@ -600,24 +607,66 @@ function handleStation(text){
     setChips(sug.map(s=>({label:s,fn:()=>handleStation(s)}))); }
   else aiSay('すみません、その駅が見つかりませんでした。都内の駅名でもう一度教えてください。');
 }
+/* 内申は「5教科」と「実技4教科」を分けて聞く（2026-08-13 MTG決定）。
+   都立の換算内申 = 5教科×1 + 実技4教科×2 なので、合計45点だけでは復元できない。
+   例) 5教科25・実技8 → 素内申33。×13/9 の概算だと48だが、正しくは 25+16=41。
+       換算内申で7点、1020点満点に直すと約32点ずれる＝判定が1ランク変わる大きさ。
+   9教科の合計しか分からない保護者のために、従来の概算経路も残す（空振りさせない）。*/
+function skipLevel(){
+  S.naishin=null;S.naishin5=null;S.naishinJ=null;S.naishinRough=false;
+  S.toujitsu=null;S.score=null;S.level=null;
+  aiSay('承知しました。成績が分からなくても大丈夫です。通いやすさとご希望を軸にご提案しますね。');
+  askWish();
+}
 function askLevel(){
-  S.state='S3'; setStep(2,'内申点');
-  aiSay('ありがとうございます。次に内申点を教えてください。通知表の9教科を合計した点数（45点満点）で大丈夫です。');
-  aiSay('内申は都立入試の合否に3割ぶん使われます。手元の通知表だけで分かるので、模試を受けていなくても構いません。');
-  setChips([{label:'まだ分からない',fn:()=>{S.naishin=null;S.toujitsu=null;S.score=null;S.level=null;
-    aiSay('承知しました。成績が分からなくても大丈夫です。通いやすさとご希望を軸にご提案しますね。');askWish();}}]);
+  S.state='S3'; setStep(2,'内申点（5教科）');
+  aiSay('ありがとうございます。次に内申点をうかがいます。都立は<b>5教科と実技4教科で重みが違う</b>ので、2回に分けて教えてください。');
+  aiSay('まず<b>国語・数学・英語・理科・社会の5教科</b>の評定を合計した点数を教えてください（<b>25点満点</b>）。通知表の数字を足すだけで大丈夫です。');
+  setChips([
+    {label:'9教科の合計しか分からない',fn:()=>{S.state='S3sum';
+      aiSay('大丈夫です。では<b>9教科すべての合計</b>（45点満点）を教えてください。実技を2倍する都立の計算に、こちらで概算で置き換えます。');
+      setChips([{label:'まだ分からない',fn:skipLevel}]);}},
+    {label:'まだ分からない',fn:skipLevel}]);
 }
 function handleLevel(text){
-  if(/わから|未定|不明|まだ/.test(text)){ S.naishin=null;S.toujitsu=null;S.score=null;S.level=null;
-    aiSay('承知しました。成績が分からなくても大丈夫です。通いやすさとご希望を軸にご提案しますね。');
-    askWish(); return; }
+  if(/わから|未定|不明|まだ/.test(text)){ skipLevel(); return; }
   const num=text.match(/(\d{1,2})/); if(!num){
-    aiSay('9教科の合計を数字で教えてください。たとえば「32」のように。「まだ分からない」でも大丈夫です。'); return; }
-  let v=+num[1];
-  if(v>45 && v<=65){ S.naishin=v; aiSay(`換算内申${v}ですね。`); }
-  else if(v<=45){ S.naishin=Math.round(v*SCALE.sonaiToKansan);
-    aiSay(`素内申${v}ですね（実技4教科を2倍する都立の計算で、換算内申はおよそ${S.naishin}です）。`); }
-  else { aiSay('45点満点か、換算内申（65点満点）の数字で教えてください。'); return; }
+    aiSay('5教科の合計を数字で教えてください。たとえば「18」のように。「9教科の合計しか分からない」でも大丈夫です。'); return; }
+  const v=+num[1];
+  if(v<5||v>25){ aiSay('5教科の合計は5〜25の範囲です。もう一度教えてください。'); return; }
+  S.naishin5=v;
+  askJitsugi();
+}
+function askJitsugi(){
+  S.state='S3j'; setStep(2,'内申点（実技4教科）');
+  aiSay(`5教科で${S.naishin5}点ですね。次に<b>音楽・美術・保健体育・技術家庭の4教科</b>の合計を教えてください（<b>20点満点</b>）。`);
+  aiSay('この4教科は<b>都立の計算では2倍</b>されます。実技が得意なお子さんは、ここで大きく伸びます。');
+  setChips([{label:'まだ分からない',fn:skipLevel}]);
+}
+function handleJitsugi(text){
+  if(/わから|未定|不明|まだ/.test(text)){ skipLevel(); return; }
+  const num=text.match(/(\d{1,2})/); if(!num){
+    aiSay('実技4教科の合計を数字で教えてください。たとえば「14」のように。'); return; }
+  const v=+num[1];
+  if(v<4||v>20){ aiSay('実技4教科の合計は4〜20の範囲です。もう一度教えてください。'); return; }
+  S.naishinJ=v;
+  S.naishin=S.naishin5+v*2;                       // 換算内申（65点満点）＝正確な値
+  S.naishinRough=false;
+  aiSay(`実技で${v}点。都立の計算では実技を2倍するので、<b>換算内申は ${S.naishin5} ＋ ${v}×2 ＝ ${S.naishin}点</b>（65点満点）です。`);
+  askToujitsu();
+}
+function handleLevelSum(text){                     // 9教科の合計しか分からない場合の概算経路
+  if(/わから|未定|不明|まだ/.test(text)){ skipLevel(); return; }
+  const num=text.match(/(\d{1,2})/); if(!num){
+    aiSay('9教科の合計を数字で教えてください。たとえば「32」のように。'); return; }
+  const v=+num[1];
+  if(v>45 && v<=65){ S.naishin=v; S.naishinRough=false; aiSay(`換算内申${v}ですね。`); }
+  else if(v>=9 && v<=45){
+    S.naishin=Math.round(v*SCALE.sonaiToKansan); S.naishinRough=true;
+    aiSay(`素内申${v}ですね。実技の内訳が分からないので、<b>換算内申はおよそ${S.naishin}点</b>として概算します。`);
+    aiSay('※ 実技4教科の点数が分かると、この数字は正確になります。あとで通知表を見て教えていただければ計算し直せます。');
+  }
+  else { aiSay('9教科の合計（9〜45）か、換算内申（65点満点）の数字で教えてください。'); return; }
   askToujitsu();
 }
 function askToujitsu(){
@@ -636,12 +685,16 @@ function handleToujitsu(text){
 function finishLevel(){
   S.score=estimateScore();
   if(S.score==null){ askWish(); return; }
-  S.level = S.scoreRough ? `換算内申${S.naishin}` : `換算内申${S.naishin}・当日${S.toujitsu}点`;
+  const nLabel = S.naishinRough ? `換算内申およそ${S.naishin}` : `換算内申${S.naishin}`;
+  S.level = S.scoreRough ? nLabel : `${nLabel}・当日${S.toujitsu}点`;
   const pct=Math.round(S.score/SCALE.max*100);
   aiSay(`ありがとうございます。都立入試は<b>当日点700点＋内申300点＋スピーキング20点＝1020点満点</b>で合否が決まります。`
     + `お子さんの現時点の見込みは<b>およそ${S.score}点</b>（${pct}%）です。`);
   if(S.scoreRough){
     aiSay('当日点がまだ分からないので、内申から概算した仮の値で計算しています。判定は幅を広めに取っています。模試を受けたら、その点数でもう一度見てみてください。');
+  }
+  if(S.naishinRough){
+    aiSay('内申は9教科の合計からの概算です。実技4教科の点数が分かると正確になり、判定の幅も狭められます。');
   }
   askWish();
 }
@@ -710,6 +763,8 @@ document.getElementById('form').addEventListener('submit',e=>{
   if(S.state==='S2') handleStation(t);
   else if(S.state==='S2b'){ const n=t.match(/(\d{2,3})/); if(n){S.limit=Math.min(120,+n[1]);askLevel();} else aiSay('「60分」のように数字で教えてください。'); }
   else if(S.state==='S3') handleLevel(t);
+  else if(S.state==='S3j') handleJitsugi(t);
+  else if(S.state==='S3sum') handleLevelSum(t);
   else if(S.state==='S3b') handleToujitsu(t);
   else if(S.state==='S4') handleWish(t);
   else if(S.state==='S6'){ handleWish(t); }
