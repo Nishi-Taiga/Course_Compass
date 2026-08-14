@@ -29,7 +29,10 @@ const EXPECTED = {
   school_stats: 1314,
   designations: 29,
   stations: 647,
-  commute_times: 31703,
+  // 通学時間を「駅→区」から「駅→学校」に変えた時点で 31,703 → 103,958 に増えた。
+  // 期待値が古いままだと /health が恒久的に ok:false になり、
+  // 本当に投入漏れが起きたときに気づけない。
+  commute_times: 103958,
 };
 
 export default {
@@ -295,7 +298,12 @@ async function handleSearch(env, request) {
     station: String(body.station ?? "").trim().slice(0, 30),
     commute_limit: Number(body.commute_limit ?? 60),
     no_commute_limit: Boolean(body.no_commute_limit),
+    // 内申は「5教科」と「実技4教科」を分けて受け取る（2026-08-13 MTG決定）。
+    // 都立の換算内申は 5教科×1 + 実技4教科×2 なので、9教科の合計45点からは
+    // 復元できない。合計しか無い場合の sonai は概算経路として残してある。
     naishin: body.naishin == null ? null : Number(body.naishin),
+    naishin5: body.naishin5 == null ? null : Number(body.naishin5),
+    jitsugi: body.jitsugi == null ? null : Number(body.jitsugi),
     sonai: body.sonai == null ? null : Number(body.sonai),
     toujitsu: body.toujitsu == null ? null : Number(body.toujitsu),
     esat: body.esat == null ? null : Number(body.esat),
