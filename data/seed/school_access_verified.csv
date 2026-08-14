@@ -1,0 +1,29 @@
+school_number,name,station,mode,ride_min,walk_min,total_min,alight_stop,detail,source_url,checked_on,note
+407420,町田総合,町田,bus,15,0,15,町田総合高校前,町田バスセンター3番/2番乗り場 町33下山崎行・町78野津田車庫行・町17淵野辺駅北口行,https://www.metro.ed.jp/machidasogo-h/access/access.html,2026-08-14,
+407420,町田総合,淵野辺,bus,10,0,10,町田総合高校前,淵野辺駅北口1番乗り場 町17町田バスセンター行,https://www.metro.ed.jp/machidasogo-h/access/access.html,2026-08-14,
+407420,町田総合,古淵,walk,,25,25,,,https://www.metro.ed.jp/machidasogo-h/access/access.html,2026-08-14,古淵は神奈川県。都内のみの駅リストでは拾えない
+410030,調布北,調布,bus,15,0,15,調布北高校前,北口12番乗り場 鷹56三鷹駅行/吉06吉祥寺駅行,https://www.metro.ed.jp/chofukita-h/access/access.html,2026-08-14,
+410030,調布北,吉祥寺,bus,20,0,20,調布北高校前,4番乗り場 吉06調布駅北口行,https://www.metro.ed.jp/chofukita-h/access/access.html,2026-08-14,
+410030,調布北,三鷹,bus,15,0,15,調布北高校前,南口2番乗り場 鷹56調布駅北口行,https://www.metro.ed.jp/chofukita-h/access/access.html,2026-08-14,
+410030,調布北,武蔵境,bus,10,,10,野崎八幡,南口2番乗り場 境92境南循環経由,https://www.metro.ed.jp/chofukita-h/access/access.html,2026-08-14,
+408050,拝島,拝島,bus,10,3,13,拝島大師,,https://www.metro.ed.jp/haijima-h/access/access.html,2026-08-14,
+408050,拝島,立川,bus,25,3,28,拝島大師,,https://www.metro.ed.jp/haijima-h/access/access.html,2026-08-14,
+408050,拝島,拝島,walk,,27,27,,,https://www.metro.ed.jp/haijima-h/access/access.html,2026-08-14,
+408050,拝島,昭島,walk,,23,23,,,https://www.metro.ed.jp/haijima-h/access/access.html,2026-08-14,
+410250,永山,京王永山,bus,5,3,8,永山高校,永山5丁目行/京王多摩車庫行/鶴川行,https://www.metro.ed.jp/nagayama-h/access/access.html,2026-08-14,学校表記は「永山駅」。京王永山・小田急永山の両方が該当
+410250,永山,聖蹟桜ヶ丘,bus,20,3,23,永山高校,11番乗り場,https://www.metro.ed.jp/nagayama-h/access/access.html,2026-08-14,
+410250,永山,鶴川,bus,20,3,23,永山高校,5番乗り場 聖蹟桜ヶ丘駅行,https://www.metro.ed.jp/nagayama-h/access/access.html,2026-08-14,
+410250,永山,京王永山,walk,,25,25,,,https://www.metro.ed.jp/nagayama-h/access/access.html,2026-08-14,
+402750,総合工科,成城学園前,bus,7,0,7,都立総合工科高校前,西口から千歳烏山駅・千歳船橋駅・狛江駅北口行など,https://www.metro.ed.jp/sogokoka-h/access/access.html,2026-08-14,
+402750,総合工科,成城学園前,walk,,15,15,,,https://www.metro.ed.jp/sogokoka-h/access/access.html,2026-08-14,バスの代替。合算しない
+406280,篠崎,篠崎,bus,5,5,10,スポーツランド入口,3番のりば 瑞江駅行/一之江行,https://www.metro.ed.jp/shinozaki-h/access/access.html,2026-08-14,
+406280,篠崎,篠崎,bus,8,2,10,江戸川スポーツランド,3番のりば,https://www.metro.ed.jp/shinozaki-h/access/access.html,2026-08-14,
+406280,篠崎,瑞江,bus,7,5,12,スポーツランド入口,小岩駅行/新小岩駅行,https://www.metro.ed.jp/shinozaki-h/access/access.html,2026-08-14,
+406280,篠崎,一之江,bus,15,5,20,スポーツランド入口,小岩駅行/新小岩駅行,https://www.metro.ed.jp/shinozaki-h/access/access.html,2026-08-14,
+406280,篠崎,小岩,bus,20,5,25,スポーツランド入口,瑞江駅行/一之江行,https://www.metro.ed.jp/shinozaki-h/access/access.html,2026-08-14,
+406280,篠崎,南行徳,bus,20,2,22,江戸川スポーツランド,,https://www.metro.ed.jp/shinozaki-h/access/access.html,2026-08-14,
+407050,八王子北,八王子,bus,,7,,楢原町,北口バス乗り場(7) 川口小学校行・上川霊園行ほか,https://www.metro.ed.jp/hachiojikita-h/access/access.html,2026-08-14,乗車分の記載なし。西東京バス（ODPTは提供終了）
+407050,八王子北,西八王子,bus,,7,,楢原町,北口右手バス乗り場(1) 市役所経由楢原町行,https://www.metro.ed.jp/hachiojikita-h/access/access.html,2026-08-14,乗車分の記載なし。西東京バス（ODPTは提供終了）
+407260,山崎,町田,bus,,3,,北二号,山崎団地行,https://www.metro.ed.jp/yamasaki-h/access/access.html,2026-08-14,乗車分の記載なし。神奈中（ODPTはチャレンジ限定）
+407260,山崎,古淵,bus,,3,,山崎高校入口,下山崎行,https://www.metro.ed.jp/yamasaki-h/access/access.html,2026-08-14,乗車分の記載なし
+403510,大泉桜,大泉学園,walk,,31,31,,,https://www.metro.ed.jp/oizumisakura-h/access/access.html,2026-08-14,アクセスページに交通案内のテキストが無い（画像の可能性）。算出値
