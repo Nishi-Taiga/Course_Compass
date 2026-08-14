@@ -72,6 +72,11 @@ def main():
     coords = {r['name']: (float(r['lat']), float(r['lon']))
               for r in csv.DictReader(open(SEED / 'school_coords.csv', encoding='utf-8'))
               if r['lat']}
+    spirit = {}
+    sp = SEED / 'school_spirit.csv'
+    if sp.exists():
+        spirit = {r['name']: r for r in csv.DictReader(open(sp, encoding='utf-8'))}
+
     stc = load_raw_station_coords()
     stc.update(load_station_coords())      # 駅マスタを優先
     acc = best_access()
@@ -99,9 +104,18 @@ def main():
                    'md': a['md'], 'mi': a['mi'], 'dt': a['dt'][:80]}
         added += 1
 
+    # 校風は学校自身の記述をそのまま持つ。判定には使わない
+    sp_added = 0
+    for s2 in D['schools']:
+        r = spirit.get(s2['n'])
+        if r and r['spirit']:
+            s2['sp'] = r['spirit'][:260]
+            s2['spu'] = r['source_url']
+            sp_added += 1
+
     new = src[:i] + 'const D = ' + json.dumps(D, ensure_ascii=False, separators=(',', ':')) + src[j:]
     PROTO.write_text(new, encoding='utf-8')
-    print(f'学校 {len(D["schools"])} 件中 アクセス情報を付与 {added} 件')
+    print(f'学校 {len(D["schools"])} 件中 アクセス情報を付与 {added} 件 / 校風 {sp_added} 件')
     if miss_coord:
         print(f'  座標が無い学校 {miss_coord} 件')
     if miss_station:
