@@ -18,6 +18,8 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 SRC = BASE / 'data' / 'fetched' / 'spirit'
+# 教育目標ページがPDF頼りで本文を持たない学校のための2つ目の出典（特色ページ）
+SRC2 = BASE / 'data' / 'fetched' / 'spirit2'
 SEED = BASE / 'data' / 'seed'
 
 # ここから先はサイト共通のナビゲーション
@@ -53,11 +55,22 @@ def main_text(path):
 VOICE = re.compile(r'私は|私が|僕は|わたしは|入学当初|卒業生の声|在校生の声|先輩の声|'
                    r'でした。私|と思います。私')
 # 学校が自分を説明している段落に出てくる語
-SCHOOLY = re.compile(r'本校|当校|生徒|教育|育成|指導|校風|学習|部活|行事|伝統|校訓')
+SCHOOLY = re.compile(r'本校|当校|生徒|教育|育成|指導|校風|学習|部活|行事|伝統|校訓|'
+                     r'精神|自由|自主|responsib|人間|態度|力を|心を|養う|重んじ|守る|'
+                     r'目指|めざす|大切')
+# 見出し・添付ファイル・準備中など、校風の記述ではない行
+NOISE = re.compile(
+    r'PDF\s*\(|\(\s*[0-9．.]+\s*[KMk]B|年間授業計画|グランドデザイン$|'
+    r'^教育目標(・|$)|^カリキュラム|^準備中|^スクール[・\s]|^東京都立|'
+    r'^[0-9０-９]{2,3}【|シラバス|一覧$|^>+$|'
+    # サイト共通のナビゲーション項目。校風の記述ではない
+    r'^進路指導|^学校の様子|^学校行事$|^部活動|^入試案内|^学校説明会|^在校生|^卒業生|'
+    r'^教育課程|^制服・校章|^沿革$|^学校運営方針|^災害時|^Ｑ＆Ａ|^Q&A|^図書|^奨学金|'
+    r'^模擬試験|^探究活動|^企業の皆様|^支援制度|^応募状況|^学力検査問題')
 
 
 def looks_like_description(l):
-    if VOICE.search(l):
+    if VOICE.search(l) or NOISE.search(l):
         return False
     # 区切り線や記号だけの行を弾く
     jp = len(re.findall(r'[぀-ヿ一-鿿]', l))
@@ -79,6 +92,20 @@ def pick(lines):
         # 1文だけでは校風が伝わらないので、上位2文をつなぐ
         top = sorted(body, key=len, reverse=True)[:2]
         spirit = ' '.join(sorted(top, key=lines.index))
+    if not spirit:
+        # 戸山・北園のように、長い段落を持たず短い箇条書きだけで書く学校がある。
+        # 「自分の行動に責任をもつ。」「学校生活にふさわしい身なりを心がける。」など
+        # 1行は短くても、並べれば校風が伝わる。出てきた順につないで1本にする。
+        bullets = [l for l in lines
+                   if 10 <= len(l) < 38 and looks_like_description(l)]
+        buf = []
+        for b in bullets:
+            if sum(len(x) for x in buf) + len(b) > 200:
+                break
+            if b not in buf:
+                buf.append(b)
+        if len(buf) >= 2:
+            spirit = '　'.join(buf)
     # 校則・生活指導に触れている段落があればそちらを優先する（保護者の関心が高い）
     for b in body:
         if re.search(r'制服|頭髪|校則|生活指導|規律|服装', b):
@@ -100,12 +127,18 @@ def main():
         if not s:
             continue
         motto, spirit = pick(main_text(f))
+        page = 'education'
+        if not spirit:
+            alt = SRC2 / f.name
+            if alt.exists():
+                motto, spirit = pick(main_text(alt))
+                page = 'feature'
         if not spirit:
             empty.append(s['name'])
             continue
         rows.append({'school_number': s['school_number'], 'name': s['name'],
                      'motto': motto, 'spirit': spirit,
-                     'source_url': f"https://www.metro.ed.jp/{f.stem}/our_school/education.html"})
+                     'source_url': f"https://www.metro.ed.jp/{f.stem}/our_school/{page}.html"})
 
     with open(SEED / 'school_spirit.csv', 'w', encoding='utf-8', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=['school_number', 'name', 'motto',
