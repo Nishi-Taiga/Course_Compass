@@ -378,6 +378,10 @@ function scrollBottom(){ $chat.scrollTop = $chat.scrollHeight; }
 function userSay(t){ const w=el('div','user'); w.appendChild(el('div','msg')).textContent=t; $chat.appendChild(w); scrollBottom(); }
 function sysSay(t){ $chat.appendChild(el('div','sys')).textContent=t; scrollBottom(); }
 let queue=Promise.resolve();
+/* Webから収集した文字列（校風・アクセス文）をテンプレートに入れる前のエスケープ。
+   収集元は各校公式サイトだが、HTML断片が紛れても実行させない */
+function esc(v){ const d=document.createElement('div'); d.textContent=String(v??''); return d.innerHTML; }
+function safeUrl(u){ try{ return new URL(u).protocol==='https:' ? u : '#'; }catch(e){ return '#'; } }
 /* 吹き出しは <b> だけ効かせたい。textContent だと <b> がそのまま文字として出てしまい、
    innerHTML だと入力値が混ざったときに危ない。いったん全部エスケープしてから <b> だけ戻す。*/
 function fmtMsg(t){ const d=document.createElement('div'); d.textContent=t;
@@ -642,7 +646,7 @@ function accessMap(s){
     </svg>
     <div class="mbadge">${label}</div>
     <div class="mattr">地理院タイル</div></div>
-    ${s.ac.dt?`<div class="mdt">${s.ac.dt}</div>`:''}`;
+    ${s.ac.dt?`<div class="mdt">${esc(s.ac.dt)}</div>`:''}`;
 }
 
 function openSheet(){
@@ -661,8 +665,8 @@ function openSheet(){
     const maps=names.map(n=>{ const s=D.schools.find(x=>x.n===n); const m=accessMap(s);
       return m?`<div class="mcard"><div class="mttl">${s.n}</div>${m}</div>`:''; }).filter(Boolean).join('');
     const sps=names.map(n=>{ const s=D.schools.find(x=>x.n===n); if(!s.sp) return '';
-      return `<div class="spcard"><div class="mttl">${s.n}</div><p class="sptxt">${s.sp}</p>
-        <a class="spsrc" href="${s.spu}" target="_blank" rel="noopener">公式サイトで読む</a></div>`; }).filter(Boolean).join('');
+      return `<div class="spcard"><div class="mttl">${esc(s.n)}</div><p class="sptxt">${esc(s.sp)}</p>
+        <a class="spsrc" href="${safeUrl(s.spu)}" target="_blank" rel="noopener">公式サイトで読む</a></div>`; }).filter(Boolean).join('');
     body.innerHTML=`<div style="overflow-x:auto"><table>
       <tr><th>学校</th><th>最寄駅から<br><span style="font-weight:400;font-size:10px">各校公式サイト</span></th><th>合格の目安<br><span style="font-weight:400;font-size:10px">1020点満点</span></th>
       <th>倍率5年推移<br><span style="font-weight:400;font-size:10px">点線＝定員ちょうど</span></th><th>特色・選抜方式</th></tr>${rows}</table></div>

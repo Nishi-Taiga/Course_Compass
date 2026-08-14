@@ -41,7 +41,7 @@ export default {
       return new Response(null, {
         headers: {
           "access-control-allow-origin": "*",
-          "access-control-allow-methods": "GET, OPTIONS",
+          "access-control-allow-methods": "GET, POST, OPTIONS",
           "access-control-allow-headers": "content-type",
         },
       });
@@ -49,7 +49,18 @@ export default {
 
     try {
       if (path === "/health") return await handleHealth(env);
-      if (path === "/health/ai") return await handleHealthAi(env);
+      if (path === "/health/ai") {
+        // Workers AI のクレジットを消費するため乱打を止める。
+        // URLが審査資料に載った瞬間から誰でも叩ける前提で、1時間6回まで。
+        const hourKey = `health_ai_calls:${new Date().toISOString().slice(0, 13)}`;
+        const calls = parseInt((await env.SESSIONS.get(hourKey)) ?? "0", 10);
+        if (calls >= 6) {
+          return json({ ok: false, error: "rate_limited",
+                        hint: "AIクレジット保護のため1時間に6回まで" }, 429);
+        }
+        await env.SESSIONS.put(hourKey, String(calls + 1), { expirationTtl: 3600 });
+        return await handleHealthAi(env);
+      }
       if (path === "/api/schools") return await handleSchoolList(env, url);
       if (path === "/api/search") {
         if (request.method !== "POST") {
@@ -281,7 +292,7 @@ async function handleSearch(env, request) {
   }
 
   const q = {
-    station: String(body.station ?? "").trim(),
+    station: String(body.station ?? "").trim().slice(0, 30),
     commute_limit: Number(body.commute_limit ?? 60),
     no_commute_limit: Boolean(body.no_commute_limit),
     naishin: body.naishin == null ? null : Number(body.naishin),
@@ -290,8 +301,11 @@ async function handleSearch(env, request) {
     esat: body.esat == null ? null : Number(body.esat),
     wants: {
       academic: Boolean(body.wants?.academic),
-      dept: body.wants?.dept ?? null,
-      clubs: Array.isArray(body.wants?.clubs) ? body.wants.clubs : [],
+      // 上限は乱打・巨大SQL対策。正常な入力はこの範囲に収まる
+      dept: body.wants?.dept ? String(body.wants.dept).slice(0, 30) : null,
+      clubs: Array.isArray(body.wants?.clubs)
+        ? body.wants.clubs.slice(0, 5).map((c) => String(c).slice(0, 30))
+        : [],
     },
     relaxations: Array.isArray(body.relaxations) ? body.relaxations : [],
   };
