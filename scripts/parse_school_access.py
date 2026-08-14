@@ -72,12 +72,18 @@ def transit_block(lines):
 
 
 def gazetteer():
-    """1都3県の駅名。長い名前から順に照合する。"""
+    """1都3県の駅名。長い名前から順に照合する。
+
+    駅データベースは同名駅を「平和台(東京)」「平和台(千葉)」と区別しているが、
+    学校サイトは素の「平和台駅」と書く。照合には original_name を使い、
+    重複したら東京を優先する。
+    """
     st = json.loads((RAW / 'station.json').read_text(encoding='utf-8'))
+    order = {13: 0, 14: 1, 11: 2, 12: 3}
     names = {}
-    for s in st:
+    for s in sorted(st, key=lambda x: order.get(x.get('prefecture'), 9)):
         if s.get('prefecture') in (11, 12, 13, 14) and not s.get('closed'):
-            names.setdefault(s['name'], s)
+            names.setdefault(s.get('original_name') or s['name'], s)
     return sorted(names.items(), key=lambda kv: -len(kv[0]))
 
 
@@ -95,6 +101,8 @@ def find_station(l, gaz):
             after = l[m.end():m.end() + 3]
             if re.match(r'\s*(行|方面|ゆき|経由)', after):
                 continue          # 行き先表記なので乗車駅ではない
+            if re.match(r'\s*線', after):
+                continue          # 「有楽町線」「三田線」などの路線名。駅ではない
             return True
         return False
 
@@ -132,8 +140,13 @@ def scan(lines, gaz):
         if cur is None:
             continue
 
-        is_bus = bool(re.search(r'バス|のりば|乗り場|停留所|行き\]|】', l)) or (
-            bus_section and re.search(r'下車|行き?[、。]|いずれか', l))
+        # 「下車」は乗り物から降りる語。ただし「◯◯駅下車」は電車を降りる意味なので除く。
+        # 野津田のように「（町26）野津田車庫行→神学校下車 徒歩10分」と、
+        # バスという語を使わずに系統だけ書く学校がある。これを徒歩と取ると
+        # 「町田駅から徒歩10分」という嘘になるので、下車の有無で拾う。
+        alight = bool(re.search(r'(?<!駅)下車', l))
+        is_bus = bool(re.search(r'バス|のりば|乗り場|停留所|行き\]|】', l)) or alight or (
+            bus_section and re.search(r'行き?[、。]|いずれか', l))
         # 「N分」を全部拾い、直前が徒歩なら徒歩、そうでなければ乗車とみなす。
         # 学校ごとに「所要時間約15分」「バスで約7分」「【一之江行き】5分」など
         # 書き方がばらばらなので、語で決め打ちせず位置関係で判定する。

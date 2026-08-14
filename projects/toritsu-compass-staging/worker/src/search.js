@@ -59,7 +59,10 @@ function scoreCandidate(row, q, tier) {
   const commute = Math.max(0, 60 - (row.commute_minutes ?? 60));
   score += commute;
   if (row.commute_minutes != null) {
-    why.push(`通学${row.commute_minutes}分`);
+    // 「◯◯駅からバス」まで書く。数字だけより保護者に伝わる
+    const via = row.via_station ? `${row.via_station}駅から` : "";
+    const leg = row.access_mode === "bus" ? "バス" : "徒歩";
+    why.push(`通学${row.commute_minutes}分（${via}${leg}）`);
   }
 
   // 適正圏を最上位に置く。安全圏ばかり並べても相談の役に立たない。
@@ -102,7 +105,7 @@ export async function searchSchools(db, q) {
     "s.course_types LIKE '%全日制%'",
   ];
 
-  let commuteJoin = "LEFT JOIN commute_times c ON c.to_ward = s.ward AND c.from_station = ?";
+  let commuteJoin = "LEFT JOIN commute_times c ON c.school_number = s.school_number AND c.from_station = ?";
   binds.push(q.station);
 
   if (!q.no_commute_limit) {
@@ -132,7 +135,7 @@ export async function searchSchools(db, q) {
     SELECT s.school_number, s.name, s.ward, s.departments, s.designation,
            s.target_score, s.selection_type, s.selection_note, s.score_layer,
            s.source_master, s.source_designation, s.source_target_score,
-           c.minutes AS commute_minutes
+           c.minutes AS commute_minutes, c.via_station, c.access_mode
            ${wantClubs.length ? ", GROUP_CONCAT(DISTINCT cl.raw_name) AS matched_clubs_csv" : ""}
       FROM schools s
       ${commuteJoin}

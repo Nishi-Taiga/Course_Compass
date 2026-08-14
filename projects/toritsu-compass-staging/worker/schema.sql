@@ -14,7 +14,7 @@ CREATE TABLE schools (
   school_number     TEXT PRIMARY KEY,     -- 都教委の学校番号（先頭0が消えないよう TEXT）
   name              TEXT NOT NULL,
   name_kana         TEXT,
-  ward              TEXT,                 -- 所在区市町村。commute_times.to_ward と対応
+  ward              TEXT,                 -- 所在区市町村
   postal_code       TEXT,
   address           TEXT,
   phone             TEXT,
@@ -72,13 +72,19 @@ CREATE TABLE ward_stations (
 );
 
 -- 駅→区市の所要時間（647 × 49 = 31,703行）
--- 急行補正済み。build_commute_graph.py の計算結果をプロトタイプ経由で取り込んだもの。
--- 島嶼部6区市（大島町・三宅村・八丈町・小笠原村・新島村・神津島村）は鉄道が無いため対象外。
+-- 通学時間。出発駅ごと・**学校ごと**に持つ（2026-08-14に区単位から作り直した）。
+--   通学時間 = 鉄道(出発駅 → アクセス起点駅) + アクセス(徒歩 または バス)
+-- アクセス起点駅は各校サイトのアクセスページが挙げた駅。複数あれば最短を採る。
+-- 以前は 駅×区(49) だったため、同じ区の学校は所要時間が全部同じ値だった。
+-- 例: 新宿→練馬区の9校はいずれも20分だったが、いま 23分(練馬工科)〜58分(大泉桜) と分かれる。
+-- 島嶼部7校は鉄道が無いため行が入らない。scripts/build_school_commute.py で再生成できる。
 CREATE TABLE commute_times (
-  from_station TEXT NOT NULL REFERENCES stations(station_name),
-  to_ward      TEXT NOT NULL REFERENCES ward_stations(ward),
-  minutes      INTEGER NOT NULL,
-  PRIMARY KEY (from_station, to_ward)
+  from_station  TEXT NOT NULL REFERENCES stations(station_name),
+  school_number TEXT NOT NULL REFERENCES schools(school_number),
+  minutes       INTEGER NOT NULL,
+  via_station   TEXT,                  -- 実際に降りる駅。画面で「◯◯駅から」と出せる
+  access_mode   TEXT,                  -- walk / bus。バスなら school_access に系統が入っている
+  PRIMARY KEY (from_station, school_number)
 );
 
 -- 「出発駅から N分以内」を引くための索引。受け入れ条件の1秒以内はこれで満たす。

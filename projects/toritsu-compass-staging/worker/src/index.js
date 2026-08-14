@@ -93,7 +93,7 @@ async function handleHealth(env) {
       // Step3 の受け入れ条件そのもの。結合が実際に効くところまで見る。
       env.DB.prepare(
         `SELECT COUNT(*) AS n
-           FROM schools s JOIN commute_times c ON c.to_ward = s.ward
+           FROM schools s JOIN commute_times c ON c.school_number = s.school_number
           WHERE c.from_station = '練馬' AND c.minutes <= 60
             AND s.course_types LIKE '%全日制%'`
       ),

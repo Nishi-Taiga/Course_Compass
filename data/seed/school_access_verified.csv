@@ -27,3 +27,21 @@ school_number,name,station,mode,ride_min,walk_min,total_min,alight_stop,detail,s
 407260,山崎,町田,bus,,3,,北二号,山崎団地行,https://www.metro.ed.jp/yamasaki-h/access/access.html,2026-08-14,乗車分の記載なし。神奈中（ODPTはチャレンジ限定）
 407260,山崎,古淵,bus,,3,,山崎高校入口,下山崎行,https://www.metro.ed.jp/yamasaki-h/access/access.html,2026-08-14,乗車分の記載なし
 403510,大泉桜,大泉学園,walk,,31,31,,,https://www.metro.ed.jp/oizumisakura-h/access/access.html,2026-08-14,アクセスページに交通案内のテキストが無い（画像の可能性）。算出値
+408070,武蔵村山,西武立川,bus,15,5,20,武蔵村山高校南,立川バス,https://www.metro.ed.jp/musashimurayama-h/access/access.html,2026-08-14,
+408070,武蔵村山,昭島,bus,25,5,30,武蔵村山高校南,立川バス,https://www.metro.ed.jp/musashimurayama-h/access/access.html,2026-08-14,
+408070,武蔵村山,箱根ヶ崎,bus,15,8,23,新道,立川バス 立川駅北口行/昭島駅北口行,https://www.metro.ed.jp/musashimurayama-h/access/access.html,2026-08-14,
+408070,武蔵村山,東大和市,bus,30,8,38,三ツ木薬師前,都営バス,https://www.metro.ed.jp/musashimurayama-h/access/access.html,2026-08-14,
+408070,武蔵村山,青梅,bus,40,8,48,新道,都営バス,https://www.metro.ed.jp/musashimurayama-h/access/access.html,2026-08-14,
+409240,国分寺,国立,bus,10,3,13,国分寺高校入口,立川バス,https://www.metro.ed.jp/kokubunji-h/access/access.html,2026-08-14,学校は「バスの便数が少ないため徒歩が確実」と明記
+409240,国分寺,国立,walk,,25,25,,,https://www.metro.ed.jp/kokubunji-h/access/access.html,2026-08-14,
+409240,国分寺,恋ヶ窪,bus,15,5,20,富士本三丁目,立川バス,https://www.metro.ed.jp/kokubunji-h/access/access.html,2026-08-14,
+409240,国分寺,恋ヶ窪,walk,,25,25,,,https://www.metro.ed.jp/kokubunji-h/access/access.html,2026-08-14,
+409240,国分寺,鷹の台,walk,,25,25,,,https://www.metro.ed.jp/kokubunji-h/access/access.html,2026-08-14,
+405250,足立東,亀有,bus,,2,,中川小学校前,有64八潮駅南口行/有65六ツ木都住行 4番乗り場,https://www.metro.ed.jp/adachihigashi-h/access/access.html,2026-08-14,乗車分の記載なし
+405250,足立東,亀有,walk,,25,25,,,https://www.metro.ed.jp/adachihigashi-h/access/access.html,2026-08-14,
+405250,足立東,北綾瀬,walk,,25,25,,,https://www.metro.ed.jp/adachihigashi-h/access/access.html,2026-08-14,
+407230,野津田,町田,bus,,0,,都立野津田高校,町45 都立野津田高校行・14番のりば,https://www.metro.ed.jp/nozuta-h/access/access.html,2026-08-14,乗車分の記載なし。神奈中/町田バス
+407230,野津田,鶴川,bus,,10,,野津田車庫,鶴33・鶴66 野津田車庫行,https://www.metro.ed.jp/nozuta-h/access/access.html,2026-08-14,乗車分の記載なし
+407230,野津田,淵野辺,bus,,10,,神学校,淵23 野津田車庫行,https://www.metro.ed.jp/nozuta-h/access/access.html,2026-08-14,乗車分の記載なし
+408820,瑞穂農芸,箱根ヶ崎,walk,,20,20,,,https://www.metro.ed.jp/mizuhonogei-h/access/access.html,2026-08-14,
+408820,瑞穂農芸,立川,bus,,15,,瑞穂町役場入口,立10 立川駅北口⇔瑞穂町営業所,https://www.metro.ed.jp/mizuhonogei-h/access/access.html,2026-08-14,乗車分の記載なし
