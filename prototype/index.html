@@ -227,6 +227,14 @@
     border:1px solid var(--line); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .cmp[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
 
+  /* ---------- くらべるバー（チャット⇄シートの行き来） ---------- */
+  .cmpbar{display:none; flex:none; padding:7px 14px 0}
+  .cmpbar.on{display:block}
+  .cmpbar button{width:100%; display:flex; align-items:center; justify-content:center; gap:7px;
+    background:var(--accent); color:var(--accent-ink); border:none; border-radius:22px;
+    padding:9px 16px; font-size:13.5px; font-weight:600; cursor:pointer; box-shadow:var(--shadow-soft)}
+  .cmpbar button:hover{filter:brightness(1.1)}
+
   /* ---------- 入力部 ---------- */
   .chips{display:flex; gap:8px; flex-wrap:wrap; padding:8px 14px 4px; flex:none}
   .chip{background:var(--chip-bg); color:var(--accent); border:1px solid var(--accent);
@@ -261,9 +269,14 @@
   .ghost{background:none; border:1px solid var(--line); color:var(--muted); border-radius:9px;
     padding:7px 15px; font-size:13px; cursor:pointer}
   .ghost:hover{border-color:var(--accent); color:var(--accent)}
+  .shead{position:sticky; top:-20px; z-index:5; display:flex; gap:8px; align-items:center;
+    margin:-20px -18px 14px; padding:11px 18px; background:var(--frame);
+    border-bottom:1px solid var(--line)}
+  .shead .sp{flex:1}
+  .shead .back{color:var(--accent); border-color:var(--accent); font-weight:600}
   @media print{
     body *{visibility:hidden} .overlay.open,.overlay.open *{visibility:visible}
-    .overlay.open{position:static; height:auto} .ovops{display:none}
+    .overlay.open{position:static; height:auto} .ovops,.shead{display:none}
   }
 </style>
 
@@ -316,6 +329,7 @@
   </header>
 
   <div id="chat" aria-live="polite"></div>
+  <div class="cmpbar" id="cmpbar"><button type="button" id="cmpbarBtn" onclick="openSheet()">くらべるシートを見る</button></div>
   <div class="chips" id="chips"></div>
   <form id="form" autocomplete="off">
     <input type="text" id="input" placeholder="メッセージを入力" aria-label="メッセージを入力">
@@ -335,14 +349,19 @@
   </aside>
 
   <div class="overlay" id="sheet">
+    <div class="shead">
+      <button class="ghost back" onclick="closeSheet()">← 対話にもどる</button>
+      <span class="sp"></span>
+      <button class="ghost" onclick="window.print()">印刷する</button>
+    </div>
     <h2 class="serif">くらべるシート</h2>
-    <div class="note">学校見学・面談に持っていける1枚。印刷して使えます。</div>
+    <div class="note">学校見学・面談に持っていける1枚。印刷して使えます。対話に戻っても内容は残ります。</div>
     <div id="sheetBody"></div>
     <div style="margin-top:14px"><b style="font-size:13px">確認したいことメモ</b>
       <textarea placeholder="説明会で聞きたいこと、見ておきたい場所など"></textarea></div>
     <div class="ovops">
       <button class="ghost" onclick="window.print()">印刷する</button>
-      <button class="ghost" onclick="document.getElementById('sheet').classList.remove('open')">対話にもどる</button>
+      <button class="ghost" onclick="closeSheet()">対話にもどる</button>
     </div>
     <div class="note">出典: 東京都教育委員会 公開資料（学校一覧・入学者選抜応募状況）を加工／学校位置は「国土数値情報（学校データ）」（国土交通省）を加工／地図は地理院タイル（国土地理院）／交通案内・校風は各校公式サイト<br>入力された情報の取り扱いについては <a href="./privacy.html" target="_blank" rel="noopener">こちら</a></div>
   </div>
@@ -396,6 +415,8 @@ function aiSay(t, delay){ queue=queue.then(()=>new Promise(res=>{
 })); return queue; }
 function aiNode(node){ queue=queue.then(()=>{ $chat.appendChild(node); scrollBottom(); }); return queue; }
 function setChips(list){ queue=queue.then(()=>{ $chips.innerHTML='';
+  // チップが増えるとチャット欄が縮み、最後の行が隠れる。描画後に必ず末尾へ
+  requestAnimationFrame(scrollBottom);
   list.forEach(c=>{ const b=el('button','chip'); b.type='button'; b.textContent=c.label;
     b.onclick=()=>{ userSay(c.label); $chips.innerHTML=''; c.fn(); }; $chips.appendChild(b); }); }); }
 function setStep(n,label){ const sp=document.getElementById('stepper');
@@ -674,8 +695,10 @@ function openSheet(){
       ${sps?`<div class="mttl2">学校の言葉<span class="sub2">学校の公式サイトから引用。合否の判定には使っていません</span></div><div class="sps">${sps}</div>`:''}
       <div class="note" style="margin-top:10px;font-size:11px">合格の目安は塾講師の監修による参考値です。面接・調査書・傾斜配点・実技などの選抜要素は考慮していません。</div>`;
   }
+  document.getElementById('sheet').scrollTop=0;
   document.getElementById('sheet').classList.add('open');
 }
+function closeSheet(){ document.getElementById('sheet').classList.remove('open'); }
 
 // ---------- 状態遷移 ----------
 function start(){
@@ -799,14 +822,22 @@ function askWish(){
   ]);
 }
 function handleWish(text){
+  const before=JSON.stringify([S.wants.dept,S.wants.academic,S.limit]);
+  let clubOnly=false;
   if(/部活|運動|文化|吹奏楽|サッカー|野球|弓道|バスケ|テニス/.test(text)){
-    S.wants.club=text;
+    S.wants.club=text; clubOnly=true;
     aiSay('部活のご希望ですね。（デモ版では部活データが準備中のため、ご希望として承ります。完成版では各校の部活リストで絞り込みます）');
   }
   if(/工業|ものづくり|機械|電気/.test(text)) S.wants.dept='工';
   else if(/商業|ビジネス|簿記/.test(text)) S.wants.dept='商';
   else if(/農業|園芸|動物/.test(text)) S.wants.dept='農';
   if(/大学|進学/.test(text)) S.wants.academic=true;
+  const changed=JSON.stringify([S.wants.dept,S.wants.academic,S.limit])!==before;
+  // 結果表示後の「ありがとう」等で同じカードを再掲しない。条件が変わったときだけ探し直す
+  if(S.shown.length && !changed){
+    if(!clubOnly) aiSay('ありがとうございます。気になる学校があれば「＋ くらべるシートに追加」を押してみてください。条件を変えたいときは「もっと近い学校がいい」なども使えます。');
+    return;
+  }
   runSearch();
 }
 function runSearch(){
@@ -829,7 +860,12 @@ function runSearch(){
     }
     aiSay('気になる学校はありますか？「くらべるシートに追加」で見比べる1枚をつくれます。');
     setChips([
-      {label:'もっと近い学校がいい',fn:()=>{S.limit=Math.max(20,S.limit-15);sysSay(`条件変更: 通学 ${S.limit}分以内`);renderBoard();runSearch();}},
+      {label:'もっと近い学校がいい',fn:()=>{
+        // 「こだわらない」(limit=999) から絞るときは 999-15=984 になってしまうので、
+        // 現実的な上限から始め直す
+        if(S.noCommuteLimit || S.limit>120){ S.noCommuteLimit=false; S.limit=30; }
+        else { S.limit=Math.max(20,S.limit-15); }
+        sysSay(`条件変更: 通学 ${S.limit}分以内`);renderBoard();runSearch();}},
       {label:'くらべるシートを見る',fn:openSheet},
       {label:'最初からやり直す',fn:()=>{location.reload();}},
     ]);
@@ -840,10 +876,12 @@ function relax(){
   S.state='S7'; setStep(null,'条件の見直し');
   const next=S.limit+15;
   aiSay(`申し訳ありません、すべての条件を満たす学校が見つかりませんでした。通学時間を${next}分まで広げて探してみますか？`);
-  setChips([
+  const opts=[
     {label:`はい、${next}分まで広げる`,fn:()=>{S.limit=next;sysSay(`条件をゆるめました: 通学 ${next}分以内（変更点はこのように必ず表示します）`);runSearch();}},
-    {label:'学科の条件を外す',fn:()=>{S.wants.dept=null;sysSay('条件をゆるめました: 学科の指定なし');runSearch();}},
-  ]);
+  ];
+  if(S.wants.dept) opts.push({label:'学科の条件を外す',fn:()=>{S.wants.dept=null;sysSay('条件をゆるめました: 学科の指定なし');runSearch();}});
+  opts.push({label:'最初からやり直す',fn:()=>location.reload()});
+  setChips(opts);
 }
 
 // ---------- 入出力 ----------
@@ -945,6 +983,9 @@ function compareBody(){
 function renderBoard(){
   boardSummary();
   document.getElementById('tabCmp').textContent=`くらべる${S.compare.size?`（${S.compare.size}）`:''}`;
+  const bar=document.getElementById('cmpbar');
+  bar.classList.toggle('on', S.compare.size>0);
+  if(S.compare.size) document.getElementById('cmpbarBtn').textContent=`くらべるシートを見る（${S.compare.size}校）`;
   const body=document.getElementById('bbody');
   body.innerHTML = boardTab==='map' ? compassMap() : compareBody();
   if(boardTab==='map'){
