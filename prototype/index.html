@@ -206,6 +206,7 @@
     border:1px solid var(--line); border-radius:4px; padding:2px 8px; font-size:11px; font-weight:700}
   .mattr{position:absolute; right:4px; bottom:3px; background:rgba(255,255,255,.86);
     padding:1px 5px; font-size:8.5px; color:#556; border-radius:3px}
+  .mattr a{color:#556; text-decoration:none}
   .mdt{font-size:10.5px; color:var(--muted); margin-top:5px; max-width:280px; line-height:1.6}
   @media print{ .amap img{ -webkit-print-color-adjust:exact; print-color-adjust:exact } }
   .dircell{text-align:center}
@@ -363,7 +364,7 @@
       <button class="ghost" onclick="window.print()">印刷する</button>
       <button class="ghost" onclick="closeSheet()">対話にもどる</button>
     </div>
-    <div class="note">出典: 東京都教育委員会 公開資料（学校一覧・入学者選抜応募状況）を加工／学校位置は「国土数値情報（学校データ）」（国土交通省）を加工／地図は地理院タイル（国土地理院）／交通案内・校風は各校公式サイト<br>入力された情報の取り扱いについては <a href="./privacy.html" target="_blank" rel="noopener">こちら</a></div>
+    <div class="note">出典: 東京都教育委員会 公開資料（学校一覧・入学者選抜応募状況）を加工／学校位置は「国土数値情報（学校データ）」（国土交通省）を加工／地図は © OpenStreetMap contributors／交通案内・校風は各校公式サイト<br>入力された情報の取り扱いについては <a href="./privacy.html" target="_blank" rel="noopener">こちら</a></div>
   </div>
 
   <div class="overlay" id="info">
@@ -426,7 +427,7 @@ function setStep(n,label){ const sp=document.getElementById('stepper');
 // ---------- 状態 ----------
 const S={ state:'S1', station:null, limit:null, noCommuteLimit:false,
   naishin:null, naishin5:null, naishinJ:null, naishinRough:false,
-  toujitsu:null, score:null, scoreRough:false, level:null,
+  toujitsu:null, toujitsuRough:false, score:null, scoreRough:false, level:null,
   wants:{dept:null, academic:false, club:null}, shown:[], compare:new Set() };
 
 /* === 合否の目安（令和8年度実施要綱 第2-10-1） ==========================
@@ -449,7 +450,7 @@ function estimateScore(){
   if(S.naishin==null && S.toujitsu==null) return null;
   const kansan = S.naishin!=null ? S.naishin : null;
   let touj = S.toujitsu;
-  S.scoreRough = false;
+  S.scoreRough = S.toujitsuRough;        // 過去問の自己採点は本番と条件が違うので幅を広げる
   if(touj==null && kansan!=null){        // 内申だけ → 当日点を粗く推定
     touj = Math.round(kansan/65*500*0.95);
     S.scoreRough = true;
@@ -615,14 +616,15 @@ function card(c){
 // ---------- 比較シート ----------
 
 /* === 比べるシート用の地図 ==========================================
-   国土地理院の淡色地図タイルを、必要な枚数だけ並べてピンを重ねる。
+   OpenStreetMapの標準タイルを、必要な枚数だけ並べてピンを重ねる。
    地図ライブラリは使わない（読み込むものを増やさないため）。
 
-   ⚠️ タイルは表示のたびに読み込む。事前に取得して同梱すると測量法29条の
-      「複製」にあたり承認申請が要るため、リアルタイム読み込みに留めている。
-      出典表示は必須（画面右下に「地理院タイル」を出す）。          */
+   ⚠️ OSMF Tile Usage Policyにより、タイルの一括事前取得・同梱は不可。
+      表示のたびのリアルタイム読み込みに留め、帰属表示
+      「© OpenStreetMap contributors」を必ず出す（ODbL）。
+      スケール時（アクセスが増えたら）は有償タイル配信への切替が必要。 */
 const TILE=256, MAPW=280, MAPH=190, MAPPAD=48;   // ピンとラベルが枠で切れない余白
-const GSI='https://cyberjapandata.gsi.go.jp/xyz/pale';
+const OSM='https://tile.openstreetmap.org';
 
 function lonlatToPx(la,lo,z){
   const n=Math.pow(2,z)*TILE;
@@ -646,7 +648,7 @@ function accessMap(s){
   let tiles='';
   for(let xi=Math.floor(left/TILE); xi<=Math.floor((left+MAPW)/TILE); xi++){
     for(let yi=Math.floor(top/TILE); yi<=Math.floor((top+MAPH)/TILE); yi++){
-      tiles+=`<img src="${GSI}/${z}/${xi}/${yi}.png" alt="" loading="lazy"
+      tiles+=`<img src="${OSM}/${z}/${xi}/${yi}.png" alt="" loading="lazy"
         style="left:${(xi*TILE-left).toFixed(1)}px;top:${(yi*TILE-top).toFixed(1)}px">`;
     }
   }
@@ -666,7 +668,7 @@ function accessMap(s){
       <text x="${X(sx)}" y="${Y(sy)+14}" text-anchor="middle" class="mlbl" fill="#B3261E">${s.n}</text>
     </svg>
     <div class="mbadge">${label}</div>
-    <div class="mattr">地理院タイル</div></div>
+    <div class="mattr"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a></div></div>
     ${s.ac.dt?`<div class="mdt">${esc(s.ac.dt)}</div>`:''}`;
 }
 
@@ -727,7 +729,7 @@ function handleStation(text){
    9教科の合計しか分からない保護者のために、従来の概算経路も残す（空振りさせない）。*/
 function skipLevel(){
   S.naishin=null;S.naishin5=null;S.naishinJ=null;S.naishinRough=false;
-  S.toujitsu=null;S.score=null;S.level=null;
+  S.toujitsu=null;S.toujitsuRough=false;S.score=null;S.level=null;
   aiSay('承知しました。成績が分からなくても大丈夫です。通いやすさとご希望を軸にご提案しますね。');
   askWish();
 }
@@ -784,13 +786,27 @@ function handleLevelSum(text){                     // 9教科の合計しか分�
 }
 function askToujitsu(){
   S.state='S3b'; setStep(2,'当日点の見込み');
-  aiSay('もう一つ、入試当日の点数の見込みは分かりますか？5教科合計の500点満点です。模試を受けていれば、その点数が目安になります。');
-  setChips([{label:'まだ模試を受けていない',fn:()=>{S.toujitsu=null;finishLevel();}}]);
+  aiSay('もう一つ、入試当日の点数の見込みをうかがいます。5教科合計の<b>500点満点</b>です。次のどれでも構いません。');
+  setChips([
+    {label:'模試の点数を入れる',fn:()=>{S.toujitsuRough=false;
+      aiSay('模試の5教科合計の点数を教えてください（500点満点）。VもぎやWもぎなど、都立入試に合わせた模試の点数がいちばん参考になります。');}},
+    {label:'過去問の自己採点がある',fn:()=>{S.toujitsuRough=true;
+      aiSay('過去問を解いたときの5教科合計の点数を教えてください（500点満点）。ご自宅での採点は本番と条件が違うので、目安として幅を広めに扱いますね。');}},
+    {label:'まだどちらもない',fn:()=>{S.toujitsu=null;S.toujitsuRough=false;
+      aiSay('大丈夫です。<b>内申から当日点を仮に置いて</b>概算しますね。模試や過去問の点数が出たら、いつでも計算し直せます。');
+      finishLevel();}},
+  ]);
 }
+/* 学校の定期テストの点数は満点も難しさも入試と別物なので、当日点には使わない。
+   その旨を聞かれたら説明して「まだどちらもない」の内申概算経路に誘導する。 */
 function handleToujitsu(text){
-  if(/わから|未定|不明|まだ|受けて/.test(text)){ S.toujitsu=null; finishLevel(); return; }
+  if(/定期|中間|期末/.test(text)){
+    aiSay('学校の定期テストは満点や問題の傾向が入試と違うため、そのまま当日点には使えません。模試か過去問の点数がなければ「まだどちらもない」を選んでください。内申から概算します。');
+    return;
+  }
+  if(/わから|未定|不明|まだ|受けて|ない/.test(text)){ S.toujitsu=null; S.toujitsuRough=false; finishLevel(); return; }
   const num=text.match(/(\d{2,3})/);
-  if(!num){ aiSay('5教科の合計点を数字で教えてください。「まだ模試を受けていない」でも大丈夫です。'); return; }
+  if(!num){ aiSay('5教科の合計点を数字で教えてください。「まだどちらもない」でも大丈夫です。'); return; }
   const v=+num[1];
   if(v<0||v>500){ aiSay('500点満点の数字で教えてください。'); return; }
   S.toujitsu=v; finishLevel();
@@ -799,12 +815,15 @@ function finishLevel(){
   S.score=estimateScore();
   if(S.score==null){ askWish(); return; }
   const nLabel = S.naishinRough ? `換算内申およそ${S.naishin}` : `換算内申${S.naishin}`;
-  S.level = S.scoreRough ? nLabel : `${nLabel}・当日${S.toujitsu}点`;
+  S.level = S.toujitsu!=null ? `${nLabel}・当日${S.toujitsu}点${S.toujitsuRough?'（過去問）':''}` : nLabel;
   const pct=Math.round(S.score/SCALE.max*100);
   aiSay(`ありがとうございます。都立入試は<b>当日点700点＋内申300点＋スピーキング20点＝1020点満点</b>で合否が決まります。`
     + `お子さんの現時点の見込みは<b>およそ${S.score}点</b>（${pct}%）です。`);
   if(S.scoreRough){
-    aiSay('当日点がまだ分からないので、内申から概算した仮の値で計算しています。判定は幅を広めに取っています。模試を受けたら、その点数でもう一度見てみてください。');
+    if(S.toujitsu==null)
+      aiSay('当日点がまだ分からないので、内申から概算した仮の値で計算しています。判定は幅を広めに取っています。模試や過去問の点数が出たら、もう一度見てみてください。');
+    else
+      aiSay('過去問の自己採点は本番と条件が違うため、判定の幅を広めに取っています。模試を受けたら、その点数でもう一度見てみてください。');
   }
   if(S.naishinRough){
     aiSay('内申は9教科の合計からの概算です。実技4教科の点数が分かると正確になり、判定の幅も狭められます。');
