@@ -9,10 +9,13 @@
  *   GET /api/schools … 学校一覧（ward / designation / q で絞り込み）
  *   GET /api/schools/:school_number … 学校詳細 + 応募倍率
  *   POST /api/search … 対話から組み立てた条件で候補校を返す（LLMは使わない）
+ *   POST /api/extract … 自由入力を検索条件に翻訳し、足りない項目を聞き返す
  */
 
 import { searchSchools, buildRelaxation } from "./search.js";
 import { SCALE, GAP, GAP_ROUGH } from "./scoring.js";
+import { parseQuery, inspect, invalidMessages } from "./query.js";
+import { extractQuery, mergeQuery } from "./extract.js";
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -29,7 +32,10 @@ const EXPECTED = {
   school_stats: 1314,
   designations: 29,
   stations: 647,
-  commute_times: 31703,
+  // 通学時間を「駅→区」から「駅→学校」に変えた時点で 31,703 → 103,958 に増えた。
+  // 期待値が古いままだと /health が恒久的に ok:false になり、
+  // 本当に投入漏れが起きたときに気づけない。
+  commute_times: 103958,
 };
 
 export default {
@@ -62,6 +68,12 @@ export default {
         return await handleHealthAi(env);
       }
       if (path === "/api/schools") return await handleSchoolList(env, url);
+      if (path === "/api/extract") {
+        if (request.method !== "POST") {
+          return json({ error: "method_not_allowed", expected: "POST" }, 405);
+        }
+        return await handleExtract(env, request);
+      }
       if (path === "/api/search") {
         if (request.method !== "POST") {
           return json({ error: "method_not_allowed", expected: "POST" }, 405);
@@ -291,24 +303,9 @@ async function handleSearch(env, request) {
     return json({ error: "invalid_json" }, 400);
   }
 
-  const q = {
-    station: String(body.station ?? "").trim().slice(0, 30),
-    commute_limit: Number(body.commute_limit ?? 60),
-    no_commute_limit: Boolean(body.no_commute_limit),
-    naishin: body.naishin == null ? null : Number(body.naishin),
-    sonai: body.sonai == null ? null : Number(body.sonai),
-    toujitsu: body.toujitsu == null ? null : Number(body.toujitsu),
-    esat: body.esat == null ? null : Number(body.esat),
-    wants: {
-      academic: Boolean(body.wants?.academic),
-      // 上限は乱打・巨大SQL対策。正常な入力はこの範囲に収まる
-      dept: body.wants?.dept ? String(body.wants.dept).slice(0, 30) : null,
-      clubs: Array.isArray(body.wants?.clubs)
-        ? body.wants.clubs.slice(0, 5).map((c) => String(c).slice(0, 30))
-        : [],
-    },
-    relaxations: Array.isArray(body.relaxations) ? body.relaxations : [],
-  };
+  // 入力の検証は query.js に寄せてある。人が入力した条件も、AIが抽出した条件も
+  // 同じ門を通す（2026-08-13 MTG決定の受け入れ基準）。
+  const { q, invalid } = parseQuery(body);
 
   if (!q.station) {
     return json({ error: "station_required", hint: "出発駅を指定してください" }, 400);
@@ -344,6 +341,9 @@ async function handleSearch(env, request) {
       count: 0,
       schools: [],
       relaxation: buildRelaxation(q),
+      // 範囲外の値は使わずに検索している。何を無視したかを黙っておかない
+      invalid,
+      invalid_messages: invalidMessages(invalid),
       ms: Date.now() - started,
     });
   }
@@ -360,10 +360,92 @@ async function handleSearch(env, request) {
     candidates_before_pick: all.length,
     schools: rows,
     relaxation: null,
+    invalid,
+    invalid_messages: invalidMessages(invalid),
     disclaimer:
       "目安点は公開データをもとにした暫定値です。合否を保証するものではありません。"
       + "最終的な判断は学校の募集要項と、塾・学校の先生にご相談ください。",
     ms: Date.now() - started,
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* POST /api/extract                                                   */
+/*                                                                     */
+/* 自由入力を検索条件に翻訳する。AIの役割はここだけ（2026-08-13 MTG決定）。 */
+/* 進行・検索・判定はコードが握る。                                      */
+/* ------------------------------------------------------------------ */
+
+async function handleExtract(env, request) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "invalid_json" }, 400);
+  }
+
+  const text = String(body.text ?? "").trim().slice(0, 1000);
+  if (!text) {
+    return json({ error: "text_required", hint: "発話を text に入れてください" }, 400);
+  }
+
+  // これまでに確定している条件。無ければ空から始める。
+  // ここで弾かれた値も握りつぶさず、あとで invalid に合流させる
+  const { q: prev, invalid: prevInvalid } = parseQuery(body.query ?? {});
+  const asked = Array.isArray(body.asked) ? body.asked.map(String) : [];
+  const declinedIn = Array.isArray(body.declined) ? body.declined.map(String) : [];
+
+  let extracted;
+  try {
+    extracted = await extractQuery(env, env.DB, text, {
+      askedSlot: body.asked_slot ?? null,
+      prev,
+    });
+  } catch (e) {
+    // 抽出が丸ごと失敗しても、会話は止めない。聞き直しに落とす（仕様書§3.6）
+    return json({
+      query: prev,
+      filled: [],
+      question: "うまく読み取れませんでした。もう一度、別の言い方で教えていただけますか？",
+      next: null,
+      error_handled: String(e?.message ?? e),
+    });
+  }
+
+  const merged = mergeQuery(prev, extracted.cand);
+  // 抽出結果もparseQueryを通す。LLM由来でも人由来でも同じ門を通す
+  const { q, invalid: nowInvalid } = parseQuery({ ...merged, free_text: [...prev.free_text, text] });
+  const invalid = [...new Set([...prevInvalid, ...nowInvalid])];
+
+  const declined = [...new Set([...declinedIn, ...extracted.declined])];
+  const state = inspect(q, asked, declined);
+
+  // 聞き返しの優先順。困っていることから先に片付ける。
+  //   ① 範囲外の値がある → まずそれを直してもらう
+  //   ② 駅の候補が絞れない → 候補を並べて選んでもらう。ここで
+  //      ただ「駅を教えてください」と返すと、同じ答えが返ってきて堂々巡りになる
+  //   ③ それ以外 → 次に足りない項目を聞く
+  const messages = invalidMessages(invalid);
+  let question = state.question;
+  if (messages.length) {
+    question = messages.join("。");
+  } else if (!q.station && extracted.station_candidates.length) {
+    question = `${extracted.station_candidates.join("・")} のどれでしょうか。`;
+  }
+
+  return json({
+    query: q,
+    filled: Object.keys(extracted.cand),
+    declined,
+    invalid,
+    notes: extracted.notes,               // 駅が特定できなかった等
+    station_candidates: extracted.station_candidates,
+    searchable: state.searchable,
+    missing_required: state.missing_required,
+    pending: state.pending,
+    next: state.next,
+    question,
+    source: extracted.source,             // 規則ベース/LLMのどちらが効いたか
   });
 }
 
