@@ -59,11 +59,21 @@ jobs:
         if: ${{ inputs.seed }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # wrangler は起動時にアカウント一覧を引きに行き、トークンに
+          # User Details / Memberships の読み取りが無いとそこで落ちる。
+          # アカウントを明示すればその照会自体が要らなくなる。
+          # 値は wrangler.jsonc の account_id と同じ（すでに公開されている）
+          CLOUDFLARE_ACCOUNT_ID: f26bb7b8b376e9d6bbe9978b5cb92c62
         run: npm run db:remote
 
       - name: Deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # wrangler は起動時にアカウント一覧を引きに行き、トークンに
+          # User Details / Memberships の読み取りが無いとそこで落ちる。
+          # アカウントを明示すればその照会自体が要らなくなる。
+          # 値は wrangler.jsonc の account_id と同じ（すでに公開されている）
+          CLOUDFLARE_ACCOUNT_ID: f26bb7b8b376e9d6bbe9978b5cb92c62
         run: npm run deploy
 
       # デプロイが通っても中身が古ければ意味がないので、公開URLを実際に叩いて確かめる。
