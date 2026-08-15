@@ -15,3 +15,6 @@ data/raw/
 data/fetched/access/
 data/raw/
 data/fetched/spirit/
+
+# 都高体連の成績PDF（再取得可能・11MB）。抽出済みCSVのみ追跡する
+data/fetched/kotairen/*.pdf
