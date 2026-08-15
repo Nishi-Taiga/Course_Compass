@@ -5,11 +5,12 @@ name: deploy-worker
 # 事前準備（1回だけ）: リポジトリの Settings → Secrets and variables → Actions に
 #   CLOUDFLARE_API_TOKEN を登録する。
 #   トークンは Cloudflare ダッシュボード → My Profile → API Tokens → Create Token で、
-#   ハッカソン用チームのアカウントを選び、次の権限を付けて発行する。
-#     - Account / Workers Scripts / Edit
-#     - Account / D1 / Edit
-#     - Account / Workers KV Storage / Edit
-#   ⚠️ 個人アカウントではなくハッカソン用チームを選ぶこと（README「つまずくところ」参照）。
+#   テンプレート「Edit Cloudflare Workers」を選び、権限に D1 / Edit を足して発行する
+#   （テンプレートに Workers Scripts・Workers KV は入るが D1 は入らない。
+#     seed 投入で D1 / Edit が要る）。
+#   ⚠️ Account Resources では wrangler.jsonc の account_id と同じアカウント
+#      （f26bb7b8b376e9d6bbe9978b5cb92c62）を選ぶこと。別アカウントのトークンだと
+#      デプロイ先が変わり、公開URLに反映されない。
 #
 # seed 投入は既定で行わない。D1の中身を入れ替えるのは重い操作で、
 # コードだけ直したいときに毎回流すものではないため、明示的に選んだときだけ実行する。
