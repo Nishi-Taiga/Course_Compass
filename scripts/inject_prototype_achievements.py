@@ -24,8 +24,8 @@ SEED = BASE / "data" / "seed"
 PROTO = BASE / "prototype" / "index.html"
 SRC = SEED / "school_club_achievements.csv"
 
-MEET_RANK = {"全国大会（インターハイ）": 3, "全国大会（定時制通信制）": 3,
-             "関東大会": 2, "東京都大会": 1}
+MEET_RANK = {"全国大会（インターハイ）": 3, "全国大会（定時制通信制）": 3, "全国大会": 3,
+             "関東大会": 2, "東京都大会": 1, "東京都大会（予選）": 1}
 MAX_PER_SCHOOL = 4
 
 
@@ -58,22 +58,51 @@ def label_sport(row: dict) -> str:
     return sport or event
 
 
+def load_site_rows() -> list[dict]:
+    """学校サイト側の実績を、連盟の記録と同じ形にそろえて返す。
+
+    連盟の一覧に載らない範囲（都大会の5位以下、高野連・高文連の管轄）を補う。
+    自動採用可(OK)のものだけを使う。要確認は人の確認を経ていないので入れない。
+    """
+    path = SEED / "school_club_achievements_sites.csv"
+    if not path.is_file():
+        return []
+    out = []
+    for r in csv.DictReader(open(path, encoding="utf-8-sig")):
+        if r["flag"] != "OK" or not r["club"] or not r["meet"]:
+            continue
+        rank = re.search(r"優勝|準優勝|ベスト\s*[0-9０-９]+|第?\s*[0-9０-９]+\s*位"
+                         r"|入賞|金賞|銀賞|銅賞|出場", r["text"])
+        if not rank:
+            continue
+        out.append({"school": r["school"], "sport": r["club"], "event": "",
+                    "division": "", "meet": r["meet"], "rank": rank.group(0),
+                    "year": r["year"], "origin": "学校公式サイト"})
+    return out
+
+
 def main() -> None:
     rows = [r for r in csv.DictReader(open(SRC, encoding="utf-8"))
             if (r["sport"] or r["event"])]          # 競技が分からない行は出さない
+    for r in rows:
+        r["origin"] = "都高体連"
 
     best: dict[str, dict] = {}
-    for r in rows:
+    # 連盟を先に入れる。同じ学校・競技で学校サイト側と重なったら連盟を優先する
+    # （連盟は第三者の公式記録、学校サイトは自己申告のため）
+    for r in rows + load_site_rows():
         sport = label_sport(r)
         if not sport:
             continue
         key = (r["school"], sport, r["division"])
         score = (MEET_RANK.get(r["meet"], 0), rank_score(r["rank"]))
         cur = best.get(key)
+        if cur is not None and cur["origin"] == "都高体連" and r["origin"] != "都高体連":
+            continue
         if cur is None or score > cur["_score"]:
             best[key] = {"_score": score, "school": r["school"], "sport": sport,
                          "division": r["division"], "meet": r["meet"],
-                         "rank": r["rank"], "year": r["year"]}
+                         "rank": r["rank"], "year": r["year"], "origin": r["origin"]}
 
     def display_rank(meet: str, rank: str) -> str:
         """全国・関東は、上位でない順位を「出場」に丸める。
@@ -104,7 +133,8 @@ def main() -> None:
                  if not any(o != i["sport"] and o.startswith(i["sport"])
                             for o, d in specific if d == i["division"])]
         out[school] = [{"sp": i["sport"], "dv": i["division"], "mt": i["meet"],
-                        "rk": display_rank(i["meet"], i["rank"]), "yr": i["year"]}
+                        "rk": display_rank(i["meet"], i["rank"]), "yr": i["year"],
+                        "sr": i["origin"]}
                        for i in items[:MAX_PER_SCHOOL]]
 
     html = PROTO.read_text(encoding="utf-8")
