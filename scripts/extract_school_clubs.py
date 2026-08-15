@@ -31,13 +31,32 @@ import sys
 import urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from fetch_school_clubs import slug_of  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 SITES_CSV = ROOT / "data" / "seed" / "school_sites.csv"
 HTML_DIR = ROOT / "data" / "fetched" / "clubs"
+RESOLVED_CSV = HTML_DIR / "_resolved.csv"
 OUT_CSV = ROOT / "data" / "seed" / "school_clubs.csv"
 
 MODEL = "@cf/openai/gpt-oss-20b"
-BASE = "https://www.metro.ed.jp/"
+
+
+def decode_html(body: bytes) -> str:
+    """HTMLを文字列にする。文字コードは meta の charset を見てから決める。
+
+    五日市の部活ページだけ Shift_JIS で、utf-8 決め打ちだと全部が文字化けし、
+    そのままLLMに渡すと部活名を1つも取れない。
+    """
+    m = re.search(rb"""charset=["']?([A-Za-z0-9_\-]+)""", body[:2000])
+    candidates = [m.group(1).decode("ascii", "ignore")] if m else []
+    for enc in candidates + ["utf-8", "cp932", "euc-jp"]:
+        try:
+            return body.decode(enc)
+        except (UnicodeDecodeError, LookupError):
+            continue
+    return body.decode("utf-8", errors="replace")
 
 SYSTEM_PROMPT = """あなたはHTMLから部活動の一覧を抜き出す抽出器です。
 次の規則に厳密に従ってください。
@@ -124,15 +143,22 @@ def main() -> None:
     if args.schools:
         targets = [t for t in targets if t["name"] in args.schools]
 
+    # iframe等で実際の取得先が clubs_url と違う学校（広尾・五日市）。
+    # 出典はLLMに渡す文面にも入るので、実際に取った方のURLを使う。
+    effective: dict[str, str] = {}
+    if RESOLVED_CSV.is_file():
+        with RESOLVED_CSV.open(encoding="utf-8-sig", newline="") as f:
+            effective = {r["name"]: r["effective_url"] for r in csv.DictReader(f)}
+
     rows: list[dict] = []
     for t in targets:
-        html_path = HTML_DIR / f"{t['school_number']}_{t['slug']}.html"
+        html_path = HTML_DIR / f"{t['school_number']}_{slug_of(t)}.html"
         if not html_path.is_file():
             print(f"  skip  {t['name']}: HTML未取得（先に fetch_school_clubs.py）")
             continue
 
-        html = strip_noise(html_path.read_text(encoding="utf-8", errors="replace"))
-        source_url = f"{BASE}{t['slug']}/{t['clubs_path']}"
+        html = strip_noise(decode_html(html_path.read_bytes()))
+        source_url = effective.get(t["name"]) or t["clubs_url"]
         user = f"学校名: {t['name']}\n出典: {source_url}\n\n--- HTML ---\n{html}"
 
         if args.dry_run:
