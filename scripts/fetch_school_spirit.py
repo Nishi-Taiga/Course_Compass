@@ -22,7 +22,7 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 OUT = BASE / 'data' / 'fetched' / 'spirit'
-SITES = BASE / 'data' / 'seed' / 'school_sites.csv'
+SITES = BASE / 'data' / 'seed' / 'school_access_sites.csv'
 PAGE = 'our_school/education.html'
 UA = ('ShinroCompass/0.1 (+https://github.com/Nishi-Taiga/Course_Compass; '
       'non-commercial school-guidance project)')
@@ -37,7 +37,7 @@ def get(url):
 
 def main():
     if not SITES.is_file():
-        sys.exit('school_sites.csv がありません。resolve_school_slugs.py を先に実行してください。')
+        sys.exit('school_access_sites.csv がありません。resolve_school_slugs.py を先に実行してください。')
     OUT.mkdir(parents=True, exist_ok=True)
     sites = list(csv.DictReader(open(SITES, encoding='utf-8')))
     print(f'{len(sites)} 校。3秒間隔で取得します。\n', flush=True)

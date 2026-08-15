@@ -10,7 +10,7 @@ slug の作り方（実例で確認）
   ハチオウジキタ -> hachioujikita -> hachiojikita
   ヒビヤ         -> hibiya
 
-出力: data/seed/school_sites.csv（school_number, name, slug, access_url）
+出力: data/seed/school_access_sites.csv（school_number, name, slug, access_url）
 """
 import csv
 import re
@@ -113,7 +113,7 @@ def main():
         if i % 25 == 0:
             print(f'  {i}/{len(master)} 解決{len(rows)} 未解決{len(miss)}', flush=True)
 
-    with open(SEED / 'school_sites.csv', 'w', encoding='utf-8', newline='') as fh:
+    with open(SEED / 'school_access_sites.csv', 'w', encoding='utf-8', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=['school_number', 'name', 'slug', 'access_url'])
         w.writeheader()
         w.writerows(rows)

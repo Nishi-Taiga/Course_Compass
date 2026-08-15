@@ -119,7 +119,7 @@ def main():
     if not SRC.exists():
         sys.exit(f'{SRC} がありません。先に fetch_school_spirit.py を実行してください。')
     sites = {r['slug']: r for r in csv.DictReader(
-        open(SEED / 'school_sites.csv', encoding='utf-8'))}
+        open(SEED / 'school_access_sites.csv', encoding='utf-8'))}
 
     rows, empty = [], []
     for f in sorted(SRC.glob('*.html')):
