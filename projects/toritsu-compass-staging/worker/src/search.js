@@ -6,7 +6,7 @@
  * まずこれだけで完全に動く状態を作る。
  */
 
-import { estimateScore, tierOf, ZONE_LABEL, SELECTION_LABEL } from "./scoring.js";
+import { estimateScore, toKansan, tierOf, ZONE_LABEL, SELECTION_LABEL } from "./scoring.js";
 
 /** 緩和は必ず段階を踏み、毎回承諾を取る（仕様書§5.3）。黙って条件を外さない。 */
 export const RELAXATIONS = [
@@ -28,7 +28,7 @@ export const RELAXATIONS = [
 ];
 
 /** 部活の類似カテゴリ。緩和2段目で使う。正規化辞書は西が監修するまでの暫定。 */
-const CLUB_CATEGORIES = {
+export const CLUB_CATEGORIES = {
   球技: ["サッカー", "野球", "バスケットボール", "バレーボール", "テニス", "卓球", "バドミントン", "ハンドボール", "ラグビー"],
   武道: ["柔道", "剣道", "弓道", "空手", "相撲", "なぎなた"],
   音楽: ["吹奏楽", "軽音楽", "音楽", "合唱", "箏曲", "オーケストラ"],
@@ -59,7 +59,10 @@ function scoreCandidate(row, q, tier) {
   const commute = Math.max(0, 60 - (row.commute_minutes ?? 60));
   score += commute;
   if (row.commute_minutes != null) {
-    why.push(`通学${row.commute_minutes}分`);
+    // 「◯◯駅からバス」まで書く。数字だけより保護者に伝わる
+    const via = row.via_station ? `${row.via_station}駅から` : "";
+    const leg = row.access_mode === "bus" ? "バス" : "徒歩";
+    why.push(`通学${row.commute_minutes}分（${via}${leg}）`);
   }
 
   // 適正圏を最上位に置く。安全圏ばかり並べても相談の役に立たない。
@@ -87,7 +90,9 @@ function scoreCandidate(row, q, tier) {
  * 検索本体。
  *
  * @param {D1Database} db
- * @param {object} q  クエリ（station, commute_limit, no_commute_limit, naishin, toujitsu, wants, relaxations）
+ * @param {object} q  クエリ（station, commute_limit, no_commute_limit,
+ *                       naishin5/jitsugi（内申の内訳）, naishin, sonai, toujitsu,
+ *                       esat, wants, relaxations）
  */
 export async function searchSchools(db, q) {
   const applied = new Set(q.relaxations ?? []);
@@ -102,7 +107,7 @@ export async function searchSchools(db, q) {
     "s.course_types LIKE '%全日制%'",
   ];
 
-  let commuteJoin = "LEFT JOIN commute_times c ON c.to_ward = s.ward AND c.from_station = ?";
+  let commuteJoin = "LEFT JOIN commute_times c ON c.school_number = s.school_number AND c.from_station = ?";
   binds.push(q.station);
 
   if (!q.no_commute_limit) {
@@ -132,7 +137,7 @@ export async function searchSchools(db, q) {
     SELECT s.school_number, s.name, s.ward, s.departments, s.designation,
            s.target_score, s.selection_type, s.selection_note, s.score_layer,
            s.source_master, s.source_designation, s.source_target_score,
-           c.minutes AS commute_minutes
+           c.minutes AS commute_minutes, c.via_station, c.access_mode
            ${wantClubs.length ? ", GROUP_CONCAT(DISTINCT cl.raw_name) AS matched_clubs_csv" : ""}
       FROM schools s
       ${commuteJoin}
@@ -242,7 +247,8 @@ export function buildRelaxation(q) {
   const next = RELAXATIONS.filter((r) => {
     if (applied.has(r.key)) return false;
     if (r.key === "club_similar" && !(q.wants?.clubs ?? []).length) return false;
-    if (r.key === "score_range" && q.naishin == null && q.sonai == null) return false;
+    // 目安点の幅を広げる緩和は、点数判定ができているときにだけ意味がある
+    if (r.key === "score_range" && toKansan(q).kansan == null) return false;
     return true;
   });
 

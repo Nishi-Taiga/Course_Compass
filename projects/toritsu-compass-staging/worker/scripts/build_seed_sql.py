@@ -208,7 +208,7 @@ def main() -> None:
     # --- 通学時間系（extract_prototype_data.py の出力） ---
     stations_csv = seed_dir / "stations.csv"
     wards_csv = seed_dir / "ward_stations.csv"
-    commute_csv = seed_dir / "commute_times.csv"
+    commute_csv = seed_dir / "school_commute_times.csv"
 
     counts = {"stations": 0, "ward_stations": 0, "commute_times": 0}
 
@@ -231,12 +231,16 @@ def main() -> None:
         counts["ward_stations"] = len(ward_rows)
 
         commute = read_csv(commute_csv)
-        bad_from = {r["from_station"] for r in commute} - station_names
-        if bad_from:
-            sys.exit(f"駅マスタに無い出発駅: {sorted(bad_from)[:10]}")
+        # 出発駅は駅マスタ（都内647駅）に載っているものだけ入れる。
+        # 到着側は都県境の学校のため神奈川等も混ざるが、そちらは via_station として
+        # 文字列で持つだけなので外部キーの対象にしない。
+        commute = [r for r in commute if r["from_station"] in station_names]
 
-        emit_inserts(out, "commute_times", ["from_station", "to_ward", "minutes"],
-                     [[sql_str(r["from_station"]), sql_str(r["to_ward"]), sql_int(r["minutes"])]
+        emit_inserts(out, "commute_times",
+                     ["from_station", "school_number", "minutes", "via_station", "access_mode"],
+                     [[sql_str(r["from_station"]), sql_str(r["school_number"]),
+                       sql_int(r["minutes"]), sql_str(r["via_station"]),
+                       sql_str(r["access_mode"])]
                       for r in commute],
                      per_stmt=ROWS_PER_INSERT_BULK)
         counts["commute_times"] = len(commute)

@@ -17,3 +17,7 @@ data/raw/
 # ためだけの中間物で、scripts/build_school_sites.py がいつでも取り直せる。
 # 台帳そのもの（data/seed/school_sites.csv）と一次ソースの list.xlsx は追跡する。
 data/fetched/tops/
+
+# アクセス・校風ページのキャッシュ（fetch_school_access.py / fetch_school_spirit.py で再取得可能）
+data/fetched/access/
+data/fetched/spirit/

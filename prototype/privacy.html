@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>入力された情報の取り扱いについて｜進路コンパス</title>
+<style>
+  :root{
+    --bg:#F7F8FA; --card:#FFFFFF; --ink:#1B2430; --muted:#5B6B7F;
+    --line:#DDE3EA; --accent:#33527E; --warn-bg:#F6EEE9; --warn:#A2432E;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#101720; --card:#18212C; --ink:#E6EBF2; --muted:#95A5B8;
+           --line:#2A3644; --accent:#82A8DA; --warn-bg:#33221C; --warn:#E8886E; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--ink); line-height:1.95;
+    font-family:"Hiragino Sans","Yu Gothic Medium","Noto Sans JP",system-ui,sans-serif;
+    font-size:16px; -webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px; margin:0 auto; padding:40px 20px 80px}
+  h1{font-size:25px; line-height:1.45; margin:0 0 6px; font-weight:700}
+  .lead{color:var(--muted); margin:0 0 30px; font-size:15px}
+  h2{font-size:18px; margin:34px 0 10px; font-weight:700;
+     padding-bottom:7px; border-bottom:2px solid var(--line)}
+  p,li{margin:0 0 12px}
+  ul{padding-left:1.3em; margin:0 0 12px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:10px;
+        padding:18px 22px; margin:0 0 18px}
+  .keep{background:var(--warn-bg); border:1px solid var(--line);
+        border-left:5px solid var(--warn); border-radius:8px; padding:16px 20px; margin:18px 0}
+  .keep b{color:var(--warn)}
+  table{border-collapse:collapse; width:100%; font-size:14.5px; margin:4px 0 12px}
+  th,td{padding:10px 12px; text-align:left; vertical-align:top;
+        border-bottom:1px solid var(--line)}
+  th{white-space:nowrap; color:var(--muted); font-size:12.5px; font-weight:700}
+  .back{display:inline-block; margin-top:34px; color:var(--accent); font-size:15px}
+  footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line);
+         font-size:12.5px; color:var(--muted); line-height:1.85}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>入力された情報の取り扱いについて</h1>
+<p class="lead">進路コンパスは、お子さんの進路という立ち入った話をうかがいます。何を預かって、何を預からないのかを、先にはっきりさせておきます。</p>
+
+<div class="keep">
+  <p style="margin:0"><b>お名前も、通っている中学校も、連絡先もうかがいません。</b>そもそも入力欄がありません。個人を特定できる情報を持たない作りにしてあります。</p>
+</div>
+
+<h2>1. うかがうこと</h2>
+<div class="card">
+  <table>
+    <tr><th>最寄り駅</th><td>通学時間を出すために使います</td></tr>
+    <tr><th>通学時間の希望</th><td>「こだわらない」も選べます</td></tr>
+    <tr><th>内申点</th><td>5教科の合計と、実技4教科の合計。通知表の数字です</td></tr>
+    <tr><th>当日点の見込み</th><td>模試を受けていれば、その点数。未受験でも構いません</td></tr>
+    <tr><th>お子さんの希望</th><td>部活・学びたい分野・進学への考えなど、自由に書いていただく部分</td></tr>
+  </table>
+  <p style="margin:0; font-size:14.5px; color:var(--muted)">どれも<b>答えなくても先に進めます</b>。「わからない」を選んでも、通いやすさやご希望を軸にご提案します。</p>
+</div>
+
+<h2>2. 成績の情報について</h2>
+<div class="keep">
+  <p style="margin:0"><b>内申点と当日点の見込みは、お子さんの学業成績にあたる、とても立ち入った情報です。</b>だからこそ、次のようにしています。</p>
+</div>
+<div class="card">
+  <ul style="margin-bottom:0">
+    <li><b>誰の成績かは分かりません。</b>お名前も中学校名もうかがっていないので、成績の数字だけが残っても、どのお子さんのものか特定できません。</li>
+    <li><b>合否の目安を出すその場でしか使いません。</b>お子さんごとの成績を集めて分析することはしません。</li>
+    <li><b>24時間で自動的に消えます。</b>相談の途中経過と一緒に消えるので、あとから成績だけが残ることはありません。</li>
+    <li><b>入力しなくても使えます。</b>「まだ分からない」を選べば、成績を預けずに通いやすさとご希望だけで学校を探せます。塾に通っていなくて模試を受けていないご家庭を想定した経路です。</li>
+    <li><b>9教科の合計だけでも構いません。</b>より正確に計算するために5教科と実技4教科を分けてうかがっていますが、分からなければ合計だけで概算します。その場合は判定の幅を広めに取り、画面にもその旨を出します。</li>
+  </ul>
+</div>
+<div class="card" style="background:transparent; border-style:dashed">
+  <p style="margin:0; font-size:14.5px"><b>お子さんに見せる前に、保護者の方へ。</b>成績の話は、お子さんにとって触れられたくない話題であることがあります。この画面は保護者の方がお一人で操作していただいても構いませんし、お子さんと一緒に見ていただいても構いません。入力した数字は画面を閉じれば残りません。</p>
+</div>
+
+<h2>3. どこに置いて、いつ消えるか</h2>
+<ul>
+  <li>相談の途中経過は、Cloudflareのサーバー上に一時的に置かれ、<b>24時間で自動的に消えます</b>。こちらで消す操作をしなくても消えます。</li>
+  <li>ブラウザを閉じれば、その相談は再開できません。続きから始める仕組みはありません。</li>
+  <li>お使いの端末には何も保存しません。</li>
+</ul>
+
+<h2>4. しないこと</h2>
+<ul>
+  <li><b>入力された内容をAIの学習には使いません。</b></li>
+  <li><b>第三者に提供・販売しません。</b>広告のための利用もしません。</li>
+  <li>塾・学校・事業者への取次ぎや勧誘は行いません。</li>
+  <li>入力内容から個人を特定しようとすることはしません。</li>
+  <li><b>成績の情報を、学校・塾・自治体などに知らせることはありません。</b></li>
+</ul>
+
+<h2>5. AIをどう使っているか</h2>
+<div class="card">
+  <p>会話の文章を扱う部分にAIを使っています。使うのは<b>入口と出口の2箇所だけ</b>です。</p>
+  <ul style="margin-bottom:0">
+    <li><b>入口</b>：自由に書いていただいた文章を、検索に使える条件に読み替える</li>
+    <li><b>出口</b>：検索結果を、読みやすい文章にする</li>
+  </ul>
+  <p style="margin:12px 0 0">どの学校を出すかを決める計算は、<b>AIではなくあらかじめ決めた手順が行います。</b>画面に出る学校名・倍率・通学時間は、すべて手元のデータにある事実です。AIがそれ以外を作り出すことはできない作りにしています。</p>
+  <p style="margin:12px 0 0; font-size:14.5px; color:var(--muted)">AIは事務局から提供されたCloudflareの環境で動かしており、外部のAIサービスに入力内容を送ることはありません。</p>
+</div>
+
+<h2>6. 合否について</h2>
+<div class="keep">
+  <p style="margin:0"><b>このサービスは合否を判定するものではありません。</b>「安全圏」「適正圏」「挑戦圏」は、公開データと塾講師の監修による<b>目安</b>です。面接・調査書・傾斜配点・実技などの選抜要素は考慮していません。学校ごとの合格ラインは東京都が公表しておらず、公式な数値は存在しません。最終的な判断は、必ず中学校の先生や学校説明会でご確認ください。</p>
+</div>
+
+<h2>7. データの出どころ</h2>
+<table>
+  <tr><th>学校一覧・応募倍率・指定区分</th><td>東京都教育委員会の公開資料を加工</td></tr>
+  <tr><th>学校の位置</th><td>「国土数値情報（学校データ）」（国土交通省）を加工</td></tr>
+  <tr><th>地図</th><td>OpenStreetMap（© OpenStreetMap contributors, ODbL）</td></tr>
+  <tr><th>交通案内・校風</th><td>各校の公式サイト</td></tr>
+  <tr><th>合格の目安点</th><td>上記の公開データをもとに、塾講師の監修により算出</td></tr>
+</table>
+
+<h2>8. お問い合わせ</h2>
+<p>本サービスは<b>都知事杯オープンデータ・ハッカソン2026</b>に向けて Team WINS が制作しているものです。ご意見・お気づきの点は<a href="https://github.com/Nishi-Taiga/Course_Compass" target="_blank" rel="noopener">GitHubのリポジトリ</a>までお寄せください。</p>
+
+<a class="back" href="./">← 進路コンパスにもどる</a>
+
+<footer>
+  最終更新: 2026-08-14<br>
+  本サービスは開発中のプロトタイプです。掲載内容の正確性を保証するものではなく、最終確認は必ず学校の公式サイト・説明会で行ってください。
+</footer>
+
+</div>
+</body>
+</html>
