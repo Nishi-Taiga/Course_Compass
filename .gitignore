@@ -12,8 +12,14 @@ __pycache__/
 
 # large raw downloads (station_database等の再取得可能データ)
 data/raw/
+
+# 各校トップページのキャッシュ（7MB超・228ファイル）。部活動ページURLを見つける
+# ためだけの中間物で、scripts/build_school_sites.py がいつでも取り直せる。
+# 台帳そのもの（data/seed/school_sites.csv）と一次ソースの list.xlsx は追跡する。
+data/fetched/tops/
+
+# アクセス・校風ページのキャッシュ（fetch_school_access.py / fetch_school_spirit.py で再取得可能）
 data/fetched/access/
-data/raw/
 data/fetched/spirit/
 
 # 都高体連の成績PDF（再取得可能・11MB）。抽出済みCSVのみ追跡する

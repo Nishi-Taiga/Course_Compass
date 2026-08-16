@@ -6,9 +6,11 @@
     python3 scripts/fetch_school_clubs.py --force     # 取得済みも取り直す
 
 収集元は各校公式サイトのみ（民間まとめサイトは規約・著作権の観点で不採用・仕様書§6.2）。
+取得先URLは data/seed/school_sites.csv の clubs_url 列。この台帳は
+scripts/build_school_sites.py が都立学校ポータルの公式一覧から作る。
 
 サーバに負荷をかけないための決まりごと:
-  - robots.txt を起動時に1回だけ読み、Disallow と Crawl-delay に従う
+  - robots.txt をホストごとに1回だけ読み、Disallow と Crawl-delay に従う
   - リクエスト間隔は既定 3秒（要件は2秒以上。余裕を持たせている）
   - Crawl-delay が3秒より長ければそちらに従う
   - User-Agent で正直に名乗る（連絡先としてリポジトリURLを入れる）
@@ -22,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 import sys
 import time
 import urllib.error
@@ -33,6 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SITES_CSV = ROOT / "data" / "seed" / "school_sites.csv"
 OUT_DIR = ROOT / "data" / "fetched" / "clubs"
 FAILURES_CSV = OUT_DIR / "_failures.csv"
+RESOLVED_CSV = OUT_DIR / "_resolved.csv"   # iframe等で実際の取得先が変わった学校
 
 BASE = "https://www.metro.ed.jp/"
 
@@ -106,6 +110,71 @@ def is_blocked(path: str, disallow: list[str]) -> str | None:
     return None
 
 
+class Crawler:
+    """ホストごとに robots.txt を1回だけ読み、間隔をあけて取得する。
+
+    5校（八潮・国際・六郷工科・広尾・五日市）は www.metro.ed.jp ではなく
+    自前のホストにサイトを置いている。robots.txt はホストごとに別物なので、
+    まとめて1回読むわけにはいかない。間隔もホストごとに数える。
+    """
+
+    def __init__(self, min_delay: float = DEFAULT_DELAY_SEC):
+        self.min_delay = min_delay
+        self.rules: dict[str, tuple[list[str], float]] = {}
+        self.last: dict[str, float] = {}
+
+    def rules_for(self, netloc: str) -> tuple[list[str], float]:
+        if netloc not in self.rules:
+            print(f"  robots.txt を確認します: {netloc}")
+            disallow, delay = load_robots(f"https://{netloc}/")
+            delay = max(delay, self.min_delay)
+            print(f"    Disallow: {disallow or '（なし）'} / 間隔 {delay:.1f}秒")
+            self.rules[netloc] = (disallow, delay)
+        return self.rules[netloc]
+
+    def get(self, url: str) -> tuple[int, bytes]:
+        p = urllib.parse.urlparse(url)
+        disallow, delay = self.rules_for(p.netloc)
+        rule = is_blocked(p.path or "/", disallow)
+        if rule:
+            raise PermissionError(f"robots.txt Disallow: {rule}")
+
+        wait = delay - (time.monotonic() - self.last.get(p.netloc, -1e9))
+        if wait > 0:
+            time.sleep(wait)
+        self.last[p.netloc] = time.monotonic()
+        return fetch(url)
+
+
+IFRAME_RE = re.compile(rb"""<iframe\b[^>]*\bsrc=["']([^"']+)["']""", re.I)
+IFRAME_HINTS = ("bukatsu", "club", "katsudou", "katsudo")
+
+
+def find_club_iframe(body: bytes, page_url: str) -> str:
+    """部活一覧を埋め込んでいる iframe のURLを返す。無ければ空文字。
+
+    文字コードが Shift_JIS の学校があるため、デコードせずバイト列のまま探す
+    （src の値はASCIIなので、これで確実に拾える）。
+    """
+    for m in IFRAME_RE.findall(body):
+        src = m.decode("ascii", errors="ignore")
+        if any(k in src.lower() for k in IFRAME_HINTS):
+            return urllib.parse.urljoin(page_url, src)
+    return ""
+
+
+def slug_of(row: dict[str, str]) -> str:
+    """保存ファイル名に使う短い識別子。top_url から作る。
+
+    www.metro.ed.jp/hibiya-h/ → hibiya-h、別ホストなら先頭ラベル（yashio-h など）。
+    """
+    p = urllib.parse.urlparse(row.get("top_url") or "")
+    path = p.path.strip("/").split("/")[0]
+    if p.netloc == "www.metro.ed.jp" and path:
+        return path
+    return p.netloc.split(".")[0] or row["school_number"]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("schools", nargs="*", help="対象の学校名（省略時は全校）")
@@ -127,41 +196,34 @@ def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     print(f"User-Agent: {USER_AGENT}")
-    print("robots.txt を確認します...")
-    disallow, robots_delay = load_robots(BASE)
-    delay = max(args.delay, robots_delay)
-    print(f"  Disallow: {disallow or '（なし）'}")
-    print(f"  リクエスト間隔: {delay:.1f}秒")
-    print()
+    crawler = Crawler(args.delay)
 
     failures: list[dict[str, str]] = []
+    resolved: list[dict[str, str]] = []
     fetched = skipped = 0
-    first = True
 
     for t in targets:
-        name, slug = t["name"], t["slug"]
-        path = f"/{slug}/{t['clubs_path']}"
-        url = urllib.parse.urljoin(BASE, path.lstrip("/"))
-        dest = OUT_DIR / f"{t['school_number']}_{slug}.html"
+        name = t["name"]
+        url = t.get("clubs_url", "")
+        dest = OUT_DIR / f"{t['school_number']}_{slug_of(t)}.html"
+
+        if not url:
+            print(f"  SKIP  {name}: 部活動ページのURLが未解決（status={t.get('status')}）")
+            failures.append({"name": name, "url": t.get("top_url", ""),
+                             "reason": "clubs_url が空。build_school_sites.py の出力を確認"})
+            continue
 
         if dest.exists() and not args.force:
             print(f"  skip  {name}（取得済み: {dest.name}）")
             skipped += 1
             continue
 
-        rule = is_blocked(path, disallow)
-        if rule:
-            print(f"  BLOCK {name}: robots.txt の Disallow: {rule} に該当。取得しません")
-            failures.append({"name": name, "url": url, "reason": f"robots.txt Disallow: {rule}"})
-            continue
-
-        # 2回目以降は必ず間隔をあけてから叩く
-        if not first:
-            time.sleep(delay)
-        first = False
-
         try:
-            status, body = fetch(url)
+            status, body = crawler.get(url)
+        except PermissionError as e:
+            print(f"  BLOCK {name}: {e}")
+            failures.append({"name": name, "url": url, "reason": str(e)})
+            continue
         except urllib.error.HTTPError as e:
             print(f"  FAIL  {name}: HTTP {e.code}")
             failures.append({"name": name, "url": url, "reason": f"HTTP {e.code}"})
@@ -176,9 +238,36 @@ def main() -> None:
             failures.append({"name": name, "url": url, "reason": f"HTTP {status}"})
             continue
 
+        # 部活一覧を iframe で外部に置いている学校がある（広尾・五日市。いずれも
+        # www.pweb.jp）。外側は枠だけで部活名が1つも書かれていないため、
+        # 中身のほうを保存する。どこから取ったかは _resolved.csv に残す。
+        inner = find_club_iframe(body, url)
+        if inner:
+            try:
+                inner_status, inner_body = crawler.get(inner)
+                if inner_status != 200:
+                    raise RuntimeError(f"HTTP {inner_status}")
+            except Exception as e:
+                print(f"  WARN  {name}: iframeを取れませんでした（{e}）。外側を保存します")
+                failures.append({"name": name, "url": inner,
+                                 "reason": f"iframeの取得に失敗: {e}"})
+            else:
+                resolved.append({"name": name, "clubs_url": url, "effective_url": inner,
+                                 "reason": "部活一覧がiframeで埋め込まれていた"})
+                body = inner_body
+                print(f"  IFRAME {name}: {inner}")
+
         dest.write_bytes(body)
         print(f"  OK    {name}: {len(body):,} bytes -> {dest.name}")
         fetched += 1
+
+    # 取得先が clubs_url と違う学校は出典として残す（出典の可視化）
+    if resolved:
+        with RESOLVED_CSV.open("w", encoding="utf-8", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=["name", "clubs_url", "effective_url", "reason"])
+            w.writeheader()
+            w.writerows(resolved)
+        print(f"\n取得先が変わった学校 {len(resolved)}件 -> {RESOLVED_CSV}")
 
     # 失敗校は理由付きで残す（安田の目視検証に回すため）
     if failures:
