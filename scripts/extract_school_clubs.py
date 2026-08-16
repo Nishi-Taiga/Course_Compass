@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
-"""取得済みHTMLから部活リストを抽出する（GPT-OSS 20B / Workers AI）。
+"""取得済みHTMLから部活リストを抽出する。
 
-    python3 scripts/extract_school_clubs.py --dry-run   # 送信内容だけ確認（LLMを呼ばない）
-    python3 scripts/extract_school_clubs.py             # 実際に抽出
+    python3 scripts/extract_school_clubs.py                # 構造で抽出（既定・LLM不要）
+    python3 scripts/extract_school_clubs.py --engine llm   # Workers AI で抽出
+    python3 scripts/extract_school_clubs.py --dry-run      # LLMに送る内容だけ確認
 
-学校ごとにHTMLの作りがバラバラで、決め打ちのパーサーが書けない。
-そのためHTMLを丸ごとLLMに渡して部活名を列挙させる。
-GPT-OSS 20B を使うのは 128k コンテキストでHTMLが丸ごと入るため
-（Qwen2.5 Coder 32B は入力コスト約10倍なので使わない）。
+抽出の仕方は2つある。出力するCSVは同じなので、あとから差し替えて比べられる。
+
+  rules（既定） … HTMLの構造から抜く。scripts/parse_clubs.py。Cloudflare不要
+  llm           … HTMLを丸ごと GPT-OSS 20B に渡して列挙させる。128kコンテキスト
+                  （Qwen2.5 Coder 32B は入力コスト約10倍なので使わない）
+
+当初は「学校ごとにHTMLがバラバラで決め打ちパーサーは書けない」と考えて llm だけを
+用意したが、167校ぶん取得して数え直すと大半が共通CMSの決まった形だった。
+正解リスト（3校80部）に対して rules は 80/80 を再現する。受け入れ条件は8割。
 
 ⚠️ 表記ゆれ（サッカー部 / サッカー / 足球部）はここで正規化しない。
    サイト上の表記そのままを raw_name に保存する。正規化辞書は西が監修し、
@@ -33,6 +39,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_school_clubs import slug_of  # noqa: E402
+from parse_clubs import (  # noqa: E402
+    decode_html,
+    strip_noise,
+    parse_clubs as parse_clubs_from_html,   # 構造で抜く方。LLM出力を読む parse_clubs と別物
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 SITES_CSV = ROOT / "data" / "seed" / "school_sites.csv"
@@ -43,20 +54,6 @@ OUT_CSV = ROOT / "data" / "seed" / "school_clubs.csv"
 MODEL = "@cf/openai/gpt-oss-20b"
 
 
-def decode_html(body: bytes) -> str:
-    """HTMLを文字列にする。文字コードは meta の charset を見てから決める。
-
-    五日市の部活ページだけ Shift_JIS で、utf-8 決め打ちだと全部が文字化けし、
-    そのままLLMに渡すと部活名を1つも取れない。
-    """
-    m = re.search(rb"""charset=["']?([A-Za-z0-9_\-]+)""", body[:2000])
-    candidates = [m.group(1).decode("ascii", "ignore")] if m else []
-    for enc in candidates + ["utf-8", "cp932", "euc-jp"]:
-        try:
-            return body.decode(enc)
-        except (UnicodeDecodeError, LookupError):
-            continue
-    return body.decode("utf-8", errors="replace")
 
 SYSTEM_PROMPT = """あなたはHTMLから部活動の一覧を抜き出す抽出器です。
 次の規則に厳密に従ってください。
@@ -71,14 +68,6 @@ SYSTEM_PROMPT = """あなたはHTMLから部活動の一覧を抜き出す抽出
 
 出力形式:
 {"clubs":[{"raw_name":"サッカー部","category":"運動部"}]}"""
-
-
-def strip_noise(html: str) -> str:
-    """script/style/コメントだけ落とす。構造は残す（見出しがカテゴリの手がかりになる）。"""
-    html = re.sub(r"<!--.*?-->", "", html, flags=re.S)
-    html = re.sub(r"<script\b.*?</script>", "", html, flags=re.S | re.I)
-    html = re.sub(r"<style\b.*?</style>", "", html, flags=re.S | re.I)
-    return re.sub(r"\n{3,}", "\n\n", html)
 
 
 def call_workers_ai(system: str, user: str) -> str:
@@ -134,8 +123,10 @@ def parse_clubs(text: str) -> list[dict]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("schools", nargs="*", help="対象の学校名（省略時は取得済み全校）")
+    ap.add_argument("--engine", choices=["rules", "llm"], default="rules",
+                    help="rules=HTMLの構造から抜く（既定・Cloudflare不要） / llm=Workers AI")
     ap.add_argument("--dry-run", action="store_true",
-                    help="LLMを呼ばず、送信するプロンプトの要約だけ表示する")
+                    help="LLMを呼ばず、送信するプロンプトの要約だけ表示する（--engine llm 用）")
     args = ap.parse_args()
 
     with SITES_CSV.open(encoding="utf-8-sig", newline="") as f:
@@ -151,32 +142,48 @@ def main() -> None:
             effective = {r["name"]: r["effective_url"] for r in csv.DictReader(f)}
 
     rows: list[dict] = []
+    thin: list[str] = []          # 取れた数が少ない学校。目視に回す
+    missing: list[str] = []
+
     for t in targets:
         html_path = HTML_DIR / f"{t['school_number']}_{slug_of(t)}.html"
         if not html_path.is_file():
             print(f"  skip  {t['name']}: HTML未取得（先に fetch_school_clubs.py）")
+            missing.append(t["name"])
             continue
 
-        html = strip_noise(decode_html(html_path.read_bytes()))
+        raw_html = decode_html(html_path.read_bytes())
         source_url = effective.get(t["name"]) or t["clubs_url"]
-        user = f"学校名: {t['name']}\n出典: {source_url}\n\n--- HTML ---\n{html}"
 
-        if args.dry_run:
-            print(f"  {t['name']}: HTML {len(html):,}字 / 推定 {len(html)//3:,} トークン "
-                  f"（{MODEL} の128k以内）")
-            continue
+        if args.engine == "rules":
+            clubs, how = parse_clubs_from_html(raw_html)
+        else:
+            html = strip_noise(raw_html)
+            user = f"学校名: {t['name']}\n出典: {source_url}\n\n--- HTML ---\n{html}"
+            if args.dry_run:
+                print(f"  {t['name']}: HTML {len(html):,}字 / 推定 {len(html)//3:,} トークン "
+                      f"（{MODEL} の128k以内）")
+                continue
+            print(f"  {t['name']}: 抽出中...")
+            clubs, how = parse_clubs(call_workers_ai(SYSTEM_PROMPT, user)), MODEL
 
-        print(f"  {t['name']}: 抽出中...")
-        clubs = parse_clubs(call_workers_ai(SYSTEM_PROMPT, user))
         for c in clubs:
+            name = (c.get("raw_name") or "").strip()
+            if not name:
+                continue
             rows.append({
                 "school_number": t["school_number"],
                 "school_name": t["name"],
-                "raw_name": c.get("raw_name", "").strip(),
+                "raw_name": name,
                 "category": (c.get("category") or "").strip(),
                 "source_url": source_url,
+                "engine": how,
             })
-        print(f"    {len(clubs)}件")
+
+        # 都立で部活が5つ未満というのは考えにくい。取りこぼしを疑って印を付ける
+        if len(clubs) < 5:
+            thin.append(f"{t['name']}({len(clubs)})")
+        print(f"  {t['name']:12} {len(clubs):3}件  [{how}]")
 
     if args.dry_run:
         print("\n--dry-run のためLLMは呼んでいません。")
@@ -185,13 +192,19 @@ def main() -> None:
     if rows:
         OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
         with OUT_CSV.open("w", encoding="utf-8", newline="") as f:
-            w = csv.DictWriter(
-                f, fieldnames=["school_number", "school_name", "raw_name", "category", "source_url"]
-            )
+            w = csv.DictWriter(f, fieldnames=[
+                "school_number", "school_name", "raw_name", "category", "source_url", "engine"
+            ])
             w.writeheader()
             w.writerows(rows)
-        print(f"\n{len(rows)}件 -> {OUT_CSV}")
-        print("※ 受け入れ条件の8割判定は、学校サイトを見て目視で答え合わせすること。")
+
+        schools = len({r["school_number"] for r in rows})
+        print(f"\n{len(rows)}件 / {schools}校 -> {OUT_CSV}")
+        if thin:
+            print(f"⚠️ 5件未満の学校 {len(thin)}校（目視で確認）: {'、'.join(thin)}")
+        if missing:
+            print(f"⚠️ HTML未取得 {len(missing)}校: {'、'.join(missing)}")
+        print("※ 8割判定の答え合わせは data/seed/school_clubs_expected.md（3校80部）で行う。")
 
 
 if __name__ == "__main__":
