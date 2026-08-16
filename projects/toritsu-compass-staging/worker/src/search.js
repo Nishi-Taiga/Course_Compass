@@ -100,28 +100,37 @@ export async function searchSchools(db, q) {
 
   const student = estimateScore(q);
 
-  // --- 必須フィルタはSQL側で落とす。3万行の結合をJSに持ち込まない ---
-  const binds = [];
+  // --- 必須フィルタはSQL側で落とす。10万行の結合をJSに持ち込まない ---
+  //
+  // ⚠️ プレースホルダは **SQL文に現れる順** に束ねること。JOIN句は WHERE句より
+  //    前に来るので、部活のバインドは通学時間・学科より先。ひとつの配列に
+  //    書いた順で push していくと、JOINとWHEREで値が入れ違う。
+  //    （school_clubs が空のうちは部活の ? が増えないため、この取り違えは
+  //      データを入れるまで表に出なかった）
+  const joinBinds = [];
+  const clubBinds = [];
+  const whereBinds = [];
   const where = [
     "s.no_hs_admission = 0",            // 高校からの募集停止（中高一貫5校）は出さない
     "s.course_types LIKE '%全日制%'",
   ];
 
   let commuteJoin = "LEFT JOIN commute_times c ON c.school_number = s.school_number AND c.from_station = ?";
-  binds.push(q.station);
+  joinBinds.push(q.station);
 
   if (!q.no_commute_limit) {
     where.push("c.minutes IS NOT NULL");
     where.push("c.minutes <= ?");
-    binds.push(limit);
+    whereBinds.push(limit);
   }
 
   if (q.wants?.dept) {
     where.push("s.departments LIKE ?");
-    binds.push(`%${q.wants.dept}%`);
+    whereBinds.push(`%${q.wants.dept}%`);
   }
 
-  // 部活フィルタ。Step2/6 のデータが入るまでは school_clubs が空なので何も起きない。
+  // 部活フィルタ。raw_name はサイトの表記のままなので、部分一致で当てる
+  // （「吹奏楽」で「吹奏楽部」に当たる）。正規化は西の監修後に normalized で行う。
   const wantClubs = q.wants?.clubs ?? [];
   let clubJoin = "";
   if (wantClubs.length) {
@@ -129,7 +138,7 @@ export async function searchSchools(db, q) {
       ? [...new Set(wantClubs.flatMap(similarClubs))]
       : wantClubs;
     const conds = names.map(() => "cl.raw_name LIKE ?").join(" OR ");
-    names.forEach((n) => binds.push(`%${n}%`));
+    names.forEach((n) => clubBinds.push(`%${n}%`));
     clubJoin = `LEFT JOIN school_clubs cl ON cl.school_number = s.school_number AND (${conds})`;
   }
 
@@ -146,6 +155,7 @@ export async function searchSchools(db, q) {
      ${wantClubs.length ? "GROUP BY s.school_number" : ""}
      ORDER BY c.minutes IS NULL, c.minutes`;
 
+  const binds = [...joinBinds, ...clubBinds, ...whereBinds];   // SQL文に現れる順
   const { results } = await db.prepare(sql).bind(...binds).all();
 
   const rows = results.map((r) => ({
@@ -153,14 +163,15 @@ export async function searchSchools(db, q) {
     matched_clubs: r.matched_clubs_csv ? r.matched_clubs_csv.split(",") : [],
   }));
 
-  // 部活が指定されていて緩和前なら、実際に一致した学校だけに絞る
+  // 部活が指定されていて緩和前なら、実際に一致した学校だけに絞る。
+  //
+  // ⚠️ 以前は「一致0件なら絞らない」という逃げを入れていた（school_clubs が
+  //    空のうちは全校が0件になるため）。データが入った今それを残すと、
+  //    無い部活を指定したときに黙って条件を外した結果を返してしまう。
+  //    0件は0件として返し、緩和を提案する（仕様書§5.3）。
   if (wantClubs.length && !applied.has("club_similar")) {
-    // school_clubs が空のうちは一致0件になるため、データが入るまでは絞らない
-    const anyMatch = rows.some((r) => r.matched_clubs.length);
-    if (anyMatch) {
-      for (let i = rows.length - 1; i >= 0; i--) {
-        if (!rows[i].matched_clubs.length) rows.splice(i, 1);
-      }
+    for (let i = rows.length - 1; i >= 0; i--) {
+      if (!rows[i].matched_clubs.length) rows.splice(i, 1);
     }
   }
 

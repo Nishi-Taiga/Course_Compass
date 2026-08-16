@@ -39,6 +39,9 @@ SOURCE_TARGET_SCORE = "公開データの層別による暫定値（2026-08-14�
 ROWS_PER_INSERT = 100
 ROWS_PER_INSERT_BULK = 250
 
+# 部活の取得日。出典と一緒に持たせる（いつ時点の情報かが分からないと使えない）
+FETCHED_AT = "2026-08-14"
+
 
 def find_repo_root(start: Path) -> Path:
     for d in [start, *start.parents]:
@@ -248,8 +251,28 @@ def main() -> None:
         out.append("-- 通学時間系は未生成（scripts/extract_prototype_data.py を先に実行）")
         out.append("")
 
-    out.append("-- school_clubs は未投入（Step2/6）")
-    out.append("")
+    # --- 部活動（Step6） ---
+    clubs_csv = root / "data" / "seed" / "school_clubs.csv"
+    if clubs_csv.is_file():
+        clubs = read_csv(clubs_csv)
+        known = {r["school_number"] for r in master}
+        unknown = sorted({r["school_number"] for r in clubs} - known)
+        if unknown:
+            # 黙って落とすと「部活が無い学校」に化ける。名寄せ漏れは必ず止める
+            sys.exit(f"school_clubs.csv に未知の学校番号: {unknown}")
+        emit_inserts(out, "school_clubs",
+                   ["school_number", "raw_name", "normalized", "category",
+                    "source_url", "fetched_at"],
+                   [[sql_str(r["school_number"]), sql_str(r["raw_name"]),
+                     "NULL",                       # 正規化は西の監修後に埋める
+                     sql_str(r.get("category") or ""), sql_str(r.get("source_url") or ""),
+                     sql_str(FETCHED_AT)]
+                    for r in clubs],
+                   per_stmt=ROWS_PER_INSERT_BULK)
+        counts["school_clubs"] = len(clubs)
+    else:
+        out.append("-- school_clubs は未投入（scripts/extract_school_clubs.py を先に実行）")
+        out.append("")
 
     dest = worker_dir / "seed.sql"
     dest.write_text("\n".join(out), encoding="utf-8", newline="\n")
@@ -260,6 +283,7 @@ def main() -> None:
     print(f"  stations      : {counts['stations']} 行")
     print(f"  ward_stations : {counts['ward_stations']} 行")
     print(f"  commute_times : {counts['commute_times']} 行")
+    print(f"  school_clubs  : {counts.get('school_clubs', 0)} 行")
     print(f"  指定区分あり  : {sum(1 for r in master if r['designation'].strip())} 校")
     print(f"  名寄せ漏れ    : 0 件")
 
