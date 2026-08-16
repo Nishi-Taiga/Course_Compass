@@ -21,3 +21,7 @@ data/fetched/tops/
 # アクセス・校風ページのキャッシュ（fetch_school_access.py / fetch_school_spirit.py で再取得可能）
 data/fetched/access/
 data/fetched/spirit/
+
+# 都高体連の成績PDF（再取得可能・11MB）。抽出済みCSVのみ追跡する
+data/fetched/kotairen/*.pdf
+data/fetched/clubs/

@@ -1,0 +1,105 @@
+name: deploy-worker
+
+# 進路コンパスの本番Worker（toritsu-compass-staging）をデプロイする。手動起動のみ。
+#
+# 事前準備（1回だけ）: リポジトリの Settings → Secrets and variables → Actions に
+#   CLOUDFLARE_API_TOKEN を登録する。
+#   トークンは Cloudflare ダッシュボード → My Profile → API Tokens → Create Token で、
+#   テンプレート「Edit Cloudflare Workers」を選び、権限に D1 / Edit を足して発行する
+#   （テンプレートに Workers Scripts・Workers KV は入るが D1 は入らない。
+#     seed 投入で D1 / Edit が要る）。
+#   ⚠️ Account Resources では wrangler.jsonc の account_id と同じアカウント
+#      （f26bb7b8b376e9d6bbe9978b5cb92c62）を選ぶこと。別アカウントのトークンだと
+#      デプロイ先が変わり、公開URLに反映されない。
+#
+# seed 投入は既定で行わない。D1の中身を入れ替えるのは重い操作で、
+# コードだけ直したいときに毎回流すものではないため、明示的に選んだときだけ実行する。
+
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: 'D1にschema+seedを投入し直す（学校データを更新したとき。約103,958行・数分かかる）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: projects/toritsu-compass-staging/worker
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install
+        run: npm ci
+
+      # seed.sql がCSVと食い違ったまま投入されるのを防ぐ。
+      # 生成物に差が出たらここで気づけるようにする（黙って古いデータを入れない）。
+      - name: Verify seed.sql is up to date
+        if: ${{ inputs.seed }}
+        run: |
+          python3 scripts/build_seed_sql.py
+          if ! git diff --quiet -- seed.sql; then
+            echo "::error::seed.sql がCSVから再生成した内容と一致しません。ローカルで npm run seed:build を実行してコミットしてください。"
+            git diff --stat -- seed.sql
+            exit 1
+          fi
+
+      - name: Apply schema and seed to D1
+        if: ${{ inputs.seed }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # wrangler は起動時にアカウント一覧を引きに行き、トークンに
+          # User Details / Memberships の読み取りが無いとそこで落ちる。
+          # アカウントを明示すればその照会自体が要らなくなる。
+          # 値は wrangler.jsonc の account_id と同じ（すでに公開されている）
+          CLOUDFLARE_ACCOUNT_ID: f26bb7b8b376e9d6bbe9978b5cb92c62
+        run: npm run db:remote
+
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # wrangler は起動時にアカウント一覧を引きに行き、トークンに
+          # User Details / Memberships の読み取りが無いとそこで落ちる。
+          # アカウントを明示すればその照会自体が要らなくなる。
+          # 値は wrangler.jsonc の account_id と同じ（すでに公開されている）
+          CLOUDFLARE_ACCOUNT_ID: f26bb7b8b376e9d6bbe9978b5cb92c62
+        run: npm run deploy
+
+      # デプロイが通っても中身が古ければ意味がないので、公開URLを実際に叩いて確かめる。
+      # /health は D1接続・KV往復・件数一致が全部揃ったときだけ ok:true を返す。
+      - name: Verify /health
+        run: |
+          BASE=https://toritsu-compass-staging.tokyo-odh-299.workers.dev
+          for i in 1 2 3 4 5; do
+            body=$(curl -sS -m 30 "$BASE/health" || true)
+            echo "$body"
+            if echo "$body" | grep -q '"ok": true'; then
+              echo "health ok"
+              break
+            fi
+            if [ "$i" = "5" ]; then
+              echo "::error::/health が ok:true を返しませんでした"
+              exit 1
+            fi
+            sleep 10
+          done
+          echo "--- /api/extract ---"
+          code=$(curl -sS -m 30 -o /dev/null -w '%{http_code}' \
+            -X POST "$BASE/api/extract" -H 'content-type: application/json' \
+            -d '{"text":"練馬に住んでいます"}')
+          echo "status=$code"
+          if [ "$code" != "200" ]; then
+            echo "::error::/api/extract が $code を返しました（デプロイが反映されていない可能性）"
+            exit 1
+          fi
