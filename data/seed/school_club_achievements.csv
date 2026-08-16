@@ -1,0 +1,875 @@
+school_number,school,year,meet,sport,event,division,rank,source
+401010,一橋,令和6年度,全国大会（定時制通信制）,第59回陸上競技大会,,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/teiji_tsushin_tokyo_result.pdf
+401040,三田,令和5年度,関東大会,卓球,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+401210,大崎,令和7年度,関東大会,ﾊﾞｽｹｯﾄﾎﾞｰﾙ,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+401230,小山台,令和5年度,全国大会（インターハイ）,自転車競技,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+401230,小山台,令和5年度,関東大会,,スクラッチ,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+401230,小山台,令和5年度,関東大会,,個人 ロード・レース,男,30位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+401230,小山台,令和7年度,関東大会,,やり投,女,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+401240,雪谷,令和5年度,東京都大会,（３層・Layer３）,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+401240,雪谷,令和6年度,全国大会（インターハイ）,水泳（競泳）,,男,44位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+401240,雪谷,令和6年度,関東大会,,100ｍ バタフライ,男,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+401240,雪谷,令和7年度,全国大会（インターハイ）,陸上競技,やり投,男,決勝出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+401240,雪谷,令和7年度,全国大会（インターハイ）,水泳(競泳),100m自由形,男,54位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+401240,雪谷,令和7年度,全国大会（インターハイ）,,ﾊﾞﾀﾌﾗｲ,男,20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+401240,雪谷,令和7年度,全国大会（インターハイ）,,ﾊﾞﾀﾌﾗｲ,男,43位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+401240,雪谷,令和7年度,関東大会,,やり投,男,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+401240,雪谷,令和7年度,関東大会,,,男,予選11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+401240,雪谷,令和7年度,関東大会,,100m ﾊﾞﾀﾌﾗｲ,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+401240,雪谷,令和7年度,関東大会,,100m ﾊﾞﾀﾌﾗｲ,男,予選11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+401240,雪谷,令和7年度,関東大会,,4×200m ﾌﾘｰﾘﾚｰ,男,予選27位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+401240,雪谷,令和7年度,東京都大会,（３層・Layer３）,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+401520,美原,令和5年度,東京都大会,弓道,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+401520,美原,令和6年度,関東大会,ソフトボール,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+401520,美原,令和6年度,関東大会,弓道,団体,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402010,戸山,令和5年度,全国大会（インターハイ）,,,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402010,戸山,令和5年度,全国大会（インターハイ）,,,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402010,戸山,令和5年度,関東大会,水泳 (競泳),学校対抗,女,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402010,戸山,令和5年度,関東大会,,100ｍ平泳ぎ,女,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402010,戸山,令和5年度,関東大会,,200ｍ 個人メドレー,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402010,戸山,令和5年度,関東大会,,400m 個人メドレー,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402010,戸山,令和6年度,全国大会（インターハイ）,カヌー,,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402010,戸山,令和6年度,関東大会,,200ｍ バタフライ,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402010,戸山,令和6年度,関東大会,,400m,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402010,戸山,令和7年度,関東大会,ｶﾇｰ,男子カヤック シングル500m,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,陸上競技,,男,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,陸上競技,,女,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,水泳(競泳),,男,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,水泳(競泳),,男,48位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,水泳(競泳),,男,18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,水泳(競泳),,男,42位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,,,男,23位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,,,男,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,,,男,42位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,全国大会（インターハイ）,自転車競技,,女,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402030,駒場,令和5年度,関東大会,陸上競技,４００ｍ,男,予選7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,陸上競技,４×１００ｍ リレー,女,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,陸上競技,４×4００ｍ リレー,女,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,陸上競技,走高跳,男,決勝4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,走幅跳,女,決勝14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,やり投,女,決勝17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,七種競技,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,体操 (機械体操),団体総合,女,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,体操 (機械体操),団体総合,男,17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,体操 (機械体操),個人総合,女,46位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,体操 (機械体操),個人総合,女,51位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,体操 (機械体操),個人総合,女,61位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,体操 (機械体操),個人総合,女,69位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,個人総合,男,56位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,個人総合,男,89位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,個人総合,男,91位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,ゆか,女,44位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,ゆか,女,46位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,ゆか,男,75位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,ゆか,女,57位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,ゆか,男,93位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,ゆか,女,71位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,跳馬,男,24位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,跳馬,女,38位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,跳馬,女,42位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,跳馬,女,50位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,跳馬,女,52位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,跳馬,男,94位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,段違い平行棒,女,38位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,段違い平行棒,女,42位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,平行棒,男,57位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,平行棒,男,60位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,段違い平行棒,女,59位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,段違い平行棒,女,65位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,平均台,女,40位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,あん馬,男,50位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,平均台,女,60位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,平均台,女,79位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,あん馬,男,92位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,平均台,女,80位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,,男,57位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,,男,66位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,,男,93位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,鉄棒,男,35位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,鉄棒,男,78位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,鉄棒,男,90位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,バスケットボール,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,バレーボール,学校対抗,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,水泳 (競泳),学校対抗,男,18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,水泳 (競泳),50m自由形,男,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,水泳 (競泳),100m自由形,男,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,水泳 (競泳),100m背泳ぎ,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,,男,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,100ｍ バタフライ,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,100ｍ バタフライ,男,33位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,4×100m フリーリレー,男,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,,女,28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,4×200ｍ フリーリレー,男,20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,4×100m メドレーリレー,男,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,500m タイム・トライアル,女,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,関東大会,,2km インディヴィデュア ル・パシュート,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402030,駒場,令和5年度,東京都大会,体操,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+402030,駒場,令和5年度,東京都大会,体操,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+402030,駒場,令和5年度,東京都大会,自転車競技,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+402030,駒場,令和6年度,全国大会（インターハイ）,陸上競技,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402030,駒場,令和6年度,全国大会（インターハイ）,水泳（競泳）,,男,20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402030,駒場,令和6年度,全国大会（インターハイ）,水泳（競泳）,,男,41位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402030,駒場,令和6年度,全国大会（インターハイ）,,,男,30位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402030,駒場,令和6年度,全国大会（インターハイ）,,,女,46位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402030,駒場,令和6年度,全国大会（インターハイ）,,,男,54位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402030,駒場,令和6年度,関東大会,陸上競技,４×４００ｍ,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,砲丸投,男,決勝14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,円盤投,男,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,体操（器械体操）,団体総合,女,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,体操（器械体操）,個人総合,女,59位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,男,55位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,女,63位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,女,65位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,男,80位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,女,67位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,跳馬,女,44位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,ゆか,男,63位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,跳馬,女,48位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,跳馬,女,57位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,ゆか,男,89位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,段違い平行棒,女,53位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,あん馬,男,51位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,段違い平行棒,女,61位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,あん馬,男,53位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,段違い平行棒,女,69位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,平均台,女,52位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,つり輪,男,59位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,平均台,女,58位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,つり輪,男,86位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,平均台,女,78位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,平均台,女,81位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,跳馬,男,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,ゆか,女,51位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,ゆか,女,56位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,ゆか,女,65位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,ゆか,女,66位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,跳馬,男,84位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,男,59位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,男,64位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,鉄棒,男,61位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,鉄棒,男,78位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,バスケットボール,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,バレーボール,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,水泳（競泳）,50m自由形,男,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,水泳（競泳）,100m自由形,男,20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,水泳（競泳）,100m自由形,男,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,水泳（競泳）,100m自由形,男,36位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,水泳（競泳）,200m自由形,男,18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,水泳（競泳）,200m自由形,女,24位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,フリーリレー,男,7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,フリーリレー,女,22位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,メドレーリレー,男,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,メドレーリレー,女,25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,男,22位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,関東大会,,,女,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402030,駒場,令和6年度,東京都大会,体操,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+402030,駒場,令和6年度,東京都大会,体操,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+402030,駒場,令和7年度,全国大会（インターハイ）,陸上競技,砲丸投,男,予選8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402030,駒場,令和7年度,全国大会（インターハイ）,陸上競技,やり投,男,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402030,駒場,令和7年度,全国大会（インターハイ）,水泳(競泳),50m自由形,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402030,駒場,令和7年度,全国大会（インターハイ）,水泳(競泳),50m自由形,男,40位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402030,駒場,令和7年度,全国大会（インターハイ）,,4×100m ﾌﾘｰﾘﾚｰ,男,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402030,駒場,令和7年度,全国大会（インターハイ）,,,女,36位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402030,駒場,令和7年度,全国大会（インターハイ）,,4×200m ﾌﾘｰﾘﾚｰ,男,38位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402030,駒場,令和7年度,関東大会,陸上競技,200m,女,予選4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,陸上競技,400m,女,予選7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,陸上競技,4×400m,女,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,陸上競技,棒高跳,女,決勝7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,砲丸投,男,決勝4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,円盤投,男,決勝15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,やり投,男,決勝4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,やり投,女,決勝17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,体操(器械体操),個人総合,男,75位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,,男,70位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,跳馬,男,76位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,あん馬,男,72位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,つり輪,男,87位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,平行棒,男,63位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,,男,84位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,ﾊﾞﾚｰﾎﾞｰﾙ,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,水泳(競泳),50m自由形,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,水泳(競泳),50m自由形,男,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,200m自由形,男,予選19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,100m平泳ぎ,男,予選24位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,4×100m ﾌﾘｰﾘﾚｰ,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,4×100m ﾌﾘｰﾘﾚｰ,女,予選21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,,男,予選23位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,4×200m ﾌﾘｰﾘﾚｰ,男,予選19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,関東大会,,4×200m ﾌﾘｰﾘﾚｰ,女,予選24位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402030,駒場,令和7年度,東京都大会,陸上,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+402030,駒場,令和7年度,東京都大会,体操,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+402030,駒場,令和7年度,東京都大会,体操,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+402410,世田谷泉,令和5年度,全国大会（定時制通信制）,第58回陸上競技大会,,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/09/R5_teitsu_alljapan_tokyoresult.pdf
+402410,世田谷泉,令和5年度,全国大会（定時制通信制）,第58回陸上競技大会,,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/09/R5_teitsu_alljapan_tokyoresult.pdf
+402410,世田谷泉,令和6年度,全国大会（定時制通信制）,第59回陸上競技大会,,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/teiji_tsushin_tokyo_result.pdf
+402420,世田谷総合,令和5年度,全国大会（インターハイ）,スケート(フィギュア),,女,64位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402420,世田谷総合,令和6年度,全国大会（インターハイ）,スケート（フィギュア）【冬季種目】,,女,25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402530,芦花,令和5年度,関東大会,弓道,団体,女,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402530,芦花,令和5年度,関東大会,弓道,個人,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402530,芦花,令和6年度,全国大会（インターハイ）,陸上競技,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402530,芦花,令和6年度,関東大会,陸上競技,４００ｍ,男,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402530,芦花,令和6年度,関東大会,陸上競技,４００ｍハードル,男,予選3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402530,芦花,令和6年度,関東大会,,走幅跳,女,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402530,芦花,令和6年度,関東大会,弓道,団体,女,ベスト8,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402530,芦花,令和6年度,関東大会,,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402530,芦花,令和7年度,全国大会（インターハイ）,弓道,個人,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402530,芦花,令和7年度,関東大会,陸上競技,400m,女,予選4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402530,芦花,令和7年度,関東大会,,やり投,男,決勝15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402530,芦花,令和7年度,関東大会,弓道,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402530,芦花,令和7年度,関東大会,弓道,個人,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402530,芦花,令和7年度,関東大会,弓道,個人,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402530,芦花,令和7年度,関東大会,ﾗｲﾌﾙ射撃,個人 エア・ライフル,男,7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402530,芦花,令和7年度,東京都大会,弓道,団体,男,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+402530,芦花,令和7年度,東京都大会,弓道,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+402750,総合工科,令和5年度,全国大会（インターハイ）,自転車競技,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+402750,総合工科,令和5年度,関東大会,,,男,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,関東大会,,スプリント,男,予選23位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,関東大会,,スプリント,男,予選30位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,関東大会,,ケイリン,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,関東大会,,ケイリン,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,関東大会,,4km速度競走,男,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,関東大会,,ポイント・レース,男,12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,関東大会,,個人 ロード・レース,男,52位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+402750,総合工科,令和5年度,東京都大会,自転車競技,団体,男,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+402750,総合工科,令和6年度,全国大会（インターハイ）,自転車競技,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402750,総合工科,令和6年度,全国大会（インターハイ）,自転車競技,,男,20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+402750,総合工科,令和6年度,関東大会,,パーシュート,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402750,総合工科,令和6年度,関東大会,,スプリント,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402750,総合工科,令和6年度,関東大会,,インディヴィデュア ル・パーシュート,男,12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402750,総合工科,令和6年度,関東大会,,4km速度競走,男,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402750,総合工科,令和6年度,関東大会,,スクラッチ,男,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402750,総合工科,令和6年度,関東大会,,ポイント・レース,男,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402750,総合工科,令和6年度,関東大会,,ロード・レース,男,50位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+402750,総合工科,令和6年度,東京都大会,自転車競技,団体,男,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+402750,総合工科,令和7年度,全国大会（インターハイ）,自転車競技,4km速度競走,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+402750,総合工科,令和7年度,関東大会,自転車競技,ﾁｰﾑ･スプリント,男,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402750,総合工科,令和7年度,関東大会,,ｽﾌﾟﾘﾝﾄ,男,予選17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402750,総合工科,令和7年度,関東大会,,ｽﾌﾟﾘﾝﾄ,男,予選22位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402750,総合工科,令和7年度,関東大会,,ｹｲﾘﾝ,男,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402750,総合工科,令和7年度,関東大会,,ｹｲﾘﾝ,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402750,総合工科,令和7年度,関東大会,,4km速度競走,男,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+402750,総合工科,令和7年度,関東大会,,ｽｸﾗｯﾁ,男,12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和5年度,関東大会,,棒高跳,女,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403020,富士,令和5年度,関東大会,,棒高跳,女,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403020,富士,令和5年度,関東大会,,ハンマー投,女,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403020,富士,令和5年度,関東大会,,,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403020,富士,令和5年度,関東大会,なぎなた,個人,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403020,富士,令和5年度,関東大会,なぎなた,演技,女,１回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403020,富士,令和5年度,東京都大会,なぎなた,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+403020,富士,令和6年度,全国大会（インターハイ）,なぎなた,,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+403020,富士,令和6年度,関東大会,陸上競技,５０００ｍ競歩,男,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,陸上競技,走高跳,女,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,,ハンマー投,女,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,なぎなた,団体,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,なぎなた,個人,女,２回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,なぎなた,個人,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,なぎなた,個人,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,なぎなた,演技,女,3回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,関東大会,なぎなた,演技,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403020,富士,令和6年度,東京都大会,なぎなた,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+403020,富士,令和7年度,全国大会（インターハイ）,陸上競技,5000m競歩,男,決勝13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403020,富士,令和7年度,全国大会（インターハイ）,なぎなた,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403020,富士,令和7年度,全国大会（インターハイ）,なぎなた,演技,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403020,富士,令和7年度,全国大会（インターハイ）,なぎなた,個人,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403020,富士,令和7年度,関東大会,陸上競技,5000mW,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和7年度,関東大会,,,男,決勝出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和7年度,関東大会,剣道,団体,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和7年度,関東大会,なぎなた,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和7年度,関東大会,なぎなた,個人,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和7年度,関東大会,なぎなた,個人,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和7年度,関東大会,なぎなた,演技,女,3回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403020,富士,令和7年度,東京都大会,なぎなた,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+403030,武蔵丘,令和5年度,関東大会,,,女,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403030,武蔵丘,令和6年度,関東大会,,200m背泳ぎ,女,29位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403050,西,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+403050,西,令和5年度,関東大会,陸上競技,３０００ｍ,女,決勝18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403050,西,令和5年度,関東大会,水泳 (競泳),50m自由形,女,18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403050,西,令和7年度,関東大会,,1500m自由形,男,決勝16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403050,西,令和7年度,関東大会,ﾃﾆｽ,ｼﾝｸﾞﾙｽ,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403060,豊多摩,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+403060,豊多摩,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,40位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+403060,豊多摩,令和5年度,関東大会,水泳 (競泳),学校対抗,女,25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403060,豊多摩,令和5年度,関東大会,水泳 (競泳),50m自由形,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403060,豊多摩,令和5年度,関東大会,水泳 (競泳),100m自由形,女,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403060,豊多摩,令和6年度,全国大会（インターハイ）,水泳（競泳）,,女,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+403060,豊多摩,令和6年度,関東大会,水泳（競泳）,50m自由形,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403060,豊多摩,令和6年度,関東大会,水泳（競泳）,100m自由形,女,27位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403060,豊多摩,令和7年度,全国大会（インターハイ）,水泳(競泳),50m自由形,女,25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403060,豊多摩,令和7年度,関東大会,水泳(競泳),50m自由形,女,予選14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403060,豊多摩,令和7年度,関東大会,,,女,予選25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403060,豊多摩,令和7年度,関東大会,,200m ﾊﾞﾀﾌﾗｲ,女,予選29位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403060,豊多摩,令和7年度,関東大会,,400m 個人ﾒﾄﾞﾚｰ,女,予選18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403070,杉並,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,50位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+403070,杉並,令和5年度,関東大会,水泳 (競泳),50m自由形,女,17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403070,杉並,令和6年度,全国大会（インターハイ）,水泳（競泳）,,女,28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+403070,杉並,令和6年度,全国大会（インターハイ）,水泳（競泳）,,女,48位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+403070,杉並,令和6年度,関東大会,水泳（競泳）,50m自由形,女,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403070,杉並,令和6年度,関東大会,水泳（競泳）,50m自由形,女,19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403070,杉並,令和6年度,関東大会,水泳（競泳）,100m自由形,女,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403070,杉並,令和6年度,関東大会,,個人メドレー,女,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403070,杉並,令和6年度,関東大会,,メドレーリレー,男,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403070,杉並,令和7年度,全国大会（インターハイ）,水泳(競泳),50m自由形,女,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403070,杉並,令和7年度,全国大会（インターハイ）,水泳(競泳),50m自由形,女,43位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403070,杉並,令和7年度,全国大会（インターハイ）,,4×100m ﾌﾘｰﾘﾚｰ,女,27位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403070,杉並,令和7年度,関東大会,水泳(競泳),50m自由形,女,決勝10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403070,杉並,令和7年度,関東大会,水泳(競泳),50m自由形,女,予選28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403070,杉並,令和7年度,関東大会,,100m背泳ぎ,男,予選33位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403070,杉並,令和7年度,関東大会,,200m平泳ぎ,男,予選18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403070,杉並,令和7年度,関東大会,,200m 個人ﾒﾄﾞﾚｰ,女,予選15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403070,杉並,令和7年度,関東大会,,4×100m ﾌﾘｰﾘﾚｰ,女,予選11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403070,杉並,令和7年度,関東大会,,,女,予選20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403210,石神井,令和7年度,全国大会（インターハイ）,陸上競技,400m,男,予選5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403210,石神井,令和7年度,関東大会,陸上競技,400m,男,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403220,井草,令和5年度,関東大会,弓道,団体,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403220,井草,令和5年度,関東大会,弓道,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403220,井草,令和5年度,東京都大会,弓道,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+403220,井草,令和6年度,全国大会（インターハイ）,弓道,,女,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+403220,井草,令和6年度,関東大会,弓道,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403220,井草,令和6年度,関東大会,,個人,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403220,井草,令和6年度,東京都大会,水泳 （水 球),団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+403220,井草,令和6年度,東京都大会,弓道,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+403220,井草,令和7年度,全国大会（インターハイ）,弓道,団体,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+403220,井草,令和7年度,関東大会,弓道,団体,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403220,井草,令和7年度,関東大会,弓道,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403220,井草,令和7年度,関東大会,弓道,個人,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403220,井草,令和7年度,東京都大会,水泳（水 球),団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+403220,井草,令和7年度,東京都大会,弓道,団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+403250,光丘,令和6年度,関東大会,,ハンマー投,女,決勝13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403250,光丘,令和6年度,関東大会,,ハンマー投,男,決勝15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403410,杉並総合,令和5年度,東京都大会,サッカー,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+403420,稔ヶ丘,令和6年度,全国大会（定時制通信制）,第59回陸上競技大会,,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/teiji_tsushin_tokyo_result.pdf
+403510,大泉桜,令和5年度,関東大会,フェンシング,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403510,大泉桜,令和5年度,関東大会,フェンシング,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403510,大泉桜,令和5年度,東京都大会,フェンシング,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+403510,大泉桜,令和6年度,関東大会,フェンシング,学校対抗,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403510,大泉桜,令和6年度,関東大会,フェンシング,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403510,大泉桜,令和7年度,関東大会,ﾌｪﾝｼﾝｸﾞ,学校対抗,女,3回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403510,大泉桜,令和7年度,関東大会,ﾌｪﾝｼﾝｸﾞ,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403510,大泉桜,令和7年度,関東大会,ﾌｪﾝｼﾝｸﾞ,個人,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403510,大泉桜,令和7年度,関東大会,ﾌｪﾝｼﾝｸﾞ,個人,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+403510,大泉桜,令和7年度,東京都大会,フェンシング,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+403810,農芸,令和5年度,関東大会,相撲,８０キロ,男,５位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+403810,農芸,令和6年度,全国大会（インターハイ）,相撲,,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+403810,農芸,令和6年度,関東大会,相撲,80kg級,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+403810,農芸,令和7年度,関東大会,相撲,80kg級,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404050,文京,令和5年度,関東大会,,砲丸投,男,決勝20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+404050,文京,令和5年度,関東大会,,100ｍ バタフライ,女,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+404050,文京,令和6年度,関東大会,陸上競技,４００ｍ,女,予選3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+404050,文京,令和7年度,関東大会,陸上競技,100m,男,準決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404050,文京,令和7年度,関東大会,陸上競技,200m,男,予選3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404050,文京,令和7年度,関東大会,陸上競技,400mH (0.762m),女,決勝7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404050,文京,令和7年度,関東大会,,三段跳,男,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404210,北園,令和6年度,全国大会（インターハイ）,自転車競技,,男,20位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+404210,北園,令和6年度,関東大会,,1km タイム・トライアル,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+404220,板橋,令和5年度,全国大会（インターハイ）,陸上競技,,男,決勝４位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+404220,板橋,令和5年度,全国大会（インターハイ）,陸上競技,,男,予選5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+404220,板橋,令和5年度,関東大会,陸上競技,１００ｍ,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+404220,板橋,令和5年度,関東大会,陸上競技,８００ｍ,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+404220,板橋,令和5年度,関東大会,,,男,決勝13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+404220,板橋,令和6年度,全国大会（インターハイ）,陸上競技,,男,準決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+404220,板橋,令和6年度,全国大会（インターハイ）,陸上競技,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+404220,板橋,令和6年度,全国大会（インターハイ）,陸上競技,,男,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+404220,板橋,令和6年度,関東大会,陸上競技,２００ｍ,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+404220,板橋,令和6年度,関東大会,陸上競技,８００ｍ,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+404220,板橋,令和6年度,関東大会,陸上競技,４×４００ｍ,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+404220,板橋,令和6年度,関東大会,,円盤投,女,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+404220,板橋,令和6年度,関東大会,,八種競技,男,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+404220,板橋,令和7年度,全国大会（インターハイ）,陸上競技,走高跳,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+404220,板橋,令和7年度,関東大会,陸上競技,800m,男,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404220,板橋,令和7年度,関東大会,陸上競技,走高跳,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404220,板橋,令和7年度,関東大会,,走幅跳,男,決勝15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404220,板橋,令和7年度,関東大会,,八種競技,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404260,高島,令和5年度,関東大会,バレーボール,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+404260,高島,令和6年度,全国大会（インターハイ）,スケート（フィギュア）【冬季種目】,,女,7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+404260,高島,令和7年度,全国大会（インターハイ）,陸上競技,800m,男,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+404260,高島,令和7年度,全国大会（インターハイ）,ｽｹｰﾄ(ﾌｨｷﾞｭｱ),学校対抗,女,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+404260,高島,令和7年度,全国大会（インターハイ）,ｽｹｰﾄ(ﾌｨｷﾞｭｱ),個人,女,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+404260,高島,令和7年度,関東大会,陸上競技,800m,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404260,高島,令和7年度,関東大会,,三段跳,女,決勝11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+404510,飛鳥,令和5年度,東京都大会,サッカー,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+404510,飛鳥,令和7年度,東京都大会,サッカー,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+404710,工芸,令和5年度,東京都大会,登山,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+404710,工芸,令和6年度,東京都大会,登山,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+404710,工芸,令和7年度,東京都大会,登山,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+405060,上野,令和5年度,関東大会,バレーボール,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405060,上野,令和5年度,東京都大会,軟式野球,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+405060,上野,令和6年度,関東大会,バレーボール,学校対抗,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405240,足立西,令和6年度,関東大会,,800m自由形,女,28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405250,足立東,令和5年度,関東大会,ボクシング,ピン級A,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405250,足立東,令和5年度,関東大会,ボクシング,ライトフライ級,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405250,足立東,令和5年度,東京都大会,ボクシング,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+405250,足立東,令和6年度,全国大会（インターハイ）,ボクシング,,男,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+405250,足立東,令和6年度,関東大会,ボクシング,バンタム級,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405250,足立東,令和6年度,東京都大会,ボクシング,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+405270,足立新田,令和5年度,全国大会（インターハイ）,相撲,,男,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+405270,足立新田,令和5年度,全国大会（インターハイ）,相撲,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+405270,足立新田,令和5年度,全国大会（インターハイ）,アーチェリー,,女,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+405270,足立新田,令和5年度,関東大会,陸上競技,３０００ｍ障害,男,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,,三段跳,男,決勝13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,バレーボール,学校対抗,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,相撲,団体,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,相撲,８０キロ,男,５位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,相撲,100kg級,男,５位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,相撲,100kg級,男,２回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,相撲,100㎏超級,男,１回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,相撲,無差別級,男,３回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,相撲,無差別級,男,２回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,関東大会,アーチェリー,団体,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+405270,足立新田,令和5年度,東京都大会,相撲,団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+405270,足立新田,令和5年度,東京都大会,アーチェリー,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+405270,足立新田,令和6年度,全国大会（インターハイ）,陸上競技,,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+405270,足立新田,令和6年度,全国大会（インターハイ）,相撲,,男,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+405270,足立新田,令和6年度,全国大会（インターハイ）,アーチェリー,,男,42位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+405270,足立新田,令和6年度,関東大会,,三段跳,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,80kg級,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,100kg級,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,100kg級,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,100kg級,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,100kg超級,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,無差別級,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,相撲,無差別級,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,アーチェリー,団体,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,関東大会,アーチェリー,個人,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+405270,足立新田,令和6年度,東京都大会,相撲,団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+405270,足立新田,令和6年度,東京都大会,アーチェリー,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+405270,足立新田,令和7年度,全国大会（インターハイ）,相撲,無差別級,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+405270,足立新田,令和7年度,全国大会（インターハイ）,ｱｰﾁｪﾘｰ,個人,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+405270,足立新田,令和7年度,関東大会,相撲,団体,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,相撲,70kg級,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,相撲,100kg級,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,相撲,100kg超級,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,相撲,100kg超級,男,3回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,相撲,100kg超級,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,相撲,100kg超級,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,,,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,関東大会,,,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+405270,足立新田,令和7年度,東京都大会,相撲,団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+405520,浅草,令和5年度,全国大会（定時制通信制）,第58回陸上競技大会,,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/09/R5_teitsu_alljapan_tokyoresult.pdf
+405520,浅草,令和5年度,全国大会（定時制通信制）,第58回陸上競技大会,,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/09/R5_teitsu_alljapan_tokyoresult.pdf
+406010,両国,令和5年度,関東大会,カヌー,男子カヤック シングル500ｍ,男,２位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406010,両国,令和7年度,関東大会,,100m背泳ぎ,男,予選25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和5年度,全国大会（インターハイ）,水泳(競泳),,男,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+406020,墨田川,令和5年度,全国大会（インターハイ）,水泳(競泳),,男,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+406020,墨田川,令和5年度,関東大会,水泳 (競泳),学校対抗,男,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406020,墨田川,令和5年度,関東大会,,100ｍ平泳ぎ,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406020,墨田川,令和5年度,関東大会,,200m平泳ぎ,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406020,墨田川,令和6年度,全国大会（インターハイ）,水泳（競泳）,,女,19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406020,墨田川,令和6年度,全国大会（インターハイ）,水泳（競泳）,,女,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406020,墨田川,令和6年度,関東大会,,400ｍ自由形,女,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406020,墨田川,令和6年度,関東大会,,800m自由形,女,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406020,墨田川,令和6年度,関東大会,,,男,28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406020,墨田川,令和7年度,全国大会（インターハイ）,水泳(競泳),400m自由形,女,23位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406020,墨田川,令和7年度,全国大会（インターハイ）,,100m平泳ぎ,男,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406020,墨田川,令和7年度,全国大会（インターハイ）,,200m平泳ぎ,男,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406020,墨田川,令和7年度,関東大会,,400m自由形,女,予選12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,関東大会,,800m自由形,女,決勝11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,関東大会,,100m平泳ぎ,男,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,関東大会,,100m平泳ぎ,男,予選29位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,関東大会,,200m平泳ぎ,男,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,関東大会,,400m 個人ﾒﾄﾞﾚｰ,女,予選22位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,関東大会,,4×100m ﾌﾘｰﾘﾚｰ,男,予選27位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,関東大会,,,女,予選25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406020,墨田川,令和7年度,東京都大会,(舵手つきク ォドルプル),団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+406030,本所,令和5年度,関東大会,相撲,７０キロ,男,５位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406030,本所,令和5年度,東京都大会,（ダブルスカル）,団体,男,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406030,本所,令和5年度,東京都大会,ボート(舵手付クオドルプル),団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406030,本所,令和5年度,東京都大会,（ダブルスカル）,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406030,本所,令和5年度,東京都大会,（シングルスカル）,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406030,本所,令和6年度,全国大会（インターハイ）,,,女,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406030,本所,令和6年度,関東大会,ローイング,ダブルスカル,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406030,本所,令和6年度,関東大会,ローイング,シングルスカル,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406030,本所,令和6年度,東京都大会,ローイング,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406030,本所,令和6年度,東京都大会,(舵手付クオドルプル),団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406030,本所,令和7年度,全国大会（インターハイ）,ﾛｰｲﾝｸﾞ,舵手つき ｸｫﾄﾞﾙﾌﾟﾙ,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406030,本所,令和7年度,関東大会,ﾛｰｲﾝｸﾞ,舵手つき ｸｫﾄﾞﾙﾌﾟﾙ,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406030,本所,令和7年度,関東大会,ﾛｰｲﾝｸﾞ,ｼﾝｸﾞﾙｽｶﾙ,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406030,本所,令和7年度,東京都大会,(舵手つきク ォドルプル),団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+406070,日本橋,令和5年度,関東大会,カヌー,女子カヤック シングル500ｍ,女,７位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406070,日本橋,令和5年度,東京都大会,ボート(舵手付クオドルプル),団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406070,日本橋,令和5年度,東京都大会,（ダブルスカル）,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406070,日本橋,令和6年度,関東大会,ローイング,ダブルスカル,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406210,深川,令和5年度,関東大会,剣道,団体,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406210,深川,令和5年度,東京都大会,剣道,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406210,深川,令和6年度,関東大会,剣道,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406210,深川,令和7年度,関東大会,剣道,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406210,深川,令和7年度,関東大会,ｶﾇｰ,女子カヤック シングル500m,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406220,東,令和5年度,全国大会（インターハイ）,弓道,,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+406220,東,令和5年度,全国大会（インターハイ）,弓道,,女,決勝出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+406220,東,令和5年度,全国大会（インターハイ）,アーチェリー,,男,170位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+406220,東,令和5年度,関東大会,弓道,団体,女,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406220,東,令和5年度,関東大会,弓道,団体,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406220,東,令和5年度,関東大会,弓道,個人,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406220,東,令和5年度,東京都大会,弓道,団体,男,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406220,東,令和5年度,東京都大会,弓道,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406220,東,令和6年度,全国大会（インターハイ）,,,男,72位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406220,東,令和6年度,全国大会（インターハイ）,弓道,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406220,東,令和6年度,全国大会（インターハイ）,弓道,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406220,東,令和6年度,関東大会,,100ｍ バタフライ,男,22位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406220,東,令和6年度,関東大会,,フリーリレー,男,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406220,東,令和6年度,関東大会,,,男,33位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406220,東,令和6年度,関東大会,弓道,団体,女,ベスト8,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406220,東,令和6年度,関東大会,,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406220,東,令和6年度,東京都大会,弓道,団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406220,東,令和6年度,東京都大会,弓道,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406220,東,令和6年度,東京都大会,アーチェリー,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406220,東,令和7年度,全国大会（インターハイ）,ｱｰﾁｪﾘｰ,個人,女,106位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406220,東,令和7年度,関東大会,ｱｰﾁｪﾘｰ,団体,女,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406220,東,令和7年度,東京都大会,弓道,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+406220,東,令和7年度,東京都大会,アーチェリー,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+406220,東,令和7年度,東京都大会,アーチェリー,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+406230,城東,令和5年度,全国大会（インターハイ）,なぎなた,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+406230,城東,令和5年度,関東大会,,,女,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406230,城東,令和5年度,関東大会,,走幅跳,男,決勝13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406230,城東,令和5年度,関東大会,なぎなた,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406230,城東,令和5年度,関東大会,なぎなた,個人,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406230,城東,令和5年度,関東大会,なぎなた,演技,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406230,城東,令和5年度,関東大会,なぎなた,演技,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406230,城東,令和5年度,東京都大会,なぎなた,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406230,城東,令和6年度,全国大会（インターハイ）,陸上競技,,男,準決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406230,城東,令和6年度,全国大会（インターハイ）,なぎなた,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406230,城東,令和6年度,全国大会（インターハイ）,なぎなた,,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406230,城東,令和6年度,全国大会（インターハイ）,なぎなた,,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406230,城東,令和6年度,関東大会,陸上競技,２００ｍ,男,予選4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,陸上競技,４００ｍ,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,,走幅跳,男,決勝15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,バスケットボール,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,バドミントン,学校対抗,男,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,バドミントン,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,なぎなた,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,なぎなた,個人,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,なぎなた,個人,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,なぎなた,個人,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,なぎなた,演技,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,関東大会,なぎなた,演技,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406230,城東,令和6年度,東京都大会,なぎなた,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406230,城東,令和7年度,全国大会（インターハイ）,なぎなた,演技,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406230,城東,令和7年度,全国大会（インターハイ）,なぎなた,個人,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406230,城東,令和7年度,関東大会,陸上競技,400mH (0.762m),女,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,陸上競技,4×100m,女,予選5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,陸上競技,4×400m,女,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,,走幅跳,男,決勝14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,団体,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,個人,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,個人,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,個人,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,演技,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,演技,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,演技,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406230,城東,令和7年度,関東大会,なぎなた,演技,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406240,小松川,令和5年度,関東大会,カヌー,男子カヤック シングル500ｍ,男,５位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406240,小松川,令和5年度,東京都大会,ボート(舵手付クオドルプル),団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406240,小松川,令和5年度,東京都大会,（ダブルスカル）,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406240,小松川,令和5年度,東京都大会,（シングルスカル）,団体,男,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406240,小松川,令和5年度,東京都大会,ボート(舵手付クオドルプル),団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406240,小松川,令和5年度,東京都大会,（ダブルスカル）,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406240,小松川,令和5年度,東京都大会,（シングルスカル）,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+406240,小松川,令和6年度,全国大会（インターハイ）,,,男,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406240,小松川,令和6年度,関東大会,ローイング,舵手付,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406240,小松川,令和6年度,東京都大会,ローイング,団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406240,小松川,令和6年度,東京都大会,(舵手付クオドルプル),団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+406240,小松川,令和7年度,関東大会,ﾛｰｲﾝｸﾞ,舵手つき ｸｫﾄﾞﾙﾌﾟﾙ,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406240,小松川,令和7年度,関東大会,ﾛｰｲﾝｸﾞ,ﾀﾞﾌﾞﾙｽｶﾙ,男,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406240,小松川,令和7年度,関東大会,ﾛｰｲﾝｸﾞ,ﾀﾞﾌﾞﾙｽｶﾙ,女,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406240,小松川,令和7年度,関東大会,ﾛｰｲﾝｸﾞ,ｼﾝｸﾞﾙｽｶﾙ,男,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406240,小松川,令和7年度,関東大会,ﾛｰｲﾝｸﾞ,ｼﾝｸﾞﾙｽｶﾙ,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406240,小松川,令和7年度,東京都大会,ローイング,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+406240,小松川,令和7年度,東京都大会,(舵手つきク ォドルプル),団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+406250,江戸川,令和7年度,関東大会,ｶﾇｰ,男子カヤック ペア500m,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406260,小岩,令和5年度,関東大会,バドミントン,学校対抗,女,２回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406260,小岩,令和6年度,全国大会（インターハイ）,バドミントン,,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+406260,小岩,令和6年度,関東大会,バドミントン,学校対抗,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+406260,小岩,令和7年度,全国大会（インターハイ）,弓道,個人,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+406260,小岩,令和7年度,関東大会,ﾊﾞﾄﾞﾐﾝﾄﾝ,学校対抗,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406260,小岩,令和7年度,関東大会,弓道,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406260,小岩,令和7年度,関東大会,弓道,個人,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406270,葛西南,令和6年度,全国大会（定時制通信制）,第59回陸上競技大会,,男,7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/teiji_tsushin_tokyo_result.pdf
+406280,篠崎,令和5年度,関東大会,剣道,団体,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406280,篠崎,令和7年度,関東大会,,円盤投,女,決勝13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+406760,葛西工科,令和5年度,関東大会,,,男,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406760,葛西工科,令和5年度,関東大会,,スプリント,男,予選34位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406760,葛西工科,令和5年度,関東大会,,ケイリン,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+406760,葛西工科,令和6年度,関東大会,,ケイリン,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407020,富士森,令和5年度,関東大会,空手道,団体組手,女,１回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407020,富士森,令和5年度,東京都大会,空手道,団体,,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+407020,富士森,令和6年度,関東大会,空手道,団体組手,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407020,富士森,令和6年度,関東大会,空手道,団体組手,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407020,富士森,令和6年度,東京都大会,空手道,団体,,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+407020,富士森,令和7年度,関東大会,空手道,団体形,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407020,富士森,令和7年度,関東大会,空手道,団体組手,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407020,富士森,令和7年度,関東大会,空手道,団体組手,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407020,富士森,令和7年度,東京都大会,空手道,団体,,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+407020,富士森,令和7年度,東京都大会,空手道,団体,,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+407030,片倉,令和5年度,全国大会（インターハイ）,陸上競技,,男,予選11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+407030,片倉,令和5年度,関東大会,陸上競技,走高跳,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407030,片倉,令和5年度,関東大会,,円盤投,男,決勝18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407030,片倉,令和5年度,関東大会,,やり投,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407030,片倉,令和6年度,関東大会,,やり投,男,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407040,八王子東,令和6年度,全国大会（インターハイ）,陸上競技,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+407040,八王子東,令和6年度,関東大会,,,男,決勝4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407040,八王子東,令和7年度,全国大会（インターハイ）,陸上競技,走高跳,男,予選8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+407040,八王子東,令和7年度,関東大会,陸上競技,走高跳,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407040,八王子東,令和7年度,関東大会,,200m自由形,女,予選28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407070,松が谷,令和5年度,関東大会,陸上競技,４×4００ｍ リレー,男,予選5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407070,松が谷,令和5年度,関東大会,,円盤投,女,決勝16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407070,松が谷,令和5年度,関東大会,,円盤投,女,決勝10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407070,松が谷,令和5年度,関東大会,アーチェリー,個人,男,49位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407070,松が谷,令和6年度,関東大会,陸上競技,５０００ｍ競歩,女,決勝10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407070,松が谷,令和6年度,関東大会,陸上競技,走高跳,女,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407070,松が谷,令和6年度,関東大会,,棒高跳,男,決勝10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407070,松が谷,令和6年度,関東大会,,砲丸投,女,決勝10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407070,松が谷,令和6年度,関東大会,アーチェリー,団体,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407070,松が谷,令和6年度,東京都大会,アーチェリー,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+407070,松が谷,令和7年度,全国大会（インターハイ）,陸上競技,棒高跳,女,決勝出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+407070,松が谷,令和7年度,全国大会（インターハイ）,陸上競技,砲丸投,女,予選17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+407070,松が谷,令和7年度,関東大会,陸上競技,5000mW,女,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407070,松が谷,令和7年度,関東大会,陸上競技,5000mW,女,決勝16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407070,松が谷,令和7年度,関東大会,陸上競技,棒高跳,女,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407070,松が谷,令和7年度,関東大会,,,男,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407070,松が谷,令和7年度,関東大会,,,男,決勝16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407070,松が谷,令和7年度,関東大会,,砲丸投,女,決勝6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407080,日野,令和5年度,関東大会,,ハンマー投,男,決勝11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407080,日野,令和7年度,関東大会,陸上競技,100m,女,準決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407090,日野台,令和5年度,関東大会,,,男,決勝14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407090,日野台,令和5年度,関東大会,卓球,学校対抗,女,１回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407090,日野台,令和6年度,関東大会,陸上競技,３０００ｍ障害,男,予選10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407090,日野台,令和7年度,関東大会,陸上競技,400m,男,予選4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407100,南平,令和5年度,関東大会,,100ｍ平泳ぎ,男,19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407100,南平,令和5年度,関東大会,,200m平泳ぎ,男,22位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407230,野津田,令和5年度,全国大会（インターハイ）,陸上競技,,女,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+407230,野津田,令和5年度,全国大会（インターハイ）,陸上競技,,女,予選22位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+407230,野津田,令和5年度,関東大会,,円盤投,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407230,野津田,令和5年度,関東大会,,やり投,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407240,成瀬,令和7年度,関東大会,,200m 個人ﾒﾄﾞﾚｰ,女,予選27位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+407250,小川,令和5年度,関東大会,,200ｍ バタフライ,女,18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407250,小川,令和6年度,全国大会（インターハイ）,スキー【冬季種目】,,女,93位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+407250,小川,令和6年度,全国大会（インターハイ）,スキー【冬季種目】,,女,107位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+407250,小川,令和6年度,関東大会,,200ｍ バタフライ,女,32位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+407250,小川,令和7年度,全国大会（インターハイ）,,,女,85位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+407250,小川,令和7年度,全国大会（インターハイ）,,回転,女,94位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+407260,山崎,令和5年度,関東大会,アーチェリー,団体,女,９位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407520,八王子拓真,令和5年度,関東大会,ボクシング,ウェルター級B,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+407520,八王子拓真,令和5年度,全国大会（定時制通信制）,第58回陸上競技大会,,男,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/09/R5_teitsu_alljapan_tokyoresult.pdf
+407520,八王子拓真,令和5年度,全国大会（定時制通信制）,第58回陸上競技大会,,女,7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/09/R5_teitsu_alljapan_tokyoresult.pdf
+407520,八王子拓真,令和6年度,全国大会（定時制通信制）,第59回陸上競技大会,,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/teiji_tsushin_tokyo_result.pdf
+408010,立川,令和6年度,全国大会（インターハイ）,卓球,,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+408010,立川,令和6年度,関東大会,卓球,シングルス,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408010,立川,令和7年度,全国大会（インターハイ）,,回転,女,95位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+408030,砂川,令和5年度,関東大会,,単独演武,男,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408030,砂川,令和6年度,全国大会（インターハイ）,少林寺拳法,,男,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+408040,昭和,令和5年度,全国大会（インターハイ）,少林寺拳法,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+408040,昭和,令和5年度,関東大会,,,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408040,昭和,令和5年度,関東大会,,,女,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408040,昭和,令和5年度,関東大会,,,女,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408040,昭和,令和5年度,関東大会,,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408040,昭和,令和5年度,東京都大会,登山,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+408040,昭和,令和6年度,東京都大会,登山,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+408040,昭和,令和7年度,全国大会（インターハイ）,登山,団体,男,37位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+408040,昭和,令和7年度,東京都大会,登山,団体,男,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+408040,昭和,令和7年度,東京都大会,登山,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+408060,東大和,令和5年度,関東大会,,走幅跳,男,決勝14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408060,東大和,令和5年度,関東大会,,やり投,女,決勝10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408060,東大和,令和5年度,関東大会,ハンドボール,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408060,東大和,令和6年度,関東大会,陸上競技,４００ｍ,男,予選5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408060,東大和,令和6年度,関東大会,陸上競技,８００ｍ,男,予選7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408060,東大和,令和6年度,関東大会,陸上競技,１５００ｍ,男,予選10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408060,東大和,令和6年度,関東大会,陸上競技,４×４００ｍ,男,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408060,東大和,令和6年度,関東大会,ハンドボール,学校対抗,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408060,東大和,令和7年度,関東大会,陸上競技,800m,男,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408060,東大和,令和7年度,東京都大会,サッカー,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+408070,武蔵村山,令和5年度,関東大会,,砲丸投,男,決勝17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,34位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+408090,東大和南,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+408090,東大和南,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+408090,東大和南,令和5年度,全国大会（インターハイ）,,,女,41位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+408090,東大和南,令和5年度,関東大会,バスケットボール,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,関東大会,水泳 (競泳),学校対抗,女,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,関東大会,水泳 (競泳),400ｍ自由形,女,12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,関東大会,水泳 (競泳),800m自由形,女,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,関東大会,,200m平泳ぎ,女,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,関東大会,,400m 個人メドレー,女,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,関東大会,,4×200ｍ フリーリレー,女,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,関東大会,,4×100m メドレーリレー,女,26位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408090,東大和南,令和5年度,東京都大会,（２層・Layer２）,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+408090,東大和南,令和6年度,東京都大会,（２層・Layer２）,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+408090,東大和南,令和7年度,関東大会,,100m背泳ぎ,女,予選25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408090,東大和南,令和7年度,東京都大会,（２層・Layer２）,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+408210,多摩,令和5年度,関東大会,,スプリント,男,予選19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408210,多摩,令和5年度,関東大会,,スクラッチ,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408210,多摩,令和6年度,関東大会,,スプリント,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408210,多摩,令和7年度,全国大会（インターハイ）,自転車競技,ｽｸﾗｯﾁ,男,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+408210,多摩,令和7年度,関東大会,,,男,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408210,多摩,令和7年度,関東大会,,ｽﾌﾟﾘﾝﾄ,男,予選31位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408210,多摩,令和7年度,関東大会,,ｹｲﾘﾝ,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408210,多摩,令和7年度,関東大会,,ｽｸﾗｯﾁ,男,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408210,多摩,令和7年度,関東大会,,ﾎﾟｲﾝﾄ･ﾚｰｽ,男,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408210,多摩,令和7年度,関東大会,,個人ﾛｰﾄﾞ･ﾚｰｽ,男,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408210,多摩,令和7年度,東京都大会,自転車競技,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+408230,福生,令和5年度,関東大会,駅伝 【11月】,七種競技,女,35位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408230,福生,令和5年度,関東大会,カヌー,女子カヤック シングル500ｍ,女,４位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408420,青梅総合,令和7年度,関東大会,剣道,団体,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408510,上水,令和5年度,関東大会,陸上競技,８００ｍ,男,予選4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408510,上水,令和5年度,関東大会,陸上競技,１５００ｍ,女,予選8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408510,上水,令和5年度,関東大会,陸上競技,３０００ｍ,女,決勝11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408510,上水,令和5年度,関東大会,駅伝 【11月】,七種競技,女,33位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408510,上水,令和5年度,関東大会,卓球,学校対抗,女,１回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+408510,上水,令和6年度,全国大会（インターハイ）,陸上競技,,女,予選9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+408510,上水,令和6年度,関東大会,陸上競技,１５００ｍ,女,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408510,上水,令和6年度,関東大会,陸上競技,３０００ｍ,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408510,上水,令和6年度,関東大会,陸上競技（駅伝）,三段跳,女,18位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+408510,上水,令和7年度,関東大会,陸上競技,1500m,女,予選6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408510,上水,令和7年度,関東大会,陸上競技,3000m,女,決勝7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408510,上水,令和7年度,関東大会,陸上競技(駅伝),駅伝,女,28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+408710,多摩工科,令和7年度,関東大会,空手道,団体形,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409010,武蔵,令和6年度,関東大会,アーチェリー,個人,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409020,武蔵野北,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+409020,武蔵野北,令和5年度,全国大会（インターハイ）,水泳(競泳),,女,19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+409020,武蔵野北,令和5年度,関東大会,水泳 (競泳),100m背泳ぎ,女,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409020,武蔵野北,令和5年度,関東大会,,,女,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409020,武蔵野北,令和6年度,関東大会,陸上競技,５０００ｍ競歩,女,決勝17位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409020,武蔵野北,令和6年度,関東大会,陸上競技,５０００ｍ競歩,男,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409020,武蔵野北,令和6年度,関東大会,,100m背泳ぎ,女,25位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409020,武蔵野北,令和7年度,全国大会（インターハイ）,陸上競技,5000m競歩,男,決勝12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409020,武蔵野北,令和7年度,関東大会,陸上競技,5000mW,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409020,武蔵野北,令和7年度,関東大会,,,女,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409030,小金井北,令和6年度,全国大会（インターハイ）,水泳（競泳）,,男,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+409030,小金井北,令和6年度,関東大会,,100m背泳ぎ,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409030,小金井北,令和6年度,東京都大会,ソフトボール,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+409030,小金井北,令和7年度,全国大会（インターハイ）,ｽｹｰﾄ(ﾌｨｷﾞｭｱ),学校対抗,女,59位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409030,小金井北,令和7年度,全国大会（インターハイ）,ｽｹｰﾄ(ﾌｨｷﾞｭｱ),個人,女,68位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409030,小金井北,令和7年度,全国大会（インターハイ）,,100m背泳ぎ,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409030,小金井北,令和7年度,全国大会（インターハイ）,,200m背泳ぎ,男,54位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409030,小金井北,令和7年度,関東大会,,100m背泳ぎ,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409030,小金井北,令和7年度,関東大会,,200m背泳ぎ,男,予選13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409040,保谷,令和6年度,関東大会,,100ｍ平泳ぎ,女,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409040,保谷,令和6年度,関東大会,,200m平泳ぎ,女,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409040,保谷,令和7年度,全国大会（インターハイ）,,100m平泳ぎ,女,43位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409040,保谷,令和7年度,全国大会（インターハイ）,,200m平泳ぎ,女,28位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409040,保谷,令和7年度,関東大会,,100m平泳ぎ,女,予選15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409040,保谷,令和7年度,関東大会,,200m平泳ぎ,女,決勝9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409070,田無,令和6年度,関東大会,,やり投,女,決勝11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409070,田無,令和7年度,関東大会,柔道,団体,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409220,小平西,令和5年度,東京都大会,ソフトボール,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+409220,小平西,令和6年度,東京都大会,ソフトボール,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+409220,小平西,令和7年度,東京都大会,ソフトボール,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+409230,東村山,令和5年度,関東大会,バドミントン,学校対抗,男,２回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409230,東村山,令和5年度,関東大会,,個人 ビームピストル,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409230,東村山,令和5年度,東京都大会,バドミントン,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+409230,東村山,令和5年度,東京都大会,ライフル射撃,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+409230,東村山,令和7年度,関東大会,ﾗｲﾌﾙ射撃,個人 ビーム・ピストル,女,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409240,国分寺,令和5年度,関東大会,陸上競技,４００ｍハードル,男,予選7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409240,国分寺,令和5年度,関東大会,,やり投,男,決勝14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409240,国分寺,令和6年度,全国大会（インターハイ）,陸上競技,,男,決勝3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+409240,国分寺,令和6年度,関東大会,陸上競技,４００ｍハードル,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409240,国分寺,令和6年度,関東大会,,走幅跳,女,決勝7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409240,国分寺,令和7年度,全国大会（インターハイ）,陸上競技,走幅跳,女,予選10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409240,国分寺,令和7年度,全国大会（インターハイ）,陸上競技,砲丸投,女,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409240,国分寺,令和7年度,関東大会,,走幅跳,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409240,国分寺,令和7年度,関東大会,,走幅跳,女,決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409240,国分寺,令和7年度,関東大会,,三段跳,男,決勝21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409240,国分寺,令和7年度,関東大会,,砲丸投,女,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409240,国分寺,令和7年度,関東大会,陸上競技(駅伝),駅伝,女,31位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和5年度,全国大会（インターハイ）,ソフトテニス,,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+409250,清瀬,令和5年度,全国大会（インターハイ）,少林寺拳法,,女,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+409250,清瀬,令和5年度,全国大会（インターハイ）,少林寺拳法,,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+409250,清瀬,令和5年度,全国大会（インターハイ）,少林寺拳法,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+409250,清瀬,令和5年度,関東大会,ソフトテニス,団体,女,ベスト１６,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,,女,3回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,少林寺拳法,団体演武,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,少林寺拳法,組演武,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,少林寺拳法,組演武,女,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,単独演武,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,単独演武,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,単独演武,男,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,単独演武,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,関東大会,,単独演武,男,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+409250,清瀬,令和5年度,東京都大会,ソフトテニス,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+409250,清瀬,令和5年度,東京都大会,少林寺拳法,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+409250,清瀬,令和6年度,全国大会（インターハイ）,少林寺拳法,,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+409250,清瀬,令和6年度,全国大会（インターハイ）,少林寺拳法,,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+409250,清瀬,令和6年度,全国大会（インターハイ）,少林寺拳法,,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+409250,清瀬,令和6年度,関東大会,ソフトテニス,団体,女,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409250,清瀬,令和6年度,関東大会,ソフトテニス,個人,男,4回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409250,清瀬,令和6年度,関東大会,,,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409250,清瀬,令和6年度,関東大会,,,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409250,清瀬,令和6年度,関東大会,少林寺拳法,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409250,清瀬,令和6年度,関東大会,少林寺拳法,組演武,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+409250,清瀬,令和6年度,東京都大会,ソフトテニス,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+409250,清瀬,令和6年度,東京都大会,ソフトテニス,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+409250,清瀬,令和6年度,東京都大会,少林寺拳法,団体,女,1位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+409250,清瀬,令和7年度,全国大会（インターハイ）,ｿﾌﾄﾃﾆｽ,個人,男,4回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409250,清瀬,令和7年度,全国大会（インターハイ）,ｿﾌﾄﾃﾆｽ,個人,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409250,清瀬,令和7年度,全国大会（インターハイ）,少林寺拳法,単独演武,女,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+409250,清瀬,令和7年度,関東大会,,やり投,男,決勝11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,ｿﾌﾄﾃﾆｽ,団体,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,ｿﾌﾄﾃﾆｽ,個人,男,3回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,ｿﾌﾄﾃﾆｽ,個人,男,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,,,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,少林寺拳法,組演武,女,9位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,,単独演武,男,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,,単独演武,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,関東大会,,単独演武,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+409250,清瀬,令和7年度,東京都大会,ソフトテニス,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+409250,清瀬,令和7年度,東京都大会,ソフトテニス,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+409410,東久留米総合,令和6年度,東京都大会,サッカー,団体,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+410030,調布北,令和7年度,関東大会,陸上競技,走高跳,男,決勝19位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410030,調布北,令和7年度,東京都大会,なぎなた,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+410050,狛江,令和5年度,全国大会（インターハイ）,体操(新体操),,女,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+410050,狛江,令和5年度,全国大会（インターハイ）,体操(新体操),,女,7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+410050,狛江,令和5年度,全国大会（インターハイ）,体操(新体操),,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_alljapan_results.pdf
+410050,狛江,令和5年度,関東大会,体操 (新体操),個人総合,女,10位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410050,狛江,令和5年度,関東大会,体操 (新体操),クラブ,女,21位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410050,狛江,令和5年度,関東大会,体操 (新体操),ボール,女,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410050,狛江,令和6年度,全国大会（インターハイ）,体操競技（新体操）,,女,6位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+410050,狛江,令和6年度,全国大会（インターハイ）,体操競技（新体操）,,女,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+410050,狛江,令和6年度,全国大会（インターハイ）,体操競技（新体操）,,女,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+410050,狛江,令和6年度,関東大会,体操（新体操）,個人総合,女,5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410050,狛江,令和6年度,関東大会,体操（新体操）,クラブ,女,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410050,狛江,令和6年度,関東大会,体操（新体操）,リボン,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410050,狛江,令和7年度,関東大会,陸上競技,100mH (0.840m),女,準決勝8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410210,府中,令和5年度,関東大会,ハンドボール,学校対抗,女,ベスト8,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410210,府中,令和5年度,東京都大会,ハンドボール,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+410210,府中,令和6年度,関東大会,バレーボール,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410220,府中東,令和5年度,関東大会,ボクシング,フライ級,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410220,府中東,令和5年度,関東大会,ボクシング,バンタム級,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410220,府中東,令和5年度,関東大会,ボクシング,ライト級,女,準優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410220,府中東,令和5年度,東京都大会,ボクシング,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_tokyo_results.pdf
+410220,府中東,令和6年度,全国大会（インターハイ）,ボクシング,,女,ベスト16,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+410220,府中東,令和6年度,関東大会,ボクシング,ライトフライ級,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410220,府中東,令和6年度,関東大会,ボクシング,フライ級,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410220,府中東,令和6年度,関東大会,ボクシング,バンタム級,女,優勝,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410220,府中東,令和6年度,関東大会,ボクシング,ライトフライ級,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410220,府中東,令和6年度,関東大会,ボクシング,バンタム級,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410220,府中東,令和6年度,東京都大会,ボクシング,団体,男,4位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+410220,府中東,令和7年度,全国大会（インターハイ）,ﾎﾞｸｼﾝｸﾞ,ﾊﾞﾝﾀﾑ級,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+410220,府中東,令和7年度,関東大会,ﾎﾞｸｼﾝｸﾞ,バンタム級A,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410220,府中東,令和7年度,東京都大会,ボクシング,団体,男,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+410220,府中東,令和7年度,東京都大会,ボクシング,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+410230,府中西,令和6年度,関東大会,ハンドボール,学校対抗,女,2回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410230,府中西,令和6年度,東京都大会,ハンドボール,団体,女,3位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/tokyo_result.pdf
+410230,府中西,令和7年度,関東大会,ﾊﾝﾄﾞﾎﾞｰﾙ,学校対抗,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和6年度,全国大会（インターハイ）,陸上競技,,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/ih_result.pdf
+410240,国立,令和6年度,関東大会,,やり投,男,決勝5位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2025/04/kt_result.pdf
+410240,国立,令和7年度,全国大会（インターハイ）,少林寺拳法,組演武,女,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+410240,国立,令和7年度,全国大会（インターハイ）,少林寺拳法,単独演武,男,1回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-IH-result.pdf
+410240,国立,令和7年度,関東大会,陸上競技,400mH (0.914m),男,決勝出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,関東大会,少林寺拳法,団体,女,8位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,関東大会,少林寺拳法,組演武,女,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,関東大会,,,男,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,関東大会,,,女,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,関東大会,,単独演武,女,16位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,関東大会,,単独演武,男,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,関東大会,,単独演武,女,出場,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+410240,国立,令和7年度,東京都大会,少林寺拳法,団体,女,2位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-tosoutai-result.pdf
+410410,若葉総合,令和5年度,関東大会,ソフトボール,学校対抗,男,１回戦,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+410710,府中工科,令和5年度,関東大会,,ハンマー投,男,決勝14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+411010,大島,令和5年度,関東大会,ヨット,420級,女,7位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+411010,大島,令和5年度,関東大会,ヨット,420級,男,14位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+411010,大島,令和5年度,関東大会,ヨット,420級,男,15位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2024/04/R5_kanto_results.pdf
+411010,大島,令和7年度,関東大会,ﾖｯﾄ,420級,男,12位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+411010,大島,令和7年度,関東大会,ﾖｯﾄ,420級,女,11位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
+411010,大島,令和7年度,関東大会,ﾖｯﾄ,420級,男,13位,https://www.tokyo-kotairen.gr.jp/wp-content/uploads/2026/04/R7-kantou-result.pdf
