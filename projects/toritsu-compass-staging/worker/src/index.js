@@ -17,6 +17,10 @@ import { SCALE, GAP, GAP_ROUGH } from "./scoring.js";
 import { parseQuery, inspect, invalidMessages } from "./query.js";
 import { extractQuery, mergeQuery } from "./extract.js";
 import { loadSession, saveSession, canCallLLM, recordLLMCall, budgetOf } from "./session.js";
+import {
+  interpretRelaxation, acceptedMessage, chooseMessage, DECLINED_MESSAGE, RELAX_LABELS,
+} from "./relax.js";
+import { explainResults } from "./explain.js";
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -329,8 +333,22 @@ async function handleSearch(env, request) {
   const started = Date.now();
   const { student, rows, all, mode } = await searchSchools(env.DB, q);
 
+  // session_id が来ていれば、提案した緩和を覚えておく。
+  // 次の発話「通学を広げて」が何に対する返事なのかを、会話側が知るため。
+  const session = body.session_id ? await loadSession(env, body.session_id) : null;
+
   // 0件なら、何を緩めるかを明示して返す。黙って条件を外さない。
   if (!rows.length) {
+    const relaxation = buildRelaxation(q);
+    if (session) {
+      session.query = q;
+      session.relaxation_offered = (relaxation.options ?? []).map((o) => o.key);
+      await saveSession(env, session);
+    }
+    const emptyPayload = {
+      student, mode: student.score == null ? "commute_only" : "scored", count: 0, schools: [],
+    };
+    const emptyExplain = await explainResults(env, q, emptyPayload, { allowLLM: false });
     return json({
       query: q,
       student: {
@@ -338,10 +356,12 @@ async function handleSearch(env, request) {
         scale: SCALE.max,
         thresholds: student.rough ? GAP_ROUGH : GAP,
       },
-      mode: student.score == null ? "commute_only" : "scored",
+      mode: emptyPayload.mode,
       count: 0,
       schools: [],
-      relaxation: buildRelaxation(q),
+      summary: emptyExplain.text,
+      relaxation,
+      session_id: session?.id,
       // 範囲外の値は使わずに検索している。何を無視したかを黙っておかない
       invalid,
       invalid_messages: invalidMessages(invalid),
@@ -349,8 +369,25 @@ async function handleSearch(env, request) {
     });
   }
 
+  if (session) {
+    session.query = q;
+    session.relaxation_offered = [];     // 見つかったので、前の提案は無効
+    await saveSession(env, session);
+  }
+
+  // 出口（S6）。レコードにある値だけで説明文を作る。LLMがあれば言い回しを
+  // 自然にし、無ければ・壊れたら定型文に落ちる（入口と同じ二段構え）。
+  const payload = { student, mode, count: rows.length, schools: rows };
+  const explained = await explainResults(env, q, payload, {
+    allowLLM: session ? canCallLLM(env, session) : true,
+  });
+  if (session && explained.llm_attempts) {
+    await recordLLMCall(env, session, explained.llm_attempts);
+  }
+
   return json({
     query: q,
+    session_id: session?.id,
     student: {
       ...student,
       scale: SCALE.max,
@@ -359,7 +396,12 @@ async function handleSearch(env, request) {
     mode,             // scored = 点数判定あり / commute_only = 成績なし経路
     count: rows.length,
     candidates_before_pick: all.length,
-    schools: rows,
+    summary: explained.text,              // 全体の説明（S6）
+    summary_source: explained.source,     // llm / template のどちらで作ったか
+    schools: rows.map((s) => {
+      const one = explained.per_school.find((p) => p.school_number === s.school_number);
+      return one ? { ...s, explanation: one.text } : s;
+    }),
     relaxation: null,
     invalid,
     invalid_messages: invalidMessages(invalid),
@@ -398,6 +440,19 @@ async function handleExtract(env, request) {
   const { q: prev, invalid: prevInvalid } = parseQuery(body.query ?? session.query ?? {});
   const asked = Array.isArray(body.asked) ? body.asked.map(String) : session.asked;
   const declinedIn = Array.isArray(body.declined) ? body.declined.map(String) : session.declined;
+
+  // 直前に緩和を提案していたら、まずその返事として読む。
+  // 「通学を広げて」を条件の抽出に回すと何も取れず、承諾が成立しない（仕様書§5.3）。
+  const offered = Array.isArray(body.relaxation_offered) && body.relaxation_offered.length
+    ? body.relaxation_offered.map(String)
+    : session.relaxation_offered;
+  if (offered.length) {
+    const reply = interpretRelaxation(text, offered);
+    if (reply.key || reply.declined || reply.ambiguous) {
+      const answered = await handleRelaxationReply(env, session, prev, text, offered, reply, asked, declinedIn);
+      if (answered) return answered;
+    }
+  }
 
   // 上限に達していたらLLMを呼ばない。会話は規則ベースで続ける（仕様書§3.6）
   const allowLLM = canCallLLM(env, session);
@@ -452,6 +507,8 @@ async function handleExtract(env, request) {
   session.asked = nextAsked;
   session.declined = declined;
   session.state = state.next;
+  // 別の話を始めたら、前の緩和提案は無効にする
+  session.relaxation_offered = [];
   await saveSession(env, session);
 
   return json({
@@ -470,6 +527,76 @@ async function handleExtract(env, request) {
     question,
     source: extracted.source,             // 規則ベース/LLMのどちらが効いたか
     llm_budget: budgetOf(env, session),   // 仕様書§3.6の呼び出し上限
+  });
+}
+
+/**
+ * 緩和の提案への返事を処理する。
+ *
+ * ⚠️ 一度に1つだけ適用する（仕様書§5.3の「段階を踏む」）。まとめて広げると、
+ *    何が効いて見つかったのかが利用者にも我々にも分からなくなる。
+ * ⚠️ 何を広げたかを必ず言葉で返す。黙って条件を外さない。
+ */
+async function handleRelaxationReply(env, session, prev, text, offered, reply, asked, declinedIn) {
+  const base = {
+    session_id: session.id,
+    filled: [],
+    declined: declinedIn,
+    asked,
+    invalid: [],
+    notes: [],
+    station_candidates: [],
+    llm_budget: budgetOf(env, session),
+  };
+
+  if (reply.ambiguous) {
+    // 決め打ちしない。どれを広げるか選び直してもらう
+    return json({
+      ...base,
+      query: prev,
+      relaxation_offered: offered,
+      searchable: Boolean(prev.station),
+      next: "relaxation",
+      question: chooseMessage(offered, RELAX_LABELS),
+      source: { rules: ["relaxation_ambiguous"], llm: "not_used", llm_attempts: 0 },
+    });
+  }
+
+  if (reply.declined) {
+    session.relaxation_offered = [];
+    session.query = prev;
+    await saveSession(env, session);
+    return json({
+      ...base,
+      query: prev,
+      relaxation_offered: [],
+      searchable: Boolean(prev.station),
+      next: null,
+      question: DECLINED_MESSAGE,
+      source: { rules: ["relaxation_declined"], llm: "not_used", llm_attempts: 0 },
+    });
+  }
+
+  const q = {
+    ...prev,
+    relaxations: [...new Set([...(prev.relaxations ?? []), reply.key])],
+    free_text: [...prev.free_text, text],
+  };
+  session.query = q;
+  session.relaxation_offered = [];       // 承諾は1回で使い切る
+  await saveSession(env, session);
+
+  return json({
+    ...base,
+    query: q,
+    filled: ["relaxations"],
+    relaxation_applied: reply.key,
+    relaxation_offered: [],
+    searchable: Boolean(q.station),
+    next: null,
+    // 何を広げたかを明示してから検索し直す
+    question: acceptedMessage(reply.key, q),
+    source: { rules: ["relaxation_accepted"], llm: "not_used", llm_attempts: 0 },
   });
 }
 
