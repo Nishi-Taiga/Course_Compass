@@ -18,7 +18,8 @@ import { parseQuery, inspect, invalidMessages } from "./query.js";
 import { extractQuery, mergeQuery } from "./extract.js";
 import { loadSession, saveSession, canCallLLM, recordLLMCall, budgetOf } from "./session.js";
 import {
-  interpretRelaxation, acceptedMessage, chooseMessage, DECLINED_MESSAGE, RELAX_LABELS,
+  interpretRelaxation, acceptedMessage, chooseMessage, confirmMessage,
+  DECLINED_MESSAGE, RELAX_LABELS,
 } from "./relax.js";
 import { explainResults } from "./explain.js";
 
@@ -550,15 +551,21 @@ async function handleRelaxationReply(env, session, prev, text, offered, reply, a
   };
 
   if (reply.ambiguous) {
-    // 決め打ちしない。どれを広げるか選び直してもらう
+    // 決め打ちしない。曖昧さの種類で聞き方を変える。
+    //   which  … 広げるのは決まっているが、どれか分からない
+    //   yesno  … 「大丈夫です」のように、広げるかどうかから分からない
     return json({
       ...base,
       query: prev,
       relaxation_offered: offered,
       searchable: Boolean(prev.station),
       next: "relaxation",
-      question: chooseMessage(offered, RELAX_LABELS),
-      source: { rules: ["relaxation_ambiguous"], llm: "not_used", llm_attempts: 0 },
+      question: reply.kind === "yesno"
+        ? confirmMessage(offered, RELAX_LABELS)
+        : chooseMessage(offered, RELAX_LABELS),
+      source: {
+        rules: [`relaxation_ambiguous(${reply.kind})`], llm: "not_used", llm_attempts: 0,
+      },
     });
   }
 
