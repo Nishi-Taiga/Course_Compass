@@ -812,6 +812,8 @@ school_number,school_name,raw_name,category,source_url,engine
 402810,園芸,女子バスケットボール部,部活動,https://www.metro.ed.jp/engei-h/school_life/activities.html,club_ul+club_link
 402810,園芸,バレーボール部,部活動,https://www.metro.ed.jp/engei-h/school_life/activities.html,club_ul+club_link
 402930,国際,男子バスケットボール部,運動部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,花王公式Youtube,部活動の活動報告,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,KATE再生リスト,部活動の活動報告,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,女子サッカー,運動部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,女子バスケットボール部,運動部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,女子バレーボール,運動部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
@@ -825,7 +827,6 @@ school_number,school_name,raw_name,category,source_url,engine
 402930,国際,ウインドアンサンブル部,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,シンポジウム部,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,演劇,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
-402930,国際,時期により土日あり,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,クッキング,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,ジャズ,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,茶道,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
@@ -833,6 +834,15 @@ school_number,school_name,raw_name,category,source_url,engine
 402930,国際,ジャパニーズスタイル,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,弦楽,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402930,国際,国際協力ボランティア同好会,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,＜コンクール,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,Competition＞,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,第18回,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,環境フォトコンテスト,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,優秀賞（国際地理）,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,学校家庭クラブ活動,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,功労賞（家庭科）,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,第61回,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
+402930,国際,優秀賞（外国語科）,文化部,https://kokusai-h.metro.ed.jp/life/club.html,club_link+generic
 402940,総合芸術,テニス部,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
 402940,総合芸術,空手道部,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
 402940,総合芸術,ダンス部,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
@@ -857,7 +867,8 @@ school_number,school_name,raw_name,category,source_url,engine
 402940,総合芸術,伝統文化同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
 402940,総合芸術,バックステージ同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
 402940,総合芸術,卓上ゲーム同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
-402940,総合芸術,Art Night同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
+402940,総合芸術,Art,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
+402940,総合芸術,Night同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
 402940,総合芸術,書道同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
 402940,総合芸術,食物研究同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
 402940,総合芸術,百人一首同好会,バレーボール同好会,https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html,club_ul+club_link
@@ -1106,7 +1117,9 @@ school_number,school_name,raw_name,category,source_url,engine
 403220,井草,吹奏楽部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
 403220,井草,演劇部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
 403220,井草,美術部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
-403220,井草,ESS（English Speaking Society）部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
+403220,井草,ESS（English,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
+403220,井草,Speaking,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
+403220,井草,Society）部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
 403220,井草,社会福祉研究部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
 403220,井草,漫画研究部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
 403220,井草,料理研究部,文化部,https://www.metro.ed.jp/igusa-h/school_life/activities.html,club_ul+club_link
@@ -1925,7 +1938,8 @@ school_number,school_name,raw_name,category,source_url,engine
 405220,江北,軽音楽部（音楽村）,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405220,江北,アコースティックギター部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405220,江北,理化部 化学,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
-405220,江北,理化部 物理・コンピュータ,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
+405220,江北,理化部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
+405220,江北,物理・コンピュータ部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405220,江北,理化部 天文・地学,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405220,江北,生物部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405220,江北,茶道部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
@@ -1937,7 +1951,6 @@ school_number,school_name,raw_name,category,source_url,engine
 405220,江北,漫画研究部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405220,江北,写真同好会,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405220,江北,競技かるた部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
-405220,江北,物理・コンピュータ部,学芸部,https://www.metro.ed.jp/kohoku-h/school_life/activities.html,club_ul+club_link
 405230,淵江,硬式野球部,運動部,https://www.metro.ed.jp/fuchie-h/school_life/activities.html,club_ul+club_link
 405230,淵江,男子バスケットボール部,運動部,https://www.metro.ed.jp/fuchie-h/school_life/activities.html,club_ul+club_link
 405230,淵江,女子バスケットボール部,運動部,https://www.metro.ed.jp/fuchie-h/school_life/activities.html,club_ul+club_link
@@ -2235,13 +2248,16 @@ school_number,school_name,raw_name,category,source_url,engine
 406030,本所,音楽部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,筝曲部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,漫画研究部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
-406030,本所,English Club ・英語部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
+406030,本所,English,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
+406030,本所,Club,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
+406030,本所,・英語部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,華道部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,演劇部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,写真部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,茶道部,文化部,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,ローイング部,部活動,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406030,本所,科学部,部活動,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
+406030,本所,Club・英語部,部活動,https://www.metro.ed.jp/honjo-h/school_life/activities.html,club_ul+club_link
 406040,葛飾野,野球部,部活動,https://www.metro.ed.jp/katsushikano-h/school_life/activities.html,club_link
 406040,葛飾野,サッカー部,部活動,https://www.metro.ed.jp/katsushikano-h/school_life/activities.html,club_link
 406040,葛飾野,陸上部,部活動,https://www.metro.ed.jp/katsushikano-h/school_life/activities.html,club_link
@@ -2513,7 +2529,8 @@ school_number,school_name,raw_name,category,source_url,engine
 406260,小岩,バレーボール部,部活動,https://www.metro.ed.jp/koiwa-h/school_life/activities.html,club_ul+club_link
 406260,小岩,バドミントン部,部活動,https://www.metro.ed.jp/koiwa-h/school_life/activities.html,club_ul+club_link
 406260,小岩,ダンス部,部活動,https://www.metro.ed.jp/koiwa-h/school_life/activities.html,club_ul+club_link
-406270,葛西南,バドミントン 男子バスケットボール,運動部,https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html,club_ul+club_link
+406270,葛西南,バドミントン,運動部,https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html,club_ul+club_link
+406270,葛西南,男子バスケットボール,運動部,https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html,club_ul+club_link
 406270,葛西南,女子バスケットボール,運動部,https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html,club_ul+club_link
 406270,葛西南,男子バレー,運動部,https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html,club_ul+club_link
 406270,葛西南,女子バレー,運動部,https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html,club_ul+club_link
@@ -3599,7 +3616,8 @@ school_number,school_name,raw_name,category,source_url,engine
 408420,青梅総合,演劇同好会,文化部,https://www.metro.ed.jp/omesogo-h/school_life/activities.html,club_ul+club_link
 408420,青梅総合,里山ネイチャー同好会,文化部,https://www.metro.ed.jp/omesogo-h/school_life/activities.html,club_ul+club_link
 408420,青梅総合,ソフトボール部,部活動,https://www.metro.ed.jp/omesogo-h/school_life/activities.html,club_ul+club_link
-408420,青梅総合,男子バドミントン部・女子バドミントン部,部活動,https://www.metro.ed.jp/omesogo-h/school_life/activities.html,club_ul+club_link
+408420,青梅総合,男子バドミントン部,部活動,https://www.metro.ed.jp/omesogo-h/school_life/activities.html,club_ul+club_link
+408420,青梅総合,女子バドミントン部,部活動,https://www.metro.ed.jp/omesogo-h/school_life/activities.html,club_ul+club_link
 408420,青梅総合,美術同好会,部活動,https://www.metro.ed.jp/omesogo-h/school_life/activities.html,club_ul+club_link
 408510,上水,男子バスケットボール部,部活動,https://www.metro.ed.jp/josui-h/school_life/activities.html,club_link
 408510,上水,女子バスケットボール部,部活動,https://www.metro.ed.jp/josui-h/school_life/activities.html,club_link
@@ -4475,7 +4493,8 @@ school_number,school_name,raw_name,category,source_url,engine
 410810,農業,合唱部,専門部・文化部,https://www.metro.ed.jp/nogyo-h/school_life/activities.html,club_ul+club_link
 410810,農業,落語研究部,専門部・文化部,https://www.metro.ed.jp/nogyo-h/school_life/activities.html,club_ul+club_link
 410810,農業,演劇(同好会),専門部・文化部,https://www.metro.ed.jp/nogyo-h/school_life/activities.html,club_ul+club_link
-410810,農業,専門部・文化部,運動部,https://www.metro.ed.jp/nogyo-h/school_life/activities.html,club_ul+club_link
+410810,農業,専門部,運動部,https://www.metro.ed.jp/nogyo-h/school_life/activities.html,club_ul+club_link
+410810,農業,文化部,運動部,https://www.metro.ed.jp/nogyo-h/school_life/activities.html,club_ul+club_link
 411010,大島,野球部,運動部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
 411010,大島,女子バレーボール部,運動部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
 411010,大島,サッカー部,運動部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
@@ -4491,7 +4510,8 @@ school_number,school_name,raw_name,category,source_url,engine
 411010,大島,吹奏楽部,文化部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
 411010,大島,農産加工同好会,文化部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
 411010,大島,ハンドメイド同好会,文化部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
-411010,大島,Hawaii Project,文化部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
+411010,大島,Hawaii,文化部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
+411010,大島,Project,文化部,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
 411010,大島,男子バスケットボール部,部活動,https://www.metro.ed.jp/oshima-h/school_life/activities.html,club_ul+club_link
 411030,新島,硬式テニス部,運動部,https://www.metro.ed.jp/niijima-h/school_life/activities.html,club_ul+club_link
 411030,新島,バスケットボール部,運動部,https://www.metro.ed.jp/niijima-h/school_life/activities.html,club_ul+club_link

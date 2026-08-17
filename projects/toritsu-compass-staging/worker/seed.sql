@@ -107426,6 +107426,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('402810', '女子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/engei-h/school_life/activities.html', '2026-08-14'),
   ('402810', 'バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/engei-h/school_life/activities.html', '2026-08-14'),
   ('402930', '男子バスケットボール部', NULL, '運動部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '花王公式Youtube', NULL, '部活動の活動報告', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', 'KATE再生リスト', NULL, '部活動の活動報告', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', '女子サッカー', NULL, '運動部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', '女子バスケットボール部', NULL, '運動部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', '女子バレーボール', NULL, '運動部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
@@ -107439,7 +107441,6 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('402930', 'ウインドアンサンブル部', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', 'シンポジウム部', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', '演劇', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
-  ('402930', '時期により土日あり', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', 'クッキング', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', 'ジャズ', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', '茶道', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
@@ -107447,6 +107448,15 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('402930', 'ジャパニーズスタイル', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', '弦楽', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402930', '国際協力ボランティア同好会', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '＜コンクール', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', 'Competition＞', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '第18回', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '環境フォトコンテスト', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '優秀賞（国際地理）', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '学校家庭クラブ活動', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '功労賞（家庭科）', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '第61回', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
+  ('402930', '優秀賞（外国語科）', NULL, '文化部', 'https://kokusai-h.metro.ed.jp/life/club.html', '2026-08-14'),
   ('402940', 'テニス部', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
   ('402940', '空手道部', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
   ('402940', 'ダンス部', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
@@ -107471,7 +107481,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('402940', '伝統文化同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
   ('402940', 'バックステージ同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
   ('402940', '卓上ゲーム同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
-  ('402940', 'Art Night同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
+  ('402940', 'Art', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
+  ('402940', 'Night同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
   ('402940', '書道同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
   ('402940', '食物研究同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
   ('402940', '百人一首同好会', NULL, 'バレーボール同好会', 'https://www.metro.ed.jp/sogo-geijutsu-h/school_life/activities.html', '2026-08-14'),
@@ -107601,7 +107612,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('403050', '工作', NULL, '同好会', 'https://www.metro.ed.jp/nishi-h/school_life/activities.html', '2026-08-14'),
   ('403050', '特別部', NULL, '文化部', 'https://www.metro.ed.jp/nishi-h/school_life/activities.html', '2026-08-14'),
   ('403060', '硬式野球部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
-  ('403060', '剣道部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
+  ('403060', '剣道部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('403060', '水泳部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
   ('403060', '陸上競技部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
   ('403060', 'サッカー部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
@@ -107612,8 +107624,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('403060', 'バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
   ('403060', '女子バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
   ('403060', 'ソフトテニス部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
-  ('403060', '女子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('403060', '女子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
   ('403060', '男子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
   ('403060', 'ラグビー部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
   ('403060', '体操ダンス部', NULL, '部活動', 'https://www.metro.ed.jp/toyotama-h/school_life/activities.html', '2026-08-14'),
@@ -107721,7 +107732,9 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('403220', '吹奏楽部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
   ('403220', '演劇部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
   ('403220', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
-  ('403220', 'ESS（English Speaking Society）部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
+  ('403220', 'ESS（English', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
+  ('403220', 'Speaking', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
+  ('403220', 'Society）部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
   ('403220', '社会福祉研究部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
   ('403220', '漫画研究部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
   ('403220', '料理研究部', NULL, '文化部', 'https://www.metro.ed.jp/igusa-h/school_life/activities.html', '2026-08-14'),
@@ -107850,7 +107863,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('403510', 'バドミントン部（男・女）', NULL, '運動部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', 'ソフトボール部（女子）', NULL, '運動部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', 'ダンス部', NULL, '運動部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
-  ('403510', '剣道部', NULL, '運動部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
+  ('403510', '剣道部', NULL, '運動部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('403510', '陸上競技部', NULL, '運動部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', 'フェンシング部', NULL, '運動部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
@@ -107863,8 +107877,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('403510', '茶道部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', '文芸部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', 'パソコン部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
-  ('403510', '被服部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('403510', '被服部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', '理科研究部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', '写真部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
   ('403510', 'ボランティア部', NULL, '文化部', 'https://www.metro.ed.jp/oizumisakura-h/school_life/activities.html', '2026-08-14'),
@@ -108101,7 +108114,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('404050', '軽音楽', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14'),
   ('404050', '演劇', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14'),
   ('404050', '生物', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14'),
-  ('404050', '箏曲', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14'),
+  ('404050', '箏曲', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('404050', '家庭科', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14'),
   ('404050', '美術', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14'),
   ('404050', '茶道', NULL, '文化部', 'https://www.metro.ed.jp/bunkyo-h/school_life/activities.html', '2026-08-14'),
@@ -108114,8 +108128,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('404210', 'バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14'),
   ('404210', '男子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14'),
   ('404210', '女子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14'),
-  ('404210', '男子バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('404210', '男子バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14'),
   ('404210', '女子バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14'),
   ('404210', '硬式テニス部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14'),
   ('404210', 'ソフトテニス部', NULL, '部活動', 'https://www.metro.ed.jp/kitazono-h/school_life/activities.html', '2026-08-14'),
@@ -108352,7 +108365,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('404710', '硬式テニス部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14'),
   ('404710', '漫画研究部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14'),
   ('404710', '映画研究部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14'),
-  ('404710', 'クラフト部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14'),
+  ('404710', 'クラフト部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('404710', '模型部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14'),
   ('404710', '理科部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14'),
   ('404710', '囲碁部', NULL, '部活動', 'https://www.metro.ed.jp/kogei-h/school_life/activities.html', '2026-08-14'),
@@ -108365,8 +108379,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('404730', '軽音楽部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14'),
   ('404730', 'サッカー部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14'),
   ('404730', 'バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14'),
-  ('404730', '男子バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('404730', '男子バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14'),
   ('404730', '卓球部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14'),
   ('404730', '柔道部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14'),
   ('404730', '剣道部', NULL, '部活動', 'https://www.metro.ed.jp/kitatoshimakoka-h/school_life/activities.html', '2026-08-14'),
@@ -108543,7 +108556,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('405220', '軽音楽部（音楽村）', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405220', 'アコースティックギター部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405220', '理化部 化学', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
-  ('405220', '理化部 物理・コンピュータ', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
+  ('405220', '理化部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
+  ('405220', '物理・コンピュータ部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405220', '理化部 天文・地学', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405220', '生物部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405220', '茶道部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
@@ -108555,7 +108569,6 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('405220', '漫画研究部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405220', '写真同好会', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405220', '競技かるた部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
-  ('405220', '物理・コンピュータ部', NULL, '学芸部', 'https://www.metro.ed.jp/kohoku-h/school_life/activities.html', '2026-08-14'),
   ('405230', '硬式野球部', NULL, '運動部', 'https://www.metro.ed.jp/fuchie-h/school_life/activities.html', '2026-08-14'),
   ('405230', '男子バスケットボール部', NULL, '運動部', 'https://www.metro.ed.jp/fuchie-h/school_life/activities.html', '2026-08-14'),
   ('405230', '女子バスケットボール部', NULL, '運動部', 'https://www.metro.ed.jp/fuchie-h/school_life/activities.html', '2026-08-14'),
@@ -108603,7 +108616,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('405240', '剣道部', NULL, '運動部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
   ('405240', '柔道部', NULL, '運動部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
   ('405240', '陸上部', NULL, '運動部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
-  ('405240', '水泳部', NULL, '運動部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
+  ('405240', '水泳部', NULL, '運動部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('405240', '卓球部', NULL, '運動部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
   ('405240', '吹奏楽部', NULL, '文化部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
   ('405240', '軽音楽部', NULL, '文化部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
@@ -108616,8 +108630,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('405240', '文芸同好会', NULL, '文化部', 'https://www.metro.ed.jp/adachinishi-h/school_life/activities.html', '2026-08-14'),
   ('405250', '陸上競技部', NULL, '運動部', 'https://www.metro.ed.jp/adachihigashi-h/school_life/activities.html', '2026-08-14'),
   ('405250', 'ボクシング部', NULL, '運動部', 'https://www.metro.ed.jp/adachihigashi-h/school_life/activities.html', '2026-08-14'),
-  ('405250', 'バドミントン部', NULL, '運動部', 'https://www.metro.ed.jp/adachihigashi-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('405250', 'バドミントン部', NULL, '運動部', 'https://www.metro.ed.jp/adachihigashi-h/school_life/activities.html', '2026-08-14'),
   ('405250', 'バスケットボール部', NULL, '運動部', 'https://www.metro.ed.jp/adachihigashi-h/school_life/activities.html', '2026-08-14'),
   ('405250', 'バレーボール部', NULL, '運動部', 'https://www.metro.ed.jp/adachihigashi-h/school_life/activities.html', '2026-08-14'),
   ('405250', '硬式野球部', NULL, '運動部', 'https://www.metro.ed.jp/adachihigashi-h/school_life/activities.html', '2026-08-14'),
@@ -108854,21 +108867,24 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('406030', '音楽部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', '筝曲部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', '漫画研究部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
-  ('406030', 'English Club ・英語部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
+  ('406030', 'English', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('406030', 'Club', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
+  ('406030', '・英語部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', '華道部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', '演劇部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', '写真部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', '茶道部', NULL, '文化部', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', 'ローイング部', NULL, '部活動', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406030', '科学部', NULL, '部活動', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
+  ('406030', 'Club・英語部', NULL, '部活動', 'https://www.metro.ed.jp/honjo-h/school_life/activities.html', '2026-08-14'),
   ('406040', '野球部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', 'サッカー部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', '陸上部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', '硬式テニス部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', 'ソフトテニス部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', '女子バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
-  ('406040', '男子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('406040', '男子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', '女子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', 'バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
   ('406040', '柔道部', NULL, '部活動', 'https://www.metro.ed.jp/katsushikano-h/school_life/activities.html', '2026-08-14'),
@@ -109102,7 +109118,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('406250', '科学部', NULL, '部活動', 'https://www.metro.ed.jp/edogawa-h/school_life/activities.html', '2026-08-14'),
   ('406250', '文芸同好会', NULL, '部活動', 'https://www.metro.ed.jp/edogawa-h/school_life/activities.html', '2026-08-14'),
   ('406260', '男子バスケットボール部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
-  ('406260', '女子バスケットボール部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
+  ('406260', '女子バスケットボール部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('406260', 'バレーボール部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', 'バドミントン部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', 'ハンドボール部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
@@ -109118,8 +109135,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('406260', 'ソフトボール部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', '剣道部', NULL, '運動部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', '軽音楽部', NULL, '文化部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
-  ('406260', '吹奏楽部', NULL, '文化部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('406260', '吹奏楽部', NULL, '文化部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', '家庭科部', NULL, '文化部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', '茶華道部', NULL, '文化部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
@@ -109134,7 +109150,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('406260', 'バレーボール部', NULL, '部活動', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', 'バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
   ('406260', 'ダンス部', NULL, '部活動', 'https://www.metro.ed.jp/koiwa-h/school_life/activities.html', '2026-08-14'),
-  ('406270', 'バドミントン 男子バスケットボール', NULL, '運動部', 'https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html', '2026-08-14'),
+  ('406270', 'バドミントン', NULL, '運動部', 'https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html', '2026-08-14'),
+  ('406270', '男子バスケットボール', NULL, '運動部', 'https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html', '2026-08-14'),
   ('406270', '女子バスケットボール', NULL, '運動部', 'https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html', '2026-08-14'),
   ('406270', '男子バレー', NULL, '運動部', 'https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html', '2026-08-14'),
   ('406270', '女子バレー', NULL, '運動部', 'https://www.metro.ed.jp/kasaiminami-h/school_life/activities.html', '2026-08-14'),
@@ -109352,7 +109369,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('406760', '硬式野球部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
   ('406760', '柔道部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
   ('406760', '剣道部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
-  ('406760', '硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
+  ('406760', '硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('406760', 'バレーボール部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
   ('406760', 'ダンス部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
   ('406760', '自転車競技部', NULL, '運動部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
@@ -109369,8 +109387,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('406760', '園芸部', NULL, '文化部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
   ('406760', '和太鼓部', NULL, '文化部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
   ('406760', '鉄道研究部', NULL, '文化部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
-  ('406760', '演劇部', NULL, '文化部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('406760', '演劇部', NULL, '文化部', 'https://www.metro.ed.jp/kasaikoka-h/school_life/activities.html', '2026-08-14'),
   ('406780', 'サッカー部', NULL, '運動部', 'https://www.metro.ed.jp/kagakugijyutu-h/school_life/activities.html', '2026-08-14'),
   ('406780', 'ラグビー部', NULL, '運動部', 'https://www.metro.ed.jp/kagakugijyutu-h/school_life/activities.html', '2026-08-14'),
   ('406780', '硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/kagakugijyutu-h/school_life/activities.html', '2026-08-14'),
@@ -109603,7 +109620,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('407070', 'バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/matsugaya-h/school_life/activities.html', '2026-08-14'),
   ('407070', '男子テニス部', NULL, '部活動', 'https://www.metro.ed.jp/matsugaya-h/school_life/activities.html', '2026-08-14'),
   ('407070', '女子テニス部', NULL, '部活動', 'https://www.metro.ed.jp/matsugaya-h/school_life/activities.html', '2026-08-14'),
-  ('407080', '陸上競技部', NULL, '運動部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
+  ('407080', '陸上競技部', NULL, '運動部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('407080', '卓球部', NULL, '運動部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
   ('407080', '剣道部', NULL, '運動部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
   ('407080', '硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
@@ -109620,8 +109638,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('407080', '山岳部', NULL, '運動部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
   ('407080', '柔道部', NULL, '運動部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
   ('407080', '科学部', NULL, '文化部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
-  ('407080', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('407080', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
   ('407080', '軽音楽部', NULL, '文化部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
   ('407080', 'マニュアルアーツ部', NULL, '文化部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
   ('407080', '吹奏楽部', NULL, '文化部', 'https://www.metro.ed.jp/hino-h/school_life/activities.html', '2026-08-14'),
@@ -109854,7 +109871,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('407510', '自然科学部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14'),
   ('407510', '文芸部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14'),
   ('407510', '和太鼓部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14'),
-  ('407510', '茶道部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14'),
+  ('407510', '茶道部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('407510', 'ダンス部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14'),
   ('407510', '家庭科部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14'),
   ('407510', '写真部', NULL, '文化部', 'https://www.metro.ed.jp/shoyo-h/school_life/activities.html', '2026-08-14'),
@@ -109871,8 +109889,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('407720', 'バドミントン部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14'),
   ('407720', '陸上競技部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14'),
   ('407720', '自転車部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14'),
-  ('407720', 'ラグビー部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('407720', 'ラグビー部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14'),
   ('407720', '茶道部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14'),
   ('407720', '美術・陶芸部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14'),
   ('407720', 'コンピューター部', NULL, '文化系', 'https://www.metro.ed.jp/machidakoka-h/school_life/activities.html', '2026-08-14'),
@@ -110105,7 +110122,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('408210', 'アニメーション部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14'),
   ('408210', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14'),
   ('408210', '茶道部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14'),
-  ('408210', '写真部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14'),
+  ('408210', '写真部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('408210', '家庭科部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14'),
   ('408210', 'パソコン部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14'),
   ('408210', '合唱部', NULL, '文化部', 'https://www.metro.ed.jp/tama-h/school_life/activities.html', '2026-08-14'),
@@ -110122,8 +110140,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('408230', 'ソフトテニス部', NULL, '運動部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14'),
   ('408230', '男子硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14'),
   ('408230', '女子硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14'),
-  ('408230', '卓球部', NULL, '運動部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('408230', '卓球部', NULL, '運動部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14'),
   ('408230', '水泳部', NULL, '運動部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14'),
   ('408230', 'ダンス部', NULL, '運動部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14'),
   ('408230', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/fussa-h/school_life/activities.html', '2026-08-14'),
@@ -110224,7 +110241,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('408420', '演劇同好会', NULL, '文化部', 'https://www.metro.ed.jp/omesogo-h/school_life/activities.html', '2026-08-14'),
   ('408420', '里山ネイチャー同好会', NULL, '文化部', 'https://www.metro.ed.jp/omesogo-h/school_life/activities.html', '2026-08-14'),
   ('408420', 'ソフトボール部', NULL, '部活動', 'https://www.metro.ed.jp/omesogo-h/school_life/activities.html', '2026-08-14'),
-  ('408420', '男子バドミントン部・女子バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/omesogo-h/school_life/activities.html', '2026-08-14'),
+  ('408420', '男子バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/omesogo-h/school_life/activities.html', '2026-08-14'),
+  ('408420', '女子バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/omesogo-h/school_life/activities.html', '2026-08-14'),
   ('408420', '美術同好会', NULL, '部活動', 'https://www.metro.ed.jp/omesogo-h/school_life/activities.html', '2026-08-14'),
   ('408510', '男子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/josui-h/school_life/activities.html', '2026-08-14'),
   ('408510', '女子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/josui-h/school_life/activities.html', '2026-08-14'),
@@ -110355,7 +110373,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('409030', '美術部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14'),
   ('409030', 'パソコン部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14'),
   ('409030', '文芸部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14'),
-  ('409030', '漫画研究部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14'),
+  ('409030', '漫画研究部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('409030', '写真部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14'),
   ('409030', '野外研究部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14'),
   ('409030', 'ボランティア部', NULL, '部活動', 'https://www.metro.ed.jp/koganeikita-h/school_life/activities.html', '2026-08-14'),
@@ -110373,8 +110392,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('409040', '卓球部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14'),
   ('409040', '剣道部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14'),
   ('409040', 'ダンス部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14'),
-  ('409040', 'ソフトテニス部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('409040', 'ソフトテニス部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14'),
   ('409040', '陸上部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14'),
   ('409040', '吹奏楽部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14'),
   ('409040', '現代音楽部', NULL, '部活動', 'https://www.metro.ed.jp/hoya-h/school_life/activities.html', '2026-08-14'),
@@ -110606,7 +110624,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('409270', '科学部', NULL, '文化部', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14'),
   ('409270', '写真部', NULL, '文化部', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14'),
   ('409270', '吹奏楽部', NULL, '文化部', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14'),
-  ('409270', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14'),
+  ('409270', '美術部', NULL, '文化部', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('409270', '野外活動研究部', NULL, '文化部', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14'),
   ('409270', 'イラスト部', NULL, '文化部', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14'),
   ('409270', '陸上競技部', NULL, '部活動', 'https://www.metro.ed.jp/kodairaminami-h/school_life/activities.html', '2026-08-14'),
@@ -110624,8 +110643,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('409280', 'バドミントン部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14'),
   ('409280', 'ハンドボール部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14'),
   ('409280', '陸上競技部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14'),
-  ('409280', 'イラスト部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('409280', 'イラスト部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14'),
   ('409280', '演劇部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14'),
   ('409280', '軽音楽部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14'),
   ('409280', '写真部', NULL, '部活動', 'https://www.metro.ed.jp/higashimurayamanishi-h/school_life/activities.html', '2026-08-14'),
@@ -110857,7 +110875,8 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('410210', '写真部', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14'),
   ('410210', '軽音楽部', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14'),
   ('410210', '演劇部', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14'),
-  ('410210', '文芸部', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14'),
+  ('410210', '文芸部', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('410210', '競技かるた部', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14'),
   ('410210', '料理研究同好会', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14'),
   ('410210', '英語部', NULL, '部活動', 'https://www.metro.ed.jp/fuchu-h/school_life/activities.html', '2026-08-14'),
@@ -110875,8 +110894,7 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('410220', '陸上競技部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14'),
   ('410220', 'ダンス部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14'),
   ('410220', '美術部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14'),
-  ('410220', '生物部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('410220', '生物部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14'),
   ('410220', '茶道部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14'),
   ('410220', '吹奏楽部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14'),
   ('410220', '軽音学部', NULL, '部活動', 'https://www.metro.ed.jp/fuchuhigashi-h/school_life/activities.html', '2026-08-14'),
@@ -111103,11 +111121,13 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('410810', '合唱部', NULL, '専門部・文化部', 'https://www.metro.ed.jp/nogyo-h/school_life/activities.html', '2026-08-14'),
   ('410810', '落語研究部', NULL, '専門部・文化部', 'https://www.metro.ed.jp/nogyo-h/school_life/activities.html', '2026-08-14'),
   ('410810', '演劇(同好会)', NULL, '専門部・文化部', 'https://www.metro.ed.jp/nogyo-h/school_life/activities.html', '2026-08-14'),
-  ('410810', '専門部・文化部', NULL, '運動部', 'https://www.metro.ed.jp/nogyo-h/school_life/activities.html', '2026-08-14'),
+  ('410810', '専門部', NULL, '運動部', 'https://www.metro.ed.jp/nogyo-h/school_life/activities.html', '2026-08-14'),
+  ('410810', '文化部', NULL, '運動部', 'https://www.metro.ed.jp/nogyo-h/school_life/activities.html', '2026-08-14'),
   ('411010', '野球部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411010', '女子バレーボール部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411010', 'サッカー部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
-  ('411010', '陸上競技部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
+  ('411010', '陸上競技部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14');
+INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
   ('411010', '水泳部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411010', '硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411010', 'ダンス部', NULL, '運動部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
@@ -111119,15 +111139,15 @@ INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_
   ('411010', '吹奏楽部', NULL, '文化部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411010', '農産加工同好会', NULL, '文化部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411010', 'ハンドメイド同好会', NULL, '文化部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
-  ('411010', 'Hawaii Project', NULL, '文化部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
+  ('411010', 'Hawaii', NULL, '文化部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
+  ('411010', 'Project', NULL, '文化部', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411010', '男子バスケットボール部', NULL, '部活動', 'https://www.metro.ed.jp/oshima-h/school_life/activities.html', '2026-08-14'),
   ('411030', '硬式テニス部', NULL, '運動部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
   ('411030', 'バスケットボール部', NULL, '運動部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
   ('411030', '野球部', NULL, '運動部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
   ('411030', 'バレーボール部', NULL, '運動部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
   ('411030', '太鼓部', NULL, '文化部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
-  ('411030', 'ボランティア部', NULL, '文化部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14');
-INSERT INTO school_clubs (school_number, raw_name, normalized, category, source_url, fetched_at) VALUES
+  ('411030', 'ボランティア部', NULL, '文化部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
   ('411030', '茶道部', NULL, '文化部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
   ('411030', '軽音楽部', NULL, '文化部', 'https://www.metro.ed.jp/niijima-h/school_life/activities.html', '2026-08-14'),
   ('411040', 'サッカー部', NULL, '運動部', 'https://www.metro.ed.jp/kouzu-h/school_life/activities.html', '2026-08-14'),
