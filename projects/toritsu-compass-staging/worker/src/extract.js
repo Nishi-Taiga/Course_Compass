@@ -169,7 +169,12 @@ function parseJson(text) {
 /** LLMの出力を、こちらが認める形だけに削ぎ落とす。余計なキーは通さない。 */
 function sanitize(obj) {
   const out = {};
+  /* ⚠️ null/""/[] を Number() に通すと 0 になる。当日点は下限が0なので、
+     「言っていない」が「0点」として通ってしまい、推定点が最低値になる
+     （実測: 駅名しか言っていない発話で toujitsu=0 が入った）。
+     数値または数字の文字列のときだけ通す。 */
   const n = (v, lo, hi) => {
+    if (typeof v !== "number" && !(typeof v === "string" && v.trim() !== "")) return null;
     const x = Number(v);
     return Number.isFinite(x) && x >= lo && x <= hi ? x : null;
   };
