@@ -266,6 +266,10 @@ function applyContext(cand, raw, askedSlot, prev) {
   const bare = text.match(/^(\d{1,3})\s*(?:点|分)?[。.\s]*$/);
 
   if (askedSlot === "station" && !cand.station) {
+    // ⚠️ 発話から他の条件が取れているなら、駅の答えではない。
+    //    「45分以内で」を駅名として扱うと、以降の回答も全部駅と誤読して
+    //    会話が抜けられなくなる（駅が埋まらない限り asked_slot が station のままのため）
+    if (Object.keys(cand).length) return;
     const name = text
       .replace(/[。.\s]+$/, "")
       .replace(/(?:駅)?(?:です|でお願いします|になります|かな|だと思います)$/, "")
@@ -292,9 +296,11 @@ function applyContext(cand, raw, askedSlot, prev) {
  * 数値と駅は規則ベースを優先する（正規表現のほうが確実で、LLMは桁を写し間違える）。
  * LLMには、規則ベースが取れなかった項目と、言い回しの揺れた意図を任せる。
  */
-export async function extractQuery(env, db, text, { askedSlot = null, prev = {} } = {}) {
+export async function extractQuery(env, db, text, { askedSlot = null, prev = {}, allowLLM = true } = {}) {
   const rules = extractRules(text);
-  const llm = await extractLLM(env, text);
+  // allowLLM=false は、そのセッションが呼び出し上限に達しているとき（仕様書§3.6）。
+  // 会話は止めず、規則ベースだけで続ける
+  const llm = allowLLM ? await extractLLM(env, text) : { ok: false, reason: "budget_exhausted" };
 
   const cand = { ...(llm.ok ? llm.cand : {}), ...rules.cand };
   if (llm.ok && llm.cand.wants) {
@@ -313,6 +319,21 @@ export async function extractQuery(env, db, text, { askedSlot = null, prev = {} 
   // --- 実在照合 ---
   const notes = [];
   let stationCandidates = [];
+
+  // 何も見当が付かないときだけ、発話まるごとを駅名として**完全一致**で当てる。
+  // 「石神井公園です」のように、駅とも言わず「〜のあたり」とも言わない人がいる。
+  // 部分一致は使わない（関係ない語がたまたま当たると、勝手に駅が決まってしまう）
+  if (!cand.station && Object.keys(cand).length === 0) {
+    const bare = String(text).trim()
+      .replace(/[。.\s]+$/, "")
+      .replace(/(?:駅)?(?:です|でお願いします|になります|かな|だと思います)$/, "")
+      .replace(/駅$/, "");
+    if (bare && bare.length <= 12) {
+      const hit = await db.prepare("SELECT station_name FROM stations WHERE station_name = ?")
+        .bind(bare).first().catch(() => null);
+      if (hit) cand.station = hit.station_name;
+    }
+  }
   if (cand.station) {
     const r = await resolveStation(db, cand.station);
     if (r.station) {

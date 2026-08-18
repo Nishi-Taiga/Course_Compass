@@ -39,7 +39,12 @@
 
   "vars": {
     // Workers AI のモデルID。ダッシュボードの Model Catalog と食い違ったらここを直す
-    "AI_MODEL": "@cf/qwen/qwen3-30b-a3b-fp8"
+    "AI_MODEL": "@cf/qwen/qwen3-30b-a3b-fp8",
+
+    // 1セッションで許すLLM呼び出しの回数（仕様書§3.6）。
+    // 超えたら会話は規則ベースだけで続ける。クレジットはチーム共通$100で、
+    // 使い切ると誰も開発できなくなるため必ず上限を置く。
+    "LLM_MAX_CALLS": "30"
   },
 
   "observability": {

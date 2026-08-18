@@ -16,6 +16,7 @@ import { searchSchools, buildRelaxation } from "./search.js";
 import { SCALE, GAP, GAP_ROUGH } from "./scoring.js";
 import { parseQuery, inspect, invalidMessages } from "./query.js";
 import { extractQuery, mergeQuery } from "./extract.js";
+import { loadSession, saveSession, canCallLLM, recordLLMCall, budgetOf } from "./session.js";
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -389,25 +390,37 @@ async function handleExtract(env, request) {
     return json({ error: "text_required", hint: "発話を text に入れてください" }, 400);
   }
 
-  // これまでに確定している条件。無ければ空から始める。
-  // ここで弾かれた値も握りつぶさず、あとで invalid に合流させる
-  const { q: prev, invalid: prevInvalid } = parseQuery(body.query ?? {});
-  const asked = Array.isArray(body.asked) ? body.asked.map(String) : [];
-  const declinedIn = Array.isArray(body.declined) ? body.declined.map(String) : [];
+  // セッション。会話の中身はKV（TTL 24h）、LLMの呼び出し回数はD1で数える。
+  // session_id を渡してもらえば、条件を毎回送り直さなくてよい。
+  const session = await loadSession(env, body.session_id);
+
+  // 明示的に query が来ていればそれを優先し、無ければセッションの続きから
+  const { q: prev, invalid: prevInvalid } = parseQuery(body.query ?? session.query ?? {});
+  const asked = Array.isArray(body.asked) ? body.asked.map(String) : session.asked;
+  const declinedIn = Array.isArray(body.declined) ? body.declined.map(String) : session.declined;
+
+  // 上限に達していたらLLMを呼ばない。会話は規則ベースで続ける（仕様書§3.6）
+  const allowLLM = canCallLLM(env, session);
 
   let extracted;
   try {
     extracted = await extractQuery(env, env.DB, text, {
       askedSlot: body.asked_slot ?? null,
       prev,
+      allowLLM,
     });
+    if (extracted.source.llm_attempts) {
+      await recordLLMCall(env, session, extracted.source.llm_attempts);
+    }
   } catch (e) {
     // 抽出が丸ごと失敗しても、会話は止めない。聞き直しに落とす（仕様書§3.6）
     return json({
+      session_id: session.id,
       query: prev,
       filled: [],
       question: "うまく読み取れませんでした。もう一度、別の言い方で教えていただけますか？",
       next: null,
+      llm_budget: budgetOf(env, session),
       error_handled: String(e?.message ?? e),
     });
   }
@@ -433,10 +446,20 @@ async function handleExtract(env, request) {
     question = `${extracted.station_candidates.join("・")} のどれでしょうか。`;
   }
 
+  // 次の発話でそのまま続けられるよう、会話の中身を保存する
+  const nextAsked = state.next && !asked.includes(state.next) ? [...asked, state.next] : asked;
+  session.query = q;
+  session.asked = nextAsked;
+  session.declined = declined;
+  session.state = state.next;
+  await saveSession(env, session);
+
   return json({
+    session_id: session.id,               // 次のリクエストでこれを渡せば条件を送り直さなくてよい
     query: q,
     filled: Object.keys(extracted.cand),
     declined,
+    asked: nextAsked,
     invalid,
     notes: extracted.notes,               // 駅が特定できなかった等
     station_candidates: extracted.station_candidates,
@@ -446,6 +469,7 @@ async function handleExtract(env, request) {
     next: state.next,
     question,
     source: extracted.source,             // 規則ベース/LLMのどちらが効いたか
+    llm_budget: budgetOf(env, session),   // 仕様書§3.6の呼び出し上限
   });
 }
 
