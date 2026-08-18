@@ -221,8 +221,15 @@ export async function extractLLM(env, text) {
         // 推論型モデルは思考に枠を使う。512だとJSONに届かないことがある
         max_tokens: 1024,
       });
-      const raw = typeof res === "string" ? res : (res?.response ?? "");
-      return { ok: true, ...sanitize(parseJson(raw)), attempts: attempt };
+      /* Workers AI の返し方はモデルと設定で変わる。
+         ・文字列                     → こちらでJSONを取り出す
+         ・{response: "…"}            → 同上
+         ・{response: {...}} (パース済) → そのまま使う（qwen3はこちらだった）
+         オブジェクトを String() すると "[object Object]" になり、
+         中括弧が無いとして毎回捨てていた。 */
+      const body = typeof res === "string" ? res : (res?.response ?? res?.result?.response ?? "");
+      const obj = (body && typeof body === "object") ? body : parseJson(body);
+      return { ok: true, ...sanitize(obj), attempts: attempt };
     } catch (e) {
       if (attempt === 2) return { ok: false, reason: String(e?.message ?? e) };
     }
