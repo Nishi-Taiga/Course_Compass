@@ -29,6 +29,7 @@ jobs:
             exit 1
           fi
 
+          NG=""
           api() {   # $1=表示名 $2=パス  → HTTPコードと結果を出す
             code=$(curl -sS -o /tmp/body.json -w '%{http_code}' \
               -H "Authorization: Bearer $TOKEN" \
@@ -38,7 +39,7 @@ jobs:
             errs=$(grep -o '"code":[0-9]*' /tmp/body.json | head -3 | tr '\n' ' ')
             case "$code" in
               200) echo "  ✅ $1 : OK" ;;
-              *)   echo "  ❌ $1 : HTTP $code  $errs" ;;
+              *)   echo "  ❌ $1 : HTTP $code  $errs"; NG="$NG$1;" ;;
             esac
           }
 
@@ -57,3 +58,11 @@ jobs:
           echo "  Workers Services が ❌ で D1 が ✅ なら、トークンに"
           echo "  Account / Workers Scripts / Edit が付いていない。"
           echo "  全部 ❌ ならトークン自体が無効か、別アカウントのもの。"
+
+          # 足りない権限があればジョブを失敗させる（結果をひと目で分かるようにするため）
+          if [ -n "$NG" ]; then
+            echo "::error::権限が不足しています → $NG"
+            exit 1
+          fi
+          echo ""
+          echo "🎉 デプロイに必要な権限はすべて揃っています。"
