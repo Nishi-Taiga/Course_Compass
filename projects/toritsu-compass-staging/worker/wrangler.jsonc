@@ -29,13 +29,13 @@
     }
   ],
 
-  // ⚠️ 招待が来るまでコメントアウト。有効なままだと wrangler が未認証で
-  // リモートプロキシセッションを張ろうとし、`wrangler dev` が
-  // "Failed to start the remote proxy session" で起動しない。
-  // チーム招待を承認したらこの3行を戻すこと（/health/ai のコードは残してある）。
-  // "ai": {
-  //   "binding": "AI"
-  // },
+  // トークンの権限が通ったので有効化（2026-08-19）。
+  // ⚠️ ローカルで `wrangler dev` を動かすときは CLOUDFLARE_API_TOKEN が要る。
+  // 未認証だと "Failed to start the remote proxy session" で起動しないため、
+  // 手元に権限が無い人は一時的にこの3行を戻すこと。
+  "ai": {
+    "binding": "AI"
+  },
 
   "vars": {
     // Workers AI のモデルID。ダッシュボードの Model Catalog と食い違ったらここを直す
