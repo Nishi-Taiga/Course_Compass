@@ -212,6 +212,11 @@
   .mttl2::before{content:""; width:4px; height:16px; background:var(--brass); border-radius:2px}
   .mttl2 .sub2{font-weight:400; font-size:10.5px; color:var(--muted); margin-left:auto}
   .maps{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px}
+  /* 最寄駅からの地図は学校ごとの行で見せる（#13で表形式に変更） */
+  .maptbl{width:100%; border-collapse:collapse}
+  .maptbl td{border-top:1px solid var(--line-soft); padding:10px 8px; vertical-align:top;
+    font-size:12.5px}
+  .maptbl tr:first-child td{border-top:none}
   .mcard{border:1px solid var(--line); border-radius:10px; padding:12px; background:var(--frame);
     box-shadow:var(--shadow-soft); transition:box-shadow .15s}
   .mcard:hover{box-shadow:var(--shadow)}
@@ -572,12 +577,15 @@ function spark(r){
   const vals=r.map(v=>v==null?null:v); const nums=vals.filter(v=>v!=null);
   if(!nums.length) return '';
   const w=200,h=60,lo=Math.min(...nums,0.8),hi=Math.max(...nums,2.0);
-  const x=i=>20+i*(w-32)/4, y=v=>16+(h-30)*(1-(v-lo)/(hi-lo||1));
+  /* 左は「1.0」ラベル、右端は値ラベルのはみ出しぶんを空ける。
+     以前は右余白が足りず R8（最新年度＝いちばん大事な点）が欠けていた */
+  const padL=22, padR=16;
+  const x=i=>padL+i*(w-padL-padR)/4, y=v=>16+(h-30)*(1-(v-lo)/(hi-lo||1));
   let pts=[]; vals.forEach((v,i)=>{ if(v!=null) pts.push([x(i),y(v)]); });
   const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
   const area=line+` L${pts[pts.length-1][0].toFixed(1)} ${h-12} L${pts[0][0].toFixed(1)} ${h-12} Z`;
   const y1=y(1.0);
-  const base=(y1>4&&y1<h-4)?`<line x1="16" y1="${y1.toFixed(1)}" x2="${w-4}" y2="${y1.toFixed(1)}"
+  const base=(y1>4&&y1<h-4)?`<line x1="16" y1="${y1.toFixed(1)}" x2="${w-padR+8}" y2="${y1.toFixed(1)}"
       stroke="var(--faint)" stroke-width="1" stroke-dasharray="3 3"/>
     <text x="14" y="${y1.toFixed(1)}" text-anchor="end" font-size="8" fill="var(--faint)" dominant-baseline="middle">1.0</text>`:'';
   const labels=['R4','R5','R6','R7','R8'];
@@ -658,17 +666,17 @@ function card(c){
   const lastR=[...(s.r||[])].reverse().find(v=>v!=null);
   const tag=schoolTag(s);
   const node=el('div','card');
-  /* アコーディオン（安田の画面案イメージⅠ）。初期は1行＝校名・圏・区・学科・指定。
-     ＋で通学・目安点・倍率・追加ボタンを展開する。行ごとタップで開閉 */
+  /* アコーディオン（安田の画面案イメージⅠ）。初期は校名・圏・区・学科・指定・タグと
+     通学の目安まで。「もっと見る」で目安点・倍率・理由・追加ボタンを開く。
+     ⚠️ #13 のマージで headrow版(＋ボタン)と card-toggle版が混ざり、
+        追加ボタンごと消えて card() が例外で落ちていた（学校が1件も出ない）。
+        card-toggle 側に一本化する */
   node.innerHTML=`
-    <div class="headrow" role="button" tabindex="0" aria-label="${s.n}の詳細を開く">
-      <div class="head"><h3>${s.n}</h3>${tier?`<span class="tier ${TIER[tier][1]}">${TIER[tier][0]}</span>`
-        :(s.st==='no_exam'?`<span class="tier" style="background:var(--line);color:var(--muted)">別枠の選抜</span>`:'')}</div>
-      <button type="button" class="exp" aria-expanded="false" aria-label="詳細を開く">＋</button>
-    </div>
-    <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${tag?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}</div>
-      <button type="button" class="card-toggle" aria-expanded="false" style="margin:0">もっと見る</button>
-    </div>
+    <div class="head"><h3>${s.n}</h3>${tier?`<span class="tier ${TIER[tier][1]}">${TIER[tier][0]}</span>`
+      :(s.st==='no_exam'?`<span class="tier" style="background:var(--line);color:var(--muted)">別枠の選抜</span>`:'')}</div>
+    <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${tag&&!(s.g&&tag.startsWith('進学'))?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}</div>
+    <div class="factgrid"><div class="fact">通学の目安<b>${rangeText(m)}</b></div></div>
+    <div class="cardops"><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
     <div class="card-details">
       ${s.sn?`<div class="note" style="margin:6px 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
       <div class="factgrid">
@@ -680,7 +688,13 @@ function card(c){
         ${spark(s.r)}
       </div>
       <div class="why">${why.map(w=>`<span>${w}</span>`).join('')}</div>
+      <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button></div>
     </div>`;
+  const tgl=node.querySelector('.card-toggle');
+  const det=node.querySelector('.card-details');
+  tgl.onclick=()=>{ const on=!det.classList.contains('open');
+    det.classList.toggle('open',on); tgl.classList.toggle('open',on);
+    tgl.setAttribute('aria-expanded',on); tgl.textContent=on?'閉じる':'もっと見る'; };
   const btn=node.querySelector('.cmp');
   btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
     btn.setAttribute('aria-pressed',on); btn.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';
@@ -789,7 +803,8 @@ function openSheet(){
     body.innerHTML=`<div style="overflow-x:auto"><table>
       <tr><th>学校</th><th>最寄駅から<br><span style="font-weight:400;font-size:10px">各校公式サイト</span></th><th>合格の目安<br><span style="font-weight:400;font-size:10px">1020点満点</span></th>
       <th>倍率5年推移<br><span style="font-weight:400;font-size:10px">点線＝定員ちょうど</span></th><th>特色・選抜方式</th></tr>${rows}</table></div>
-      ${maps?`<div class="mttl2">最寄駅から学校まで</div><div class="maps">${maps}</div>`:''}
+      ${maps?`<div class="mttl2">最寄駅から学校まで</div>
+        <div style="overflow-x:auto"><table class="maptbl">${maps}</table></div>`:''}
       ${achs?`<div class="mttl2">部の実績<span class="sub2">東京都高等学校体育連盟の公式記録（令和5〜7年度）と各校公式サイト。競技ごとの最上位のみ</span></div><div class="sps">${achs}</div>
         ${noAch.length?`<div class="anote">${noAch.map(esc).join('・')} は、上の3年度の記録に掲載がありませんでした。<b>実績がないという意味ではありません</b>（都大会は上位4位まで、関東・全国は出場者のみが記録されるため）。部の活動の様子は学校の説明会でご確認ください。</div>`:''}`:''}
       ${ufs?`<div class="mttl2">制服<span class="sub2">各校公式サイトの記述から。写真は公式サイトでご覧ください</span></div><div class="sps">${ufs}</div>`:''}
