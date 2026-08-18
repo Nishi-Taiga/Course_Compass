@@ -146,11 +146,23 @@ const SYSTEM = `あなたは保護者の発話から、高校検索の条件を�
 declined には、本人が「分からない」「決めていない」と言った項目名を入れます
 （station / commute_limit / naishin / toujitsu / wants のいずれか）。`;
 
-/** LLMの返答からJSONを取り出す。前後に文が付いていても拾う。 */
+/** LLMの返答からJSONを取り出す。前後に文が付いていても拾う。
+ *
+ * qwen3 は推論型なので <think>…</think> を前置きすることがある。
+ * 中括弧がそこに含まれると壊れたJSONを掴むので、先に思考部分を落とす。
+ * 見つからないときは、何が返ってきたのかを理由に含める（本番でしか
+ * 再現しないため、応答を見ないと直しようがない）。 */
 function parseJson(text) {
-  const t = String(text ?? "").replace(/```(?:json)?/g, "").trim();
+  let t = String(text ?? "")
+    .replace(/<think>[\s\S]*?<\/think>/gi, "")   // 思考ブロック
+    .replace(/<think>[\s\S]*$/i, "")             // 閉じtagが切れた場合
+    .replace(/```(?:json)?/g, "")
+    .trim();
   const start = t.indexOf("{");
-  if (start < 0) throw new Error("JSONが見つかりません");
+  if (start < 0) {
+    const head = t.slice(0, 120).replace(/\s+/g, " ");
+    throw new Error(`JSONが見つかりません（応答の冒頭: ${head || "空"}）`);
+  }
   return JSON.parse(t.slice(start, t.lastIndexOf("}") + 1));
 }
 
@@ -206,7 +218,8 @@ export async function extractLLM(env, text) {
               : `${text}\n\n（前回の返答はJSONとして読めませんでした。JSONだけを返してください）`,
           },
         ],
-        max_tokens: 512,
+        // 推論型モデルは思考に枠を使う。512だとJSONに届かないことがある
+        max_tokens: 1024,
       });
       const raw = typeof res === "string" ? res : (res?.response ?? "");
       return { ok: true, ...sanitize(parseJson(raw)), attempts: attempt };
