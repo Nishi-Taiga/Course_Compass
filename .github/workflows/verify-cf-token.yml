@@ -1,0 +1,59 @@
+name: verify-cf-token
+
+# CLOUDFLARE_API_TOKEN にどの権限が付いているかを、実際にAPIを叩いて判定する。
+# デプロイが Authentication error [code: 10000] で落ちるとき、
+# 「トークンが無効」なのか「特定の権限だけ足りない」のかを切り分けるため。
+#
+# トークンの値はログに出さない。各APIのHTTPステータスと成否だけを表示する。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  ACCT: f26bb7b8b376e9d6bbe9978b5cb92c62   # wrangler.jsonc の account_id
+  WORKER: toritsu-compass-staging
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check token permissions
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN が登録されていません"
+            exit 1
+          fi
+
+          api() {   # $1=表示名 $2=パス  → HTTPコードと結果を出す
+            code=$(curl -sS -o /tmp/body.json -w '%{http_code}' \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json" \
+              "https://api.cloudflare.com/client/v4$2")
+            # エラーコードだけ拾う（本文にトークンは含まれない）
+            errs=$(grep -o '"code":[0-9]*' /tmp/body.json | head -3 | tr '\n' ' ')
+            case "$code" in
+              200) echo "  ✅ $1 : OK" ;;
+              *)   echo "  ❌ $1 : HTTP $code  $errs" ;;
+            esac
+          }
+
+          echo "── トークン自体の有効性 ──"
+          api "トークンが有効か" "/user/tokens/verify"
+
+          echo ""
+          echo "── デプロイに必要な権限 ──"
+          api "Workers Scripts (一覧)     " "/accounts/$ACCT/workers/scripts"
+          api "Workers Services (デプロイ先)" "/accounts/$ACCT/workers/services/$WORKER"
+          api "D1 (seed投入に必要)        " "/accounts/$ACCT/d1/database"
+          api "Workers KV (SESSIONS用)    " "/accounts/$ACCT/storage/kv/namespaces"
+
+          echo ""
+          echo "── 読み方 ──"
+          echo "  Workers Services が ❌ で D1 が ✅ なら、トークンに"
+          echo "  Account / Workers Scripts / Edit が付いていない。"
+          echo "  全部 ❌ ならトークン自体が無効か、別アカウントのもの。"
