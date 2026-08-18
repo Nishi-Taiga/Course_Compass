@@ -61,8 +61,16 @@ def strip_noise(html: str) -> str:
 
 
 def text_of(fragment: str) -> str:
-    """タグを落として1行の文字列にする。"""
+    """タグを落として1行の文字列にする。
+
+    ⚠️ 隣り合う要素の境目には空白を入れる。単にタグを消すと
+       「<span>バドミントン</span><span>男子バスケットボール</span>」が
+       「バドミントン男子バスケットボール」という存在しない部活名になる。
+       要素の内側（「男子<span>バスケ</span>部」）は繋がったままにしたいので、
+       境目（`></`）だけを空白にする。
+    """
     s = fragment.replace("<br>", " ").replace("<br/>", " ").replace("<br />", " ")
+    s = re.sub(r">\s*<", "> <", s)
     s = TAG_RE.sub("", s)
     s = s.replace("&nbsp;", " ").replace("&amp;", "&")
     return WS_RE.sub(" ", s).strip()
@@ -80,6 +88,9 @@ EXCLUDE_RE = re.compile(
     # 活動紹介の本文が項目に混ざる学校がある（国際の「活動日：月・水・土or日」
     # 「IH予選の大会報告！」「目黒区大会 春季大会 優勝」など）。部活名ではない
     r"活動日|練習日|活動場所|大会|優勝|入賞|予選|報告|参加|開催|結果|"
+    # 活動日の但し書きが項目に混ざる（国際の「時期により土日あり」）。
+    # 部活名が「〜あり」「〜により」で終わることは無いので、語尾で落とす
+    r"により|に応じて|不定期|あり$|なし$|"
     r"[：:！!※]|"
     r"^\d+$|^令和|^平成|^\W+$"
 )
@@ -91,6 +102,28 @@ EXCLUDE_EXACT = {
 
 # 見出しがカテゴリかどうか
 CATEGORY_RE = re.compile(r"運動部|文化部|学芸部|体育部|同好会|部活動|クラブ")
+
+
+def _split_joined(s: str) -> list[str]:
+    """1項目に2つ以上の部が詰め込まれている場合に分ける。
+
+    「男子バドミントン部・女子バドミントン部」（青梅総合）や
+    「バドミントン 男子バスケットボール」（葛西南）のような形。
+
+    誤って分けないよう条件を絞る。
+      - 「・」区切りは、分けた全部が「部」等で終わるときだけ
+      - 空白区切りは、全体が10文字以上で、どの断片も3文字以上のときだけ
+        （「卓 球」「ESS 同好会」のような装飾の空白を割らないため）
+    """
+    if "・" in s:
+        parts = [p.strip() for p in s.split("・") if p.strip()]
+        if len(parts) >= 2 and all(CLUBLIKE_RE.search(p) for p in parts):
+            return parts
+    if " " in s and len(s.replace(" ", "")) >= 10:
+        parts = [p.strip() for p in s.split(" ") if p.strip()]
+        if len(parts) >= 2 and all(len(p) >= 3 for p in parts):
+            return parts
+    return [s]
 
 
 def _clean_item(raw: str) -> str | None:
@@ -126,7 +159,8 @@ def _headings_and(html: str, item_pattern: str) -> list[tuple[str, str]]:
             continue
         name = _clean_item(item)
         if name:
-            out.append((name, category))
+            for piece in _split_joined(name):
+                out.append((piece, category))
     return out
 
 
@@ -149,7 +183,8 @@ def _from_club_ul(html: str) -> list[tuple[str, str]]:
         for li in re.findall(r"<li[^>]*>(.*?)</li>", m.group("ul"), re.S | re.I):
             name = _clean_item(li)
             if name:
-                found.append((name, category))
+                for piece in _split_joined(name):
+                    found.append((piece, category))
     return found
 
 
@@ -187,7 +222,8 @@ def _from_club_links(html: str) -> list[tuple[str, str]]:
             category = t
             continue
         if CLUBLIKE_RE.search(t) and t not in EXCLUDE_EXACT and not EXCLUDE_RE.search(t):
-            found.append((t, category))
+            for piece in _split_joined(t):
+                found.append((piece, category))
     return found
 
 
