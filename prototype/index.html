@@ -197,25 +197,7 @@
   .bandmeter{display:flex; gap:3px; margin-top:5px}
   .bandmeter i{width:15px; height:6px; border-radius:2px; background:var(--line)}
   .bandmeter i.on{background:var(--brass)}
-  /* 比べるシートの校風 */
-  .sub2{font-weight:400; font-size:10.5px; color:var(--muted); margin-left:8px}
-  .sps{display:flex; flex-wrap:wrap; gap:14px}
-  .spcard{border:1px solid var(--line); border-radius:8px; padding:12px 14px;
-    background:#fff; width:300px}
-  .sptxt{font-size:11.5px; line-height:1.85; margin:0 0 8px; color:var(--ink)}
-  .spsrc{font-size:10.5px; color:var(--accent)}
-  /* 部の実績 */
-  .acard{border:1px solid var(--line); border-radius:8px; padding:12px 14px;
-    background:#fff; width:300px}
-  .alist{list-style:none; margin:0; padding:0}
-  .alist li{font-size:11.5px; line-height:1.7; padding:5px 0; border-top:1px solid var(--line)}
-  .alist li:first-child{border-top:none}
-  .adv{font-size:10px; color:var(--muted); margin-left:4px}
-  .amt{color:var(--muted); font-size:10.5px; margin:0 5px 0 0; display:block}
-  .ark{color:var(--accent); font-size:12px}
-  .ayr{font-size:10px; color:var(--faint); margin-left:6px}
-  .asr{font-size:9.5px; color:var(--muted); margin-left:6px; border:1px solid var(--line);
-    border-radius:3px; padding:0 4px}
+  .sps{display:flex; flex-wrap:wrap; gap:16px}
   .anote{font-size:10.5px; color:var(--muted); line-height:1.8; margin-top:10px;
     border-left:3px solid var(--line); padding-left:10px}
   /* 制服 */
@@ -225,11 +207,17 @@
   .ufc{font-size:10px; font-weight:400; color:var(--accent); border:1px solid var(--accent);
     border-radius:3px; padding:1px 5px; margin-left:7px; vertical-align:1px}
   /* 比べるシートの地図 */
-  .mttl2{font-weight:700; font-size:13px; margin:16px 0 8px}
-  .maps{display:flex; flex-wrap:wrap; gap:14px}
-  .mcard{border:1px solid var(--line); border-radius:8px; padding:9px; background:#fff}
-  .mttl{font-size:12.5px; font-weight:700; margin-bottom:6px}
-  .amap{position:relative; overflow:hidden; background:#eef1f4; border-radius:5px}
+  .mttl2{font-weight:700; font-size:14px; margin:20px 0 10px; display:flex; align-items:center; gap:8px;
+    padding-bottom:6px; border-bottom:2px solid var(--brass)}
+  .mttl2::before{content:""; width:4px; height:16px; background:var(--brass); border-radius:2px}
+  .mttl2 .sub2{font-weight:400; font-size:10.5px; color:var(--muted); margin-left:auto}
+  .maps{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px}
+  .mcard{border:1px solid var(--line); border-radius:10px; padding:12px; background:var(--frame);
+    box-shadow:var(--shadow-soft); transition:box-shadow .15s}
+  .mcard:hover{box-shadow:var(--shadow)}
+  .mttl{font-size:13px; font-weight:700; margin-bottom:8px; padding-bottom:6px;
+    border-bottom:1px solid var(--line-soft)}
+  .amap{position:relative; overflow:hidden; background:#eef1f4; border-radius:6px}
   .amap img{position:absolute; width:256px; height:256px; display:block; max-width:none}
   .amap svg{position:absolute; left:0; top:0}
   .mlbl{font-size:10.5px; font-weight:700; stroke:#fff; stroke-width:3; paint-order:stroke}
@@ -238,7 +226,8 @@
   .mattr{position:absolute; right:4px; bottom:3px; background:rgba(255,255,255,.86);
     padding:1px 5px; font-size:8.5px; color:#556; border-radius:3px}
   .mattr a{color:#556; text-decoration:none}
-  .mdt{font-size:10.5px; color:var(--muted); margin-top:5px; max-width:280px; line-height:1.6}
+  .mdt{font-size:10.5px; color:var(--muted); margin-top:6px; max-width:280px; line-height:1.6;
+    padding:4px 8px; background:var(--surface); border-radius:4px}
   @media print{ .amap img{ -webkit-print-color-adjust:exact; print-color-adjust:exact } }
   .dircell{text-align:center}
   .dir{width:44px; height:44px}
@@ -254,10 +243,41 @@
   .why{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
   .why span{font-size:10.5px; color:var(--accent); border:1px solid var(--line);
     border-radius:20px; padding:1.5px 9px; background:var(--surface)}
+  /* 部活カード */
+  .acard{border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+    background:var(--frame); box-shadow:var(--shadow-soft); transition:box-shadow .15s}
+  .acard:hover{box-shadow:var(--shadow)}
+  .acard .mttl{margin-bottom:8px}
+  .alist{list-style:none; margin:0; padding:0}
+  .alist li{font-size:12px; line-height:1.8; padding:6px 0; border-top:1px solid var(--line-soft)}
+  .alist li:first-child{border-top:none}
+  .alist li:last-child{border-bottom:none}
+  .adv{font-size:10px; color:var(--muted); margin-left:4px; background:var(--surface);
+    padding:1px 5px; border-radius:3px}
+  .amt{color:var(--muted); font-size:10.5px; margin:0 5px 0 0; display:inline}
+  .ark{color:var(--accent); font-size:12px}
+  .ayr{font-size:10px; color:var(--faint); margin-left:6px}
+  .asr{font-size:9.5px; color:var(--muted); margin-left:6px; border:1px solid var(--line);
+    border-radius:3px; padding:0 4px}
+  /* 学校の言葉カード */
+  .spcard{border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+    background:var(--frame); box-shadow:var(--shadow-soft); transition:box-shadow .15s}
+  .spcard:hover{box-shadow:var(--shadow)}
+  .spcard .mttl{margin-bottom:8px}
+  .sptxt{font-size:12px; line-height:1.9; margin:0 0 10px; color:var(--ink);
+    border-left:3px solid var(--brass); padding-left:12px}
+  .spsrc{font-size:11px; color:var(--accent); text-decoration:none; font-weight:600}
+  .spsrc:hover{text-decoration:underline}
   .cardops{margin-top:11px}
   .cmp{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);
     border:1px solid var(--line); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .cmp[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+  .card-details{display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--line-soft)}
+  .card-details.open{display:block}
+  .card-toggle{display:flex; align-items:center; gap:4px; font-size:11.5px;
+    color:var(--accent); cursor:pointer; background:none; border:none; padding:0}
+  .card-toggle::after{content:"▶"; font-size:8px; transition:transform .15s}
+  .card-toggle.open::after{transform:rotate(90deg)}
 
   /* ---------- くらべるバー（チャット⇄シートの行き来） ---------- */
   .cmpbar{display:none; flex:none; padding:7px 14px 0}
@@ -328,15 +348,15 @@
         <path d="M29 8 L34.5 26.5 L29 23.4 L23.5 26.5 Z" fill="#C9A85C"/>
         <path d="M29 50 L23.5 31.5 L29 34.6 L34.5 31.5 Z" fill="#C9A85C" opacity=".45"/>
       </svg>
-      <h1 class="serif">わが子に合う都立が、<br>会話で見つかる。</h1>
+      <h1 class="serif">会話で見つける<br>わが子に合う都立高校</h1>
       <p class="tag">塾の面談のような志望校えらびを、どのご家庭にも。都立高校172校の公開データをもとに、AIがいっしょに探します。</p>
+      <p style="margin-top:24px;font-size:14px;color:#C4D1E4;letter-spacing:.08em">質問3つ　1分で見つかるぴったりの都立高校</p>
       <div class="steps3">
-        <div><span class="n">1</span>ご自宅の最寄り駅と、通学時間の希望</div>
+        <div><span class="n">1</span>ご自宅の最寄り駅（住所も名前も不要）</div>
         <div><span class="n">2</span>成績の目安（わからなくても大丈夫）</div>
-        <div><span class="n">3</span>お子さんの希望を、ことばのままに</div>
-        <div class="note">お伺いするのはこの3問だけ。お名前や住所は伺いません。</div>
+        <div><span class="n">3</span>ご希望の条件</div>
       </div>
-      <button class="cta" id="startBtn">さがしはじめる</button>
+      <button class="cta" id="startBtn">探し始める</button>
     </div>
     <p class="land-foot">本サービスの情報は東京都教育委員会などの公開データに基づく参考情報です。最終確認は必ず学校公式サイト・学校説明会で行ってください。合否を判定するものではありません。<br>デモ版: 会話はルールベースの疑似応答です（製品版はAIエージェント）。</p>
   </section>
@@ -551,20 +571,25 @@ function search(){
 function spark(r){
   const vals=r.map(v=>v==null?null:v); const nums=vals.filter(v=>v!=null);
   if(!nums.length) return '';
-  const w=112,h=36,lo=Math.min(...nums,0.8),hi=Math.max(...nums,2.0);
-  const x=i=>6+i*(w-16)/4, y=v=>6+(h-14)*(1-(v-lo)/(hi-lo||1));
+  const w=200,h=60,lo=Math.min(...nums,0.8),hi=Math.max(...nums,2.0);
+  const x=i=>20+i*(w-32)/4, y=v=>16+(h-30)*(1-(v-lo)/(hi-lo||1));
   let pts=[]; vals.forEach((v,i)=>{ if(v!=null) pts.push([x(i),y(v)]); });
   const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
-  const area=line+` L${pts[pts.length-1][0].toFixed(1)} ${h-4} L${pts[0][0].toFixed(1)} ${h-4} Z`;
-  const last=pts[pts.length-1];
+  const area=line+` L${pts[pts.length-1][0].toFixed(1)} ${h-12} L${pts[0][0].toFixed(1)} ${h-12} Z`;
   const y1=y(1.0);
-  const base=(y1>2&&y1<h-2)?`<line x1="4" y1="${y1.toFixed(1)}" x2="${w-4}" y2="${y1.toFixed(1)}"
-      stroke="var(--faint)" stroke-width="1" stroke-dasharray="3 3"/>`:'';
+  const base=(y1>4&&y1<h-4)?`<line x1="16" y1="${y1.toFixed(1)}" x2="${w-4}" y2="${y1.toFixed(1)}"
+      stroke="var(--faint)" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="14" y="${y1.toFixed(1)}" text-anchor="end" font-size="8" fill="var(--faint)" dominant-baseline="middle">1.0</text>`:'';
+  const labels=['R4','R5','R6','R7','R8'];
+  const xLabels=vals.map((v,i)=>v!=null?`<text x="${x(i)}" y="${h-2}" text-anchor="middle" font-size="8" fill="var(--faint)">${labels[i]}</text>`:'').join('');
+  const dots=vals.map((v,i)=>v!=null?`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="var(--spark)"/>
+    <text x="${x(i)}" y="${y(v)-8}" text-anchor="middle" font-size="8" font-weight="600" fill="var(--ink)">${v.toFixed(2)}</text>`:'').join('');
   return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="応募倍率の推移。点線は定員ちょうどの1.00倍">
     ${base}
     <path d="${area}" fill="var(--spark-fill)"/>
     <path d="${line}" fill="none" stroke="var(--spark)" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="${last[0]}" cy="${last[1]}" r="3.4" fill="var(--spark)"/>
+    ${dots}
+    ${xLabels}
   </svg>`;
 }
 function dirWidget(school){
@@ -596,6 +621,22 @@ function ratioWords(v){
   const per100=Math.round(v*100);
   return `定員100人に${per100}人が出願`;
 }
+function schoolTag(s){
+  if(s.st==='no_exam') return '総合選抜';
+  if(s.d&&s.d.includes('工')) return '工科';
+  if(s.d&&s.d.includes('商')) return '商業';
+  if(s.d&&s.d.includes('農')) return '農業';
+  if(s.d&&s.d.includes('総')) return '総合選択';
+  if(s.d&&s.d.includes('水')) return '水産';
+  if(s.g==='進学指導重点校') return '進学特化';
+  if(s.g==='進学指導特別推進校') return '進学特化';
+  if(s.g==='進学指導推進校') return '進学重視';
+  if(s.sp&&s.sp.includes('文武')) return '文武両道';
+  if(s.sp&&s.sp.includes('自律')) return '自律重視';
+  if(s.sp&&s.sp.includes('国际')||s.sp&&s.sp.includes('国際')) return '国際交流';
+  if(s.b>=2) return '充実校';
+  return '';
+}
 function scoreFact(s){
   if(s.st==='no_exam') return `<div class="fact">選抜方法<b style="font-size:12.5px">学力検査なし</b>
     <small style="font-size:10px;color:var(--faint)">面接・作文・調査書</small></div>`;
@@ -615,6 +656,7 @@ function card(c){
   if(s.g) why.push(s.g);
   if(S.wants.dept&&s.d.includes(S.wants.dept)) why.push('希望の学科あり');
   const lastR=[...(s.r||[])].reverse().find(v=>v!=null);
+  const tag=schoolTag(s);
   const node=el('div','card');
   /* アコーディオン（安田の画面案イメージⅠ）。初期は1行＝校名・圏・区・学科・指定。
      ＋で通学・目安点・倍率・追加ボタンを展開する。行ごとタップで開閉 */
@@ -624,30 +666,21 @@ function card(c){
         :(s.st==='no_exam'?`<span class="tier" style="background:var(--line);color:var(--muted)">別枠の選抜</span>`:'')}</div>
       <button type="button" class="exp" aria-expanded="false" aria-label="詳細を開く">＋</button>
     </div>
-    <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}</div>
-    <div class="cardbody">
-    ${s.sn?`<div class="note" style="margin:6px 0 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
-    <div class="factgrid">
-      <div class="fact">通学の目安<b>${rangeText(m)}</b></div>
-      ${scoreFact(s)}
+    <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${tag?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}</div>
+      <button type="button" class="card-toggle" aria-expanded="false" style="margin:0">もっと見る</button>
     </div>
-    <div class="sparkrow">
-      <div class="lbl">応募倍率<b>${lastR!=null?lastR.toFixed(2):'—'}<small style="font-size:10px;color:var(--faint)"> 倍(R8)</small></b>
-        <small style="font-size:10px;color:var(--faint)">${ratioWords(lastR)}</small></div>
-      <div class="lbl" style="font-size:10px;color:var(--faint)">5年推移 R4〜R8<br>点線＝定員ちょうど(1.00)</div>
-      ${spark(s.r)}
-    </div>
-    <div class="why">${why.map(w=>`<span>${w}</span>`).join('')}</div>
-    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button></div>
+    <div class="card-details">
+      ${s.sn?`<div class="note" style="margin:6px 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
+      <div class="factgrid">
+        ${scoreFact(s)}
+      </div>
+      <div class="sparkrow">
+        <div class="lbl">応募倍率<b>${lastR!=null?lastR.toFixed(2):'—'}<small style="font-size:10px;color:var(--faint)"> 倍(R8)</small></b>
+          <small style="font-size:10px;color:var(--faint)">${ratioWords(lastR)}</small></div>
+        ${spark(s.r)}
+      </div>
+      <div class="why">${why.map(w=>`<span>${w}</span>`).join('')}</div>
     </div>`;
-  const exp=node.querySelector('.exp');
-  const toggle=()=>{ const on=!node.classList.contains('open');
-    node.classList.toggle('open',on); exp.setAttribute('aria-expanded',on);
-    exp.setAttribute('aria-label',on?'詳細を閉じる':'詳細を開く'); };
-  node.querySelector('.headrow').addEventListener('click',toggle);
-  node.querySelector('.headrow').addEventListener('keydown',e=>{
-    // ＋ボタン上のEnterはclickが別途飛んでくるので、行自身への操作だけ拾う
-    if(e.target===e.currentTarget&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); toggle(); } });
   const btn=node.querySelector('.cmp');
   btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
     btn.setAttribute('aria-pressed',on); btn.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';
@@ -731,8 +764,8 @@ function openSheet(){
       <td>${tgt}${z?`<br><span class="tier ${ZONE[z][1]}" style="font-size:10px">${ZONE[z][0]}</span>`:''}</td>
       <td>${spark(s.r)}<br><span style="font-size:10px;color:var(--faint)">${lastR!=null?ratioWords(lastR):''}</span></td>
       <td>${s.g||'—'}${s.sn?`<br><span style="font-size:10px;color:var(--faint)">${s.sn}</span>`:''}</td></tr>`; }).join('');
-    const maps=names.map(n=>{ const s=D.schools.find(x=>x.n===n); const m=accessMap(s);
-      return m?`<div class="mcard"><div class="mttl">${s.n}</div>${m}</div>`:''; }).filter(Boolean).join('');
+    const maps=names.map(n=>{ const s=D.schools.find(x=>x.n===n);
+      return `<tr><td style="white-space:nowrap"><b>${esc(s.n)}</b></td><td>${s.ac?accessMap(s):'—'}</td></tr>`; }).join('');
     const sps=names.map(n=>{ const s=D.schools.find(x=>x.n===n); if(!s.sp) return '';
       return `<div class="spcard"><div class="mttl">${esc(s.n)}</div><p class="sptxt">${esc(s.sp)}</p>
         <a class="spsrc" href="${safeUrl(s.spu)}" target="_blank" rel="noopener">公式サイトで読む</a></div>`; }).filter(Boolean).join('');
