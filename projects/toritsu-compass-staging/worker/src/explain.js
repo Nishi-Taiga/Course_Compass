@@ -34,6 +34,9 @@ function conditionText(q, student) {
       ? `${q.wants.clubs.join("・")}と似た種目のある学校`
       : `${q.wants.clubs.join("・")}のある学校`);
   }
+  if (q.wants?.course_types?.length) {
+    parts.push(`${q.wants.course_types.join("・")}も含めて`);
+  }
   if (q.wants?.dept) parts.push(`学科は「${q.wants.dept}」`);
   if (q.wants?.academic) parts.push("大学進学に力を入れている学校");
 
@@ -67,6 +70,10 @@ export function explainSchool(s) {
   if (s.designation) bits.push(`${s.designation}に指定されています`);
   if (s.encourage) {
     bits.push("学力検査によらない選抜のため、点数では判定していませんが候補に残しています");
+  }
+  if (s.requested_course) {
+    const label = s.course_types === "高専" ? "高専" : "定時制";
+    bits.push(`ご希望の${label}です`);
   }
   if (s.selection_note) bits.push(s.selection_note);
 

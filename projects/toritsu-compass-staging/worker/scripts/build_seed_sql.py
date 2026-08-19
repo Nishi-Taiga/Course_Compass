@@ -105,6 +105,19 @@ def main() -> None:
     seed_dir = root / "data" / "seed"
 
     master = read_csv(seed_dir / "schools_master.csv")
+
+    # 都教委の一覧に載らない学校（産技高専）。schools_master.csv は都教委CSVから
+    # 生成されるので直接書き足すと再生成で消える。別ファイルにして合流させる。
+    extra_csv = seed_dir / "extra_schools.csv"
+    extra_schools = read_csv(extra_csv) if extra_csv.is_file() else []
+    for r in extra_schools:
+        master.append({
+            "school_number": r["school_number"], "name": r["name"], "name_kana": "",
+            "ward": r["ward"], "postal_code": "", "address": r["address"], "phone": "",
+            "course_types": r["course_types"], "departments": r["departments"],
+            "students_fulltime": "", "designation": "",
+        })
+
     designations = read_csv(seed_dir / "designations.csv")
 
     # 判定モデル用の値。extract_prototype_data.py が prototype から取り出す。
@@ -145,10 +158,17 @@ def main() -> None:
     ]
 
     # --- schools ---
+    extra_by_number = {r["school_number"]: r for r in extra_schools}
     school_rows = []
     for r in master:
         name = r["name"].strip()
         sc = scores.get(name, {})
+        # 高専は目安点を持たない。入試の満点も配点も都立高校と違うため、
+        # 同じ目安点を当てると過大評価になる（build_kosen.py の注記参照）
+        ex = extra_by_number.get(r["school_number"])
+        if ex:
+            sc = {"selection_type": ex["selection_type"],
+                  "selection_note": ex["selection_note"]}
         school_rows.append([
             sql_str(r["school_number"]),
             sql_str(name),
@@ -167,7 +187,7 @@ def main() -> None:
             sql_str(sc.get("selection_note")),
             sql_str(sc.get("score_layer")),
             sql_int(sc.get("no_hs_admission") or 0),
-            sql_str(SOURCE_MASTER),
+            sql_str(extra_by_number.get(r["school_number"], {}).get("source_master") or SOURCE_MASTER),
             sql_str(src_by_name.get(name)),
             sql_str(SOURCE_TARGET_SCORE if sc.get("target_score") else None),
         ])
@@ -252,9 +272,13 @@ def main() -> None:
         out.append("")
 
     # --- 部活動（Step6） ---
-    clubs_csv = root / "data" / "seed" / "school_clubs.csv"
+    # 全日制・定時制・高専の3系統。取得の経路が違うのでCSVが分かれている
+    club_files = [seed_dir / "school_clubs.csv",
+                  seed_dir / "school_clubs_teiji.csv",
+                  seed_dir / "extra_school_clubs.csv"]
+    clubs_csv = club_files[0]
     if clubs_csv.is_file():
-        clubs = read_csv(clubs_csv)
+        clubs = [r for f in club_files if f.is_file() for r in read_csv(f)]
         known = {r["school_number"] for r in master}
         unknown = sorted({r["school_number"] for r in clubs} - known)
         if unknown:

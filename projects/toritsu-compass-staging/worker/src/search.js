@@ -117,7 +117,10 @@ export async function searchSchools(db, q) {
   // 黙って混ぜると、普通に探している保護者に点数判定できない学校が並んでしまう。
   const wantCourses = q.wants?.course_types ?? [];
   const courseConds = ["s.course_types LIKE '%全日制%'"];
-  if (wantCourses.includes("定時制")) courseConds.push("s.course_types LIKE '%定時制%'");
+  // ⚠️ LIKE '%定時制%' にしない。全日制を併設している39校まで拾ってしまうが、
+  //    それらは全日制としてすでに候補に入っている。ここで足したいのは
+  //    **定時制のみの15校**（一橋・六本木・新宿山吹など）。
+  if (wantCourses.includes("定時制")) courseConds.push("s.course_types = '定時制'");
   if (wantCourses.includes("高専")) courseConds.push("s.course_types = '高専'");
 
   const where = [
@@ -220,11 +223,18 @@ export async function searchSchools(db, q) {
   // 入らない。そのままだと「定時制も見たい」と言われたのに1校も出ない。
   // 通学の近い順に最大2校、明示的に足す。
   if (wantCourses.length) {
-    const extra = judged
-      .filter((r) => !out.some((o) => o.school_number === r.school_number))
-      .filter((r) => wantCourses.some((c) => (r.course_types ?? "").includes(c)))
-      .slice(0, 2);
-    out.push(...extra.map((r) => ({ ...r, requested_course: true })));
+    // ⚠️ 課程ごとに枠を取る。まとめて2校にすると、定時制と高専の両方を
+    //    希望されたときに近いほうだけで枠が埋まり、片方が1校も出ない。
+    const perCourse = wantCourses.length > 1 ? 1 : 2;
+    for (const course of wantCourses) {
+      const extra = judged
+        .filter((r) => !out.some((o) => o.school_number === r.school_number))
+        // 希望そのものの課程だけを足す。「定時制」の希望に全日制併設校を足すと、
+        // 定時制を見たいと言った人に全日制の学校が並ぶ
+        .filter((r) => (r.course_types ?? "") === course)
+        .slice(0, perCourse);
+      out.push(...extra.map((r) => ({ ...r, requested_course: true })));
+    }
   }
 
   return { student, rows: decorate(out, q), all: judged, mode: "scored" };
