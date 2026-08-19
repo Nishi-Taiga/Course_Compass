@@ -1141,6 +1141,14 @@ function finishLevel(){
   }
   askWish();
 }
+function askLimit(){
+  aiSay('通学時間はどのくらいまでにしますか？');
+  setChips([[30],[45],[60],[75]].map(([v])=>({label:`${v}分`,fn:()=>{S.limit=v;S.noCommuteLimit=false;
+    sysSay(`条件変更: 通学 ${v}分以内`);runSearch();}})).concat([
+    {label:'こだわらない',fn:()=>{S.noCommuteLimit=true;S.limit=999;
+      sysSay('条件変更: 通学こだわらない');runSearch();}},
+  ]));
+}
 function askWish(){
   S.state='S4'; setStep(3,'お子さんの希望');
   aiSay('最後に、お子さんの希望はありますか？部活、校風、学びたい分野など、なんでも構いません。');
@@ -1202,21 +1210,9 @@ function runSearch(){
     }
     aiSay('気に入りましたか？条件を変えたいときは下のボタンから。');
     setChips([
-      {label:'通学時間を変えたい',fn:()=>{
-        aiSay('通学時間はどのくらいまでにしますか？');
-        setChips([[30],[45],[60],[75]].map(([v])=>({label:`${v}分`,fn:()=>{S.limit=v;S.noCommuteLimit=false;
-          sysSay(`条件変更: 通学 ${v}分以内`);runSearch();}})).concat([
-          {label:'こだわらない',fn:()=>{S.noCommuteLimit=true;S.limit=999;
-            sysSay('条件変更: 通学こだわらない');runSearch();}},
-        ]));
-      }},
+      {label:'通学時間を変えたい',fn:()=>{askLimit();}},
       {label:'点数を入力/変更したい',fn:()=>{askLevel();}},
       {label:'希望を変えたい',fn:()=>{askWish();}},
-      {label:'もっと近い学校がいい',fn:()=>{
-        if(S.noCommuteLimit||S.limit>120){S.noCommuteLimit=false;S.limit=30;}
-        else{S.limit=Math.max(20,S.limit-15);}
-        sysSay(`条件変更: 通学 ${S.limit}分以内`);renderBoard();runSearch();}},
-      {label:'くらべるシートを見る',fn:openSheet},
       {label:'最初からやり直す',fn:()=>{location.reload();}},
     ]);
     S.state='S6';
