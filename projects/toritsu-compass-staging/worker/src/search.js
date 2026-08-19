@@ -269,7 +269,14 @@ export async function attachSchoolDetails(db, rows) {
   const byAch = new Map();
   for (const a of ach.results ?? []) {
     if (!byAch.has(a.school_number)) byAch.set(a.school_number, []);
-    byAch.get(a.school_number).push(a);
+    // 種目・区分が無い実績は多い（団体競技など）。NULLのまま返すと
+    // 受け手が "null" を連結して「陸上競技null」と表示してしまうので空文字にする
+    byAch.get(a.school_number).push({
+      ...a,
+      event: a.event ?? "",
+      division: a.division ?? "",
+      year: a.year ?? "",
+    });
   }
   const byUni = new Map((uni.results ?? []).map((u) => [u.school_number, u]));
 
