@@ -817,6 +817,15 @@ function openSheet(){
   document.getElementById('sheet').classList.add('open');
 }
 function closeSheet(){ document.getElementById('sheet').classList.remove('open'); }
+<<<<<<< Updated upstream
+=======
+function showDetail(name){
+  const saved=new Set(S.compare);
+  S.compare=new Set([name]);
+  openSheet();
+  S.compare=saved;
+}
+>>>>>>> Stashed changes
 
 // ---------- 状態遷移 ----------
 function start(){
