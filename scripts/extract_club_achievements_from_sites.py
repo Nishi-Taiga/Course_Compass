@@ -106,7 +106,10 @@ def main() -> None:
             # 隣の部の名前を拾う（狛江で女子バレーの実績が男子バレーに付いた）
             anchor = m.start() + year.start()
             before = text[max(0, anchor - 300):anchor]
-            clubs = [c for c in CLUB.findall(before) if CLUB_WORD.search(c)]
+            # 「〜てから吹奏楽を始めた部」のように、地の文の途中から拾って
+            # しまうことがある。ひらがな始まりや助詞で始まるものは部活名でない
+            clubs = [c for c in CLUB.findall(before)
+                     if CLUB_WORD.search(c) and not re.match(r"^[ぁ-ん]", c)]
             rows.append({
                 "school_number": number,
                 "school": info.get("name", ""),
