@@ -71,6 +71,9 @@ export function explainSchool(s) {
   if (s.encourage) {
     bits.push("学力検査によらない選抜のため、点数では判定していませんが候補に残しています");
   }
+  if (s.suggested_course) {
+    bits.push("ものづくり系をお探しなので、5年制の高専も挙げています");
+  }
   if (s.requested_course) {
     const label = s.course_types === "高専" ? "高専" : "定時制";
     bits.push(`ご希望の${label}です`);

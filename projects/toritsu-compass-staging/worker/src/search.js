@@ -123,12 +123,19 @@ export async function searchSchools(db, q) {
   // 既定は全日制だけ。定時制・高専は**希望されたときだけ**足す（2026-08-19 決定）。
   // 黙って混ぜると、普通に探している保護者に点数判定できない学校が並んでしまう。
   const wantCourses = q.wants?.course_types ?? [];
+  // 「工業系・ものづくりをやりたい」と言われたら、高専も候補に足す（西・2026-08-19）。
+  // 高専を知らないまま探している家庭にこそ届けたい選択肢で、既定の全日制だけに
+  // 絞ると、いちばん向いている相手に見えないまま終わる。
+  // ⚠️ 本人が「高専」と言ったわけではないので、希望ではなく**提案**として扱う
+  //    （文言が「ご希望の高専です」になると、言っていないことにされる）。
+  const suggestKosen = q.wants?.dept === "工" && !wantCourses.includes("高専");
+  const courses = suggestKosen ? [...wantCourses, "高専"] : wantCourses;
   const courseConds = ["s.course_types LIKE '%全日制%'"];
   // ⚠️ LIKE '%定時制%' にしない。全日制を併設している39校まで拾ってしまうが、
   //    それらは全日制としてすでに候補に入っている。ここで足したいのは
   //    **定時制のみの15校**（一橋・六本木・新宿山吹など）。
-  if (wantCourses.includes("定時制")) courseConds.push("s.course_types = '定時制'");
-  if (wantCourses.includes("高専")) courseConds.push("s.course_types = '高専'");
+  if (courses.includes("定時制")) courseConds.push("s.course_types = '定時制'");
+  if (courses.includes("高専")) courseConds.push("s.course_types = '高専'");
 
   const where = [
     "s.no_hs_admission = 0",            // 高校からの募集停止（中高一貫5校）は出さない
@@ -234,18 +241,22 @@ export async function searchSchools(db, q) {
   // 希望された課程（定時制・高専）は、目安点が無いので tier が付かず pool に
   // 入らない。そのままだと「定時制も見たい」と言われたのに1校も出ない。
   // 通学の近い順に最大2校、明示的に足す。
-  if (wantCourses.length) {
+  if (courses.length) {
     // ⚠️ 課程ごとに枠を取る。まとめて2校にすると、定時制と高専の両方を
     //    希望されたときに近いほうだけで枠が埋まり、片方が1校も出ない。
-    const perCourse = wantCourses.length > 1 ? 1 : 2;
-    for (const course of wantCourses) {
+    const perCourse = courses.length > 1 ? 1 : 2;
+    for (const course of courses) {
       const extra = judged
         .filter((r) => !out.some((o) => o.school_number === r.school_number))
         // 希望そのものの課程だけを足す。「定時制」の希望に全日制併設校を足すと、
         // 定時制を見たいと言った人に全日制の学校が並ぶ
         .filter((r) => (r.course_types ?? "") === course)
         .slice(0, perCourse);
-      out.push(...extra.map((r) => ({ ...r, requested_course: true })));
+      // 本人が挙げた課程は「ご希望の」、こちらから足した高専は「提案」と分ける
+      const asSuggestion = suggestKosen && course === "高専";
+      out.push(...extra.map((r) => (asSuggestion
+        ? { ...r, suggested_course: true }
+        : { ...r, requested_course: true })));
     }
   }
 
@@ -332,6 +343,8 @@ function decorate(rows, q) {
       course_types: r.course_types,
       // 「定時制も見たい」等の希望に応えて足した学校であることを画面に出せるように
       requested_course: r.requested_course ?? false,
+      // 学科の希望から**こちらが足した**学校（今は高専のみ）
+      suggested_course: r.suggested_course ?? false,
       matched_clubs: r.matched_clubs ?? [],
       match_score,
       why,
