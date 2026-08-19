@@ -16,6 +16,9 @@ import { RANGE, LABEL, toKansan } from "./scoring.js";
 
 const num = (v) => (v == null || v === "" ? null : Number(v));
 
+/** 全日制のほかに検索へ含められる課程。schools.course_types の値と揃える。 */
+export const COURSE_TYPES = ["定時制", "高専"];
+
 /**
  * 生のリクエストボディを検索条件に整える。
  * 範囲外の値は黙って丸めず、invalid に名前を残して null にする。
@@ -50,6 +53,13 @@ export function parseQuery(body = {}) {
 
     wants: {
       academic: Boolean(body.wants?.academic),
+      // 希望された課程。既定（空）は全日制だけを見る。
+      // 「定時制も見たい」「高専に興味がある」と言われたときだけ広げる
+      // （2026-08-19 決定。黙って混ぜると、普通に探している保護者に
+      //   点数判定できない学校が並んで分かりにくくなる）
+      course_types: Array.isArray(body.wants?.course_types)
+        ? body.wants.course_types.filter((c) => COURSE_TYPES.includes(c))
+        : [],
       dept: body.wants?.dept ? String(body.wants.dept).slice(0, 30) : null,
       clubs: Array.isArray(body.wants?.clubs)
         ? body.wants.clubs.filter(Boolean).slice(0, 5).map((c) => String(c).slice(0, 30))

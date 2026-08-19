@@ -69,6 +69,7 @@ MASTER_CSV = ROOT / "data" / "seed" / "schools_master.csv"
 TOPS_DIR = ROOT / "data" / "fetched" / "tops"
 LIST_XLSX = ROOT / "data" / "fetched" / "metro_school_list.xlsx"
 OUT_CSV = ROOT / "data" / "seed" / "school_sites.csv"
+OUT_CSV_TEIJI = ROOT / "data" / "seed" / "school_sites_teiji.csv"
 PROBLEMS_CSV = TOPS_DIR / "_problems.csv"
 
 LIST_URL = "https://www.metro.ed.jp/js/xlsx/list.xlsx"
@@ -239,7 +240,11 @@ def main() -> None:
     ap.add_argument("--force", action="store_true", help="トップページを取り直す")
     ap.add_argument("--delay", type=float, default=DEFAULT_DELAY_SEC,
                     help=f"リクエスト間隔の下限秒（既定 {DEFAULT_DELAY_SEC}）")
+    ap.add_argument("--course", choices=["zennichi", "teiji"], default="zennichi",
+                    help="zennichi=全日制167校（既定） / teiji=定時制のみの15校")
     args = ap.parse_args()
+
+    out_csv = OUT_CSV if args.course == "zennichi" else OUT_CSV_TEIJI
 
     TOPS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -258,13 +263,24 @@ def main() -> None:
         LIST_XLSX.write_bytes(blob)   # 出典として現物を残す
 
     listed = read_school_list(blob)
-    zennichi = [r for r in listed if r["course"].lstrip().startswith("全日制")]
-    print(f"一覧 {len(listed)}行 → 全日制 {len(zennichi)}校\n")
 
     # --- マスタと突き合わせ ---
     with MASTER_CSV.open(encoding="utf-8-sig", newline="") as f:
         master = list(csv.DictReader(f))
     by_name = {r["name"]: r for r in master}
+
+    if args.course == "zennichi":
+        zennichi = [r for r in listed if r["course"].lstrip().startswith("全日制")]
+        print(f"一覧 {len(listed)}行 → 全日制 {len(zennichi)}校\n")
+    else:
+        # 定時制**のみ**の学校に絞る。全日制を併設している学校はすでに全日制として
+        # 検索に出ているので、同じ学校を二重に持たない。
+        # （マスタは1校1行で、課程は course_types 列にまとまっている）
+        teiji_only = {r["name"] for r in master if (r["course_types"] or "").strip() == "定時制"}
+        zennichi = [r for r in listed
+                    if r["course"].lstrip().startswith("定時制")
+                    and r["name"].replace("高等学校", "").strip() in teiji_only]
+        print(f"一覧 {len(listed)}行 → 定時制のみ {len(zennichi)}校\n")
 
     problems: list[dict[str, str]] = []
     targets: list[dict[str, str]] = []
@@ -373,7 +389,7 @@ def main() -> None:
 
     fields = ["school_number", "name", "official_name", "course", "top_url",
               "clubs_url", "status", "club_link_text", "clubs_url_alt", "via", "source"]
-    with OUT_CSV.open("w", encoding="utf-8", newline="") as f:
+    with out_csv.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()
         w.writerows(rows)
@@ -388,10 +404,14 @@ def main() -> None:
 
     ok = sum(1 for r in rows if r["status"] == "ok")
     listed_names = {t["short"] for t in targets}
+    course_word = "全日制" if args.course == "zennichi" else "定時制"
     missing = [r["name"] for r in master
-               if "全日制" in (r["course_types"] or "") and r["name"] not in listed_names]
+               if course_word in (r["course_types"] or "")
+               and (args.course == "zennichi"
+                    or (r["course_types"] or "").strip() == "定時制")
+               and r["name"] not in listed_names]
 
-    print(f"{OUT_CSV.relative_to(ROOT)} -> {len(rows)}行")
+    print(f"{out_csv.relative_to(ROOT)} -> {len(rows)}行")
     print(f"  部活ページ解決  {ok}校")
     print(f"  未解決          {len(rows) - ok}校")
     print(f"  要確認          {len(problems)}件"
