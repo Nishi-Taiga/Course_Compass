@@ -149,6 +149,8 @@ def main() -> None:
         "",
         "DELETE FROM sessions;",
         "DELETE FROM school_clubs;",
+        "DELETE FROM school_achievements;",
+        "DELETE FROM school_uniforms;",
         "DELETE FROM commute_times;",
         "DELETE FROM ward_stations;",
         "DELETE FROM stations;",
@@ -298,6 +300,66 @@ def main() -> None:
         out.append("-- school_clubs は未投入（scripts/extract_school_clubs.py を先に実行）")
         out.append("")
 
+    # --- 部の実績 ---
+    # 出典の異なる4系統＋各校サイト。すべて同じ列にそろえてある。
+    # ⚠️ 生徒の氏名・学年・記録は元データの時点で読み取っていない。
+    #    ここでも列を作らない（列を作って空にすると後から埋められてしまう）。
+    ach_files = [
+        (seed_dir / "school_club_achievements.csv", "東京都高等学校体育連盟"),
+        (seed_dir / "school_baseball_results.csv", "東京都高等学校野球連盟"),
+        (seed_dir / "school_suisou_results.csv", "東京都高等学校吹奏楽連盟"),
+        (seed_dir / "school_ifac_results.csv", "高校生国際美術展"),
+    ]
+    ach = []
+    for path, org in ach_files:
+        if not path.is_file():
+            continue
+        for r in read_csv(path):
+            ach.append({**r, "source_org": org})
+    if ach:
+        known = {r["school_number"] for r in master}
+        unknown = sorted({r["school_number"] for r in ach} - known)
+        if unknown:
+            sys.exit(f"実績CSVに未知の学校番号: {unknown}")
+        # 氏名らしき列が紛れ込んでいないかの最終検査
+        forbidden = {"name", "選手名", "氏名", "grade", "学年", "record", "記録"}
+        for r in ach[:1]:
+            bad = forbidden & set(r)
+            if bad:
+                sys.exit(f"実績CSVに個人情報の列が含まれています: {bad}")
+        emit_inserts(out, "school_achievements",
+                     ["school_number", "year", "meet", "sport", "event",
+                      "division", "rank", "source_org", "source"],
+                     [[sql_str(r["school_number"]), sql_str(r.get("year") or ""),
+                       sql_str(r.get("meet") or ""), sql_str(r.get("sport") or ""),
+                       sql_str(r.get("event") or ""), sql_str(r.get("division") or ""),
+                       sql_str(r.get("rank") or ""), sql_str(r["source_org"]),
+                       sql_str(r.get("source") or "")]
+                      for r in ach],
+                     per_stmt=ROWS_PER_INSERT_BULK)
+        counts["school_achievements"] = len(ach)
+    else:
+        out.append("-- school_achievements は未投入")
+        out.append("")
+
+    # --- 制服 ---
+    uni_csv = seed_dir / "school_uniforms.csv"
+    if uni_csv.is_file():
+        uni = [r for r in read_csv(uni_csv) if r.get("uniform_type")]
+        known = {r["school_number"] for r in master}
+        uni = [r for r in uni if r["school_number"] in known]
+        emit_inserts(out, "school_uniforms",
+                     ["school_number", "uniform_type", "slacks_skirt_choice",
+                      "quote", "source"],
+                     [[sql_str(r["school_number"]), sql_str(r["uniform_type"]),
+                       "1" if r.get("slacks_skirt_choice") else "0",
+                       sql_str(r.get("quote") or ""), sql_str(r.get("source") or "")]
+                      for r in uni])
+        counts["school_uniforms"] = len(uni)
+    else:
+        out.append("-- school_uniforms は未投入")
+        out.append("")
+
     dest = worker_dir / "seed.sql"
     dest.write_text("\n".join(out), encoding="utf-8", newline="\n")
 
@@ -308,6 +370,8 @@ def main() -> None:
     print(f"  ward_stations : {counts['ward_stations']} 行")
     print(f"  commute_times : {counts['commute_times']} 行")
     print(f"  school_clubs  : {counts.get('school_clubs', 0)} 行")
+    print(f"  実績          : {counts.get('school_achievements', 0)} 行")
+    print(f"  制服          : {counts.get('school_uniforms', 0)} 行")
     print(f"  指定区分あり  : {sum(1 for r in master if r['designation'].strip())} 校")
     print(f"  名寄せ漏れ    : 0 件")
 

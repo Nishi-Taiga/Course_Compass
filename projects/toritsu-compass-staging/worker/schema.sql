@@ -105,6 +105,41 @@ CREATE TABLE school_clubs (
 CREATE INDEX idx_clubs_school ON school_clubs(school_number);
 CREATE INDEX idx_clubs_norm   ON school_clubs(normalized);
 
+-- 部の実績。出典の異なる4系統（都高体連・高野連・都吹奏楽連盟・高校生国際美術展）
+-- と各校サイトを1つの表にまとめる。source_org でどれの記録か分かるようにする。
+--
+-- ⚠️ 生徒の氏名・学年・記録は保持しない（2026-08-15 西の判断）。
+--    元データの抽出時点で読み取っておらず、この表にも列を作らない。
+--    列を作って空にすると、後から誰かが埋められてしまう。
+--
+-- ⚠️ rank は順位ではなく「賞」のこともある（金賞は複数校が受賞する、
+--    入賞/佳作は順位ではない）。数値に読み替えず、文字列のまま持つ。
+CREATE TABLE school_achievements (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  school_number TEXT NOT NULL REFERENCES schools(school_number),
+  year          TEXT,                     -- 令和7年度 など
+  meet          TEXT,                     -- 全国大会 / 関東大会 / 東京都大会
+  sport         TEXT,                     -- 陸上競技 / 吹奏楽 / 美術 など
+  event         TEXT,                     -- 種目（無い場合は空）
+  division      TEXT,                     -- 男 / 女（無い場合は空）
+  rank          TEXT,                     -- 優勝 / ベスト8 / 金賞 / 入賞 など
+  source_org    TEXT,                     -- 記録の出どころ（団体名）
+  source        TEXT                      -- 出典URL
+);
+
+CREATE INDEX idx_ach_school ON school_achievements(school_number);
+CREATE INDEX idx_ach_sport  ON school_achievements(sport);
+
+-- 制服。生徒本人の関心が高いという指摘を受けた項目（2026-08-17 安田）。
+-- 種類が判定できなかった学校は uniform_type を空にする（推測で埋めない）。
+CREATE TABLE school_uniforms (
+  school_number TEXT PRIMARY KEY REFERENCES schools(school_number),
+  uniform_type  TEXT,                     -- ブレザー / 学ラン / 制服なし など
+  slacks_skirt_choice INTEGER DEFAULT 0,  -- スラックス・スカートを選べる記述あり
+  quote         TEXT,                     -- 学校の記述の一節
+  source        TEXT
+);
+
 -- 対話セッション。本体はKV（TTL 24h）に置くが、
 -- LLM呼び出し回数の上限管理（仕様書§3.6）を落とさないための控えを持つ。
 CREATE TABLE sessions (

@@ -12,7 +12,7 @@
  *   POST /api/extract … 自由入力を検索条件に翻訳し、足りない項目を聞き返す
  */
 
-import { searchSchools, buildRelaxation } from "./search.js";
+import { searchSchools, buildRelaxation, attachSchoolDetails } from "./search.js";
 import { SCALE, GAP, GAP_ROUGH } from "./scoring.js";
 import { parseQuery, inspect, invalidMessages } from "./query.js";
 import { extractQuery, mergeQuery } from "./extract.js";
@@ -335,7 +335,9 @@ async function handleSearch(env, request) {
   if (!Number.isFinite(q.commute_limit) || q.commute_limit <= 0) q.commute_limit = 60;
 
   const started = Date.now();
-  const { student, rows, all, mode } = await searchSchools(env.DB, q);
+  const { student, rows: found, all, mode } = await searchSchools(env.DB, q);
+  // 実績・制服は候補が決まってから引く（全校ぶん結合すると行が爆発するため）
+  const rows = await attachSchoolDetails(env.DB, found);
 
   // session_id が来ていれば、提案した緩和を覚えておく。
   // 次の発話「通学を広げて」が何に対する返事なのかを、会話側が知るため。

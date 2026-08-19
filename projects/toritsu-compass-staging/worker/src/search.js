@@ -240,6 +240,55 @@ export async function searchSchools(db, q) {
   return { student, rows: decorate(out, q), all: judged, mode: "scored" };
 }
 
+/**
+ * 候補が決まってから、実績と制服をまとめて引いて付ける。
+ *
+ * 検索SQLに結合しないのは、実績が1校あたり最大数十件あり、全校ぶんを
+ * 結合すると行が爆発するため。候補は数校なので後から引くほうが軽い。
+ *
+ * ⚠️ 実績に生徒の氏名・学年・記録は含まれない（列自体が無い）。
+ * ⚠️ rank は順位とは限らない（金賞は複数校が受賞、入賞/佳作も順位ではない）。
+ *    数値に読み替えず文字列のまま返す。
+ */
+export async function attachSchoolDetails(db, rows) {
+  const nums = rows.map((r) => r.school_number);
+  if (!nums.length) return rows;
+  const marks = nums.map(() => "?").join(",");
+
+  const [ach, uni] = await Promise.all([
+    db.prepare(
+      `SELECT school_number, year, meet, sport, event, division, rank, source_org, source
+         FROM school_achievements WHERE school_number IN (${marks})`
+    ).bind(...nums).all().catch(() => ({ results: [] })),
+    db.prepare(
+      `SELECT school_number, uniform_type, slacks_skirt_choice, quote, source
+         FROM school_uniforms WHERE school_number IN (${marks})`
+    ).bind(...nums).all().catch(() => ({ results: [] })),
+  ]);
+
+  const byAch = new Map();
+  for (const a of ach.results ?? []) {
+    if (!byAch.has(a.school_number)) byAch.set(a.school_number, []);
+    byAch.get(a.school_number).push(a);
+  }
+  const byUni = new Map((uni.results ?? []).map((u) => [u.school_number, u]));
+
+  return rows.map((r) => {
+    const list = byAch.get(r.school_number) ?? [];
+    const u = byUni.get(r.school_number);
+    return {
+      ...r,
+      achievements: list,
+      uniform: u ? {
+        type: u.uniform_type,
+        slacks_skirt_choice: !!u.slacks_skirt_choice,
+        quote: u.quote || null,
+        source: u.source || null,
+      } : null,
+    };
+  });
+}
+
 function decorate(rows, q) {
   return rows.map((r) => {
     const { match_score, why } = scoreCandidate(r, q, r.tier);
