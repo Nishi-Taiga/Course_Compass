@@ -53,6 +53,9 @@ export async function loadSession(env, rawId) {
     query: state?.query ?? null,
     asked: state?.asked ?? [],
     declined: state?.declined ?? [],
+    // 直前に提示した緩和の選択肢。次の発話が「通学を広げて」だったときに
+    // 何に対する返事なのかを知るために持ち回る（仕様書§5.3の承諾）
+    relaxation_offered: state?.relaxation_offered ?? [],
     llm_calls: row?.llm_calls ?? 0,
   };
 }
@@ -63,6 +66,7 @@ export async function saveSession(env, session) {
     query: session.query,
     asked: session.asked,
     declined: session.declined,
+    relaxation_offered: session.relaxation_offered ?? [],
     updated_at: new Date().toISOString(),
   });
   try {
