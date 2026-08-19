@@ -676,7 +676,10 @@ function card(c){
       :(s.st==='no_exam'?`<span class="tier" style="background:var(--line);color:var(--muted)">別枠の選抜</span>`:'')}</div>
     <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${tag&&!(s.g&&tag.startsWith('進学'))?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}</div>
     <div class="factgrid"><div class="fact">通学の目安<b>${rangeText(m)}</b></div></div>
-    <div class="cardops"><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
+    <div class="cardops" style="display:flex;align-items:center;gap:8px">
+      <button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button>
+      <button type="button" class="card-toggle" aria-expanded="false" style="margin:0">もっと見る</button>
+    </div>
     <div class="card-details">
       ${s.sn?`<div class="note" style="margin:6px 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
       <div class="factgrid">
@@ -688,7 +691,6 @@ function card(c){
         ${spark(s.r)}
       </div>
       <div class="why">${why.map(w=>`<span>${w}</span>`).join('')}</div>
-      <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button></div>
     </div>`;
   const tgl=node.querySelector('.card-toggle');
   const det=node.querySelector('.card-details');
