@@ -93,6 +93,29 @@ const e4 = await post("/api/extract", { text: "5教科は99です" });
 check("範囲外は弾いて聞き直す", (e4.json?.invalid ?? []).includes("naishin5"),
   JSON.stringify(e4.json?.invalid));
 
+/* --- 3b. セッションを使った往復 --------------------------------------
+   スロット回答は規則ベースで足りるのでLLMを呼ばない（速い）。
+   当日点の裸の数字が取れず永久に埋まらなかった不具合の回帰も兼ねる。 */
+console.log("\n── 会話の往復 ──");
+let sid = null;
+const turns = [
+  ["練馬", "station"], ["60分", "commute_limit"],
+  ["22", "naishin"], ["10", "naishin"], ["390", "toujitsu"],
+];
+let last = null, slowTurn = null;
+for (const [text, slot] of turns) {
+  const t0 = Date.now();
+  const r = await post("/api/extract", { text, asked_slot: slot, ...(sid ? { session_id: sid } : {}) });
+  const ms = Date.now() - t0;
+  sid = r.json?.session_id ?? sid;
+  last = r.json?.query ?? {};
+  if (ms > 3000) slowTurn = `${text}=${ms}ms`;
+}
+check("往復で条件が積み上がる",
+  last.naishin5 === 22 && last.jitsugi === 10 && last.toujitsu === 390,
+  JSON.stringify({ n5: last.naishin5, j: last.jitsugi, t: last.toujitsu }));
+check("スロット回答はLLMを呼ばず速い", slowTurn === null, slowTurn ?? "全て3秒未満");
+
 /* --- 4. Workers AI ------------------------------------------------- */
 console.log("\n── Workers AI ──");
 const ai = await fetch(`${BASE}/health/ai`).then((r) => r.json()).catch(() => null);
