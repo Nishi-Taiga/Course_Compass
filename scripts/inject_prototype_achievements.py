@@ -26,6 +26,8 @@ SRC = SEED / "school_club_achievements.csv"
 
 MEET_RANK = {"全国大会（インターハイ）": 3, "全国大会（定時制通信制）": 3, "全国大会": 3,
              "関東大会": 2, "東京都大会": 1, "東京都大会（予選）": 1}
+# 吹奏楽コンクールは都のコンクール。大会の格としては都大会と同じ扱い
+SUISOU_MEET = "東京都高等学校吹奏楽コンクール"
 MAX_PER_SCHOOL = 4
 
 
@@ -41,6 +43,13 @@ def rank_score(rank: str) -> int:
     m = re.search(r"(\d+)\s*位", rank)
     if m:
         return max(20, 92 - int(m.group(1)) * 2)
+    # 吹奏楽の賞。金賞は複数校出るので「優勝」と同格にはしない
+    if rank.startswith("金賞"):
+        return 88 if "最優秀" in rank else 75
+    if rank.startswith("銀賞"):
+        return 55
+    if rank.startswith("銅賞"):
+        return 40
     if "出場" in rank:
         return 15
     m = re.match(r"(\d+)\s*回戦", rank)
@@ -81,11 +90,31 @@ def load_site_rows() -> list[dict]:
     return out
 
 
+def load_suisou() -> list[dict]:
+    """吹奏楽コンクールの結果。高体連の管轄外なので別ファイルから読む。
+
+    金賞は複数校出るため「1位」ではない。順位に読み替えず賞のまま出す。
+    """
+    path = SEED / "school_suisou_results.csv"
+    if not path.is_file():
+        return []
+    out = []
+    for r in csv.DictReader(open(path, encoding="utf-8")):
+        # 組（A/B/C/東日本）は編成規模の区分で、保護者には意味が伝わらない。
+        # 競技名は「吹奏楽」に統一し、組は賞のうしろに小さく添える
+        kumi = (r.get("event") or "").strip()
+        out.append({**r, "sport": "吹奏楽", "event": "",
+                    "rank": f"{r['rank']}（{kumi}）" if kumi else r["rank"],
+                    "meet": "東京都大会", "origin": "東京都吹奏楽連盟"})
+    return out
+
+
 def main() -> None:
     rows = [r for r in csv.DictReader(open(SRC, encoding="utf-8"))
             if (r["sport"] or r["event"])]          # 競技が分からない行は出さない
     for r in rows:
         r["origin"] = "都高体連"
+    rows += load_suisou()
 
     best: dict[str, dict] = {}
     # 連盟を先に入れる。同じ学校・競技で学校サイト側と重なったら連盟を優先する
@@ -110,6 +139,8 @@ def main() -> None:
         インターハイ95位は弱さの証拠ではなく、全国に出たという事実のほうが
         保護者に伝わる。順位で誤解させない（元の順位はCSVに残る）。
         """
+        if "賞" in rank:
+            return rank            # 金銀銅は順位ではないので丸めない
         if MEET_RANK.get(meet, 0) < 2:
             return rank
         m = re.fullmatch(r"(?:決勝|準決勝|準々決勝|予選)?\s*(\d+)\s*位", rank)

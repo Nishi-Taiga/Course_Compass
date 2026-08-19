@@ -31,3 +31,4 @@ data/fetched/uniforms/*.html
 # （parse_hbf_results.py が学校名・ラウンド・スコアだけを取り出す）。
 # fetch_hbf_results.py でいつでも取り直せる。
 data/fetched/hbf/
+data/fetched/suisou/*.pdf
