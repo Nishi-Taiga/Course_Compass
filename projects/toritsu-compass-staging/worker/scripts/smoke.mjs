@@ -96,6 +96,12 @@ check("範囲外は弾いて聞き直す", (e4.json?.invalid ?? []).includes("na
 /* --- 3b. セッションを使った往復 --------------------------------------
    スロット回答は規則ベースで足りるのでLLMを呼ばない（速い）。
    当日点の裸の数字が取れず永久に埋まらなかった不具合の回帰も兼ねる。 */
+// 言い換えの展開: 「プログラミング」はパソコン部・コンピューター部に当たること
+const eAlias = await post("/api/extract", { text: "プログラミングがやりたいです" });
+const cl4 = eAlias.json?.query?.wants?.clubs ?? [];
+check("部活の言い換えを展開する", cl4.includes("パソコン") && cl4.includes("コンピューター"),
+  JSON.stringify(cl4));
+
 console.log("\n── 会話の往復 ──");
 let sid = null;
 const turns = [

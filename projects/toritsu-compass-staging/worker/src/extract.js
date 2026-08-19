@@ -50,6 +50,16 @@ const DEPT_WORDS = [
 
 const CLUB_WORDS = [...new Set(Object.values(CLUB_CATEGORIES).flat())];
 
+// 部活の言い換え。学校サイトの部活名は「パソコン部」「コンピューター部」で、
+// 保護者は「プログラミング」「IT」と言う。展開しないと LIKE で1件も当たらず、
+// データがあるのに0件と答えてしまう（2026-08-19 欠陥チェックで発覚）。
+const CLUB_ALIAS = {
+  "プログラミング": ["パソコン", "コンピューター", "情報"],
+  "IT": ["パソコン", "コンピューター", "情報"],
+  "eスポーツ": ["eスポーツ", "パソコン"],
+  "ブラスバンド": ["吹奏楽"],
+};
+
 // 「わかりません」「まだ受けてない」まで拾う。ここを取りこぼすと、
 // 同じ質問を繰り返して保護者が離脱する。
 const DECLINE_RE =
@@ -120,7 +130,10 @@ export function extractRules(raw) {
     const m = text.match(new RegExp(`${w}(?:部|同好会|クラブ)?`));
     if (m) clubs.push(m[0]);
   }
-  if (clubs.length) { wants.clubs = clubs; hits.push("wants.clubs"); }
+  for (const [say, real] of Object.entries(CLUB_ALIAS)) {
+    if (text.includes(say)) clubs.push(...real);
+  }
+  if (clubs.length) { wants.clubs = [...new Set(clubs)]; hits.push("wants.clubs"); }
   if (Object.keys(wants).length) cand.wants = wants;
 
   // --- 「わからない」。どの項目についてかは呼び出し側が文脈で決める ---

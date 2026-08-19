@@ -109,6 +109,67 @@ await page3.waitForTimeout(600);
 const names3 = await page3.locator(".card h3").allInnerTexts();
 check("希望がなければ高専は出さない", !names3.some((n) => n.includes("高専")), names3.join("・"));
 
+/* ---- 2026-08-19 欠陥チェックで見つかった退行の再発防止 ---- */
+console.log("\n── 希望の反映（部活・定時制・制服・複合） ──");
+async function ask(inputs) {
+  const pg = await browser.newPage({ viewport: { width: 1100, height: 900 }, reducedMotion: "reduce" });
+  pg.on("pageerror", (e) => errors.push(String(e)));
+  await pg.route("**://tile.openstreetmap.org/**", (r) => r.abort());
+  await pg.goto(FILE);
+  await pg.click("#startBtn");
+  for (const t of inputs) {
+    await pg.fill("#input", t);
+    await pg.press("#input", "Enter");
+    await pg.waitForTimeout(350);
+  }
+  await pg.waitForTimeout(600);
+  const names = await pg.locator(".card h3").allInnerTexts();
+  const state = await pg.evaluate(() => ({ wants: S.wants, limit: S.limit,
+    ok: S.shown.every((c) => !S.wants.club || !!clubMatch(c.s, S.wants.club)) }));
+  await pg.close();
+  return { names, ...state };
+}
+
+// 部活: データにある部（軽音楽・剣道）で絞れ、全カードにその部があること
+const keion = await ask(["町田", "45分以内", "20", "15", "350", "軽音楽をやりたい"]);
+check("部活名で絞れる（軽音楽）", keion.wants.club?.[0] === "軽音楽" && keion.names.length > 0,
+  keion.names.join("・"));
+check("出た学校すべてに希望の部がある", keion.ok === true);
+
+// 定時制: 希望したときだけ出る
+const teiji = await ask(["新宿", "30分以内", "15", "10", "250", "夜間の定時制も見たい"]);
+check("定時制の希望で定時制が出る", teiji.names.some((n) => ["新宿山吹","一橋","六本木","稔ヶ丘"].includes(n)),
+  teiji.names.join("・"));
+const noTeiji = await ask(["新宿", "30分以内", "15", "10", "250", "特にありません"]);
+check("希望がなければ定時制は出ない",
+  !noTeiji.names.some((n) => ["新宿山吹","一橋","六本木","稔ヶ丘","浅草","大江戸"].includes(n)),
+  noTeiji.names.join("・"));
+
+// 制服: 「制服がない学校」で制服なし校だけになる
+const shifuku = await ask(["池袋", "30分以内", "22", "16", "400", "制服がない学校がいい"]);
+check("制服なしの希望で絞れる", shifuku.wants.uf === "no" && shifuku.names.length > 0,
+  shifuku.names.join("・"));
+
+// 満点近い子: 進学校が並び、エンカレッジ校が混ざらない
+const high = await ask(["渋谷", "60分以内", "25", "20", "480", "大学進学に力を入れたい"]);
+check("満点近い子に進学校が複数出る", high.names.length >= 3, high.names.join("・"));
+check("満点近い子にエンカレッジ校を混ぜない",
+  !high.names.some((n) => ["蒲田","足立東","東村山","秋留台","中野工科"].includes(n)));
+
+// 通学時間を「こだわらない」とテキストで打つ
+const nolim = await ask(["八王子", "こだわらない", "22", "16", "400", "特にありません"]);
+check("「こだわらない」のテキスト入力が通る", nolim.limit === 999 && nolim.names.length > 0,
+  `limit=${nolim.limit}`);
+
+// 学科語と部活名の衝突: 「ものづくりがやりたい」を ものづくり部と誤解しない
+const mono = await ask(["品川シーサイド", "40分以内", "18", "13", "300", "ものづくりがやりたい。定時制も見たい"]);
+check("「ものづくり」を学科として扱う（部活と誤解しない）", mono.wants.club == null && mono.wants.dept === "工",
+  JSON.stringify({ club: mono.wants.club, dept: mono.wants.dept }));
+check("複合希望（工業系＋定時制）で高専と定時制の両方が出る",
+  mono.names.some((n) => n.includes("高専")) && mono.names.some((n) => ["六本木","新宿山吹","世田谷泉"].includes(n)),
+  mono.names.join("・"));
+check("追加シナリオでJSの例外が出ていない", errors.length === 0, errors[0] ?? "");
+
 await browser.close();
 const ng = results.filter((r) => !r.ok);
 console.log(`\n${results.length - ng.length} / ${results.length} 件 通過`);
