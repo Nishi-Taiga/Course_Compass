@@ -285,6 +285,7 @@ export async function attachSchoolDetails(db, rows) {
     // 受け手が "null" を連結して「陸上競技null」と表示してしまうので空文字にする
     byAch.get(a.school_number).push({
       ...a,
+      sport: a.sport ?? "",
       event: a.event ?? "",
       division: a.division ?? "",
       year: a.year ?? "",
