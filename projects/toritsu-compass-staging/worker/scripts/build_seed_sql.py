@@ -281,6 +281,11 @@ def main() -> None:
     clubs_csv = club_files[0]
     if clubs_csv.is_file():
         clubs = [r for f in club_files if f.is_file() for r in read_csv(f)]
+        # 正規化辞書（西の監修済み・2026-08-19）。raw_name → normalized。
+        # raw_name は書き換えない。normalized を足すだけ（仕様書§6.2）
+        norm_csv = seed_dir / "club_normalize.csv"
+        norm = ({r["raw_name"]: r["normalized"] for r in read_csv(norm_csv)}
+                if norm_csv.is_file() else {})
         known = {r["school_number"] for r in master}
         unknown = sorted({r["school_number"] for r in clubs} - known)
         if unknown:
@@ -290,7 +295,7 @@ def main() -> None:
                    ["school_number", "raw_name", "normalized", "category",
                     "source_url", "fetched_at"],
                    [[sql_str(r["school_number"]), sql_str(r["raw_name"]),
-                     "NULL",                       # 正規化は西の監修後に埋める
+                     sql_str(norm.get(r["raw_name"], "")),   # 監修済みの正規化名
                      sql_str(r.get("category") or ""), sql_str(r.get("source_url") or ""),
                      sql_str(FETCHED_AT)]
                     for r in clubs],

@@ -150,8 +150,13 @@ export async function searchSchools(db, q) {
     const names = applied.has("club_similar")
       ? [...new Set(wantClubs.flatMap(similarClubs))]
       : wantClubs;
-    const conds = names.map(() => "cl.raw_name LIKE ?").join(" OR ");
-    names.forEach((n) => clubBinds.push(`%${n}%`));
+    // 表記そのまま(raw_name)と、監修済みの正規化名(normalized)の両方で当てる。
+    // 「バレーボール」で探したとき、学校サイトに「バレー部」としか
+    // 書いていない学校を取りこぼさないため（西の監修 2026-08-19）
+    const conds = names
+      .map(() => "(cl.raw_name LIKE ? OR cl.normalized LIKE ?)")
+      .join(" OR ");
+    names.forEach((n) => clubBinds.push(`%${n}%`, `%${n}%`));
     clubJoin = `LEFT JOIN school_clubs cl ON cl.school_number = s.school_number AND (${conds})`;
   }
 
