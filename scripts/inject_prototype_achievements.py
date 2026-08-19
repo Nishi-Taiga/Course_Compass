@@ -50,6 +50,16 @@ def rank_score(rank: str) -> int:
         return 55
     if rank.startswith("銅賞"):
         return 40
+    # 美術展の区分。入賞が上、佳作がその下
+    if rank == "入賞":
+        return 70
+    if rank == "佳作":
+        return 45
+    # 野球の勝ち上がり。回戦が進むほど上。一回戦出場は最も軽い
+    m = re.match(r"([一二三四五六七八九])回戦(進出|出場)", rank)
+    if m:
+        n = "一二三四五六七八九".index(m.group(1)) + 1
+        return 12 + n * 6
     if "出場" in rank:
         return 15
     m = re.match(r"(\d+)\s*回戦", rank)
@@ -109,12 +119,39 @@ def load_suisou() -> list[dict]:
     return out
 
 
+def load_ifac() -> list[dict]:
+    """高校生国際美術展の結果（美術・書道）。
+
+    入賞と佳作の2区分。個別の賞名はPDF上で学校行と対応づけられないので
+    区分までに留める（推測で当てない）。
+    """
+    path = SEED / "school_ifac_results.csv"
+    if not path.is_file():
+        return []
+    return [{**r, "meet": "全国大会", "origin": "高校生国際美術展"}
+            for r in csv.DictReader(open(path, encoding="utf-8"))]
+
+
+def load_baseball() -> list[dict]:
+    """硬式野球（高野連）の結果。
+
+    ⚠️ 1,263件のうち639件が「一回戦出場」で、大半が初戦の記録。
+    そのまま出すと、勝ち上がった学校と初戦だけの学校が同じ重みに見える。
+    大会の格は都大会として扱い、重み付け（rank_score）で差を付ける。
+    """
+    path = SEED / "school_baseball_results.csv"
+    if not path.is_file():
+        return []
+    return [{**r, "meet": "東京都大会", "origin": "東京都高等学校野球連盟"}
+            for r in csv.DictReader(open(path, encoding="utf-8"))]
+
+
 def main() -> None:
     rows = [r for r in csv.DictReader(open(SRC, encoding="utf-8"))
             if (r["sport"] or r["event"])]          # 競技が分からない行は出さない
     for r in rows:
         r["origin"] = "都高体連"
-    rows += load_suisou()
+    rows += load_suisou() + load_ifac() + load_baseball()
 
     best: dict[str, dict] = {}
     # 連盟を先に入れる。同じ学校・競技で学校サイト側と重なったら連盟を優先する
@@ -139,8 +176,8 @@ def main() -> None:
         インターハイ95位は弱さの証拠ではなく、全国に出たという事実のほうが
         保護者に伝わる。順位で誤解させない（元の順位はCSVに残る）。
         """
-        if "賞" in rank:
-            return rank            # 金銀銅は順位ではないので丸めない
+        if "賞" in rank or rank in ("入賞", "佳作"):
+            return rank            # 金銀銅・入賞・佳作は順位ではないので丸めない
         if MEET_RANK.get(meet, 0) < 2:
             return rank
         m = re.fullmatch(r"(?:決勝|準決勝|準々決勝|予選)?\s*(\d+)\s*位", rank)

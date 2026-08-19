@@ -32,3 +32,4 @@ data/fetched/uniforms/*.html
 # fetch_hbf_results.py でいつでも取り直せる。
 data/fetched/hbf/
 data/fetched/suisou/*.pdf
+data/fetched/ifac/*.pdf
