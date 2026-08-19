@@ -692,7 +692,6 @@ function card(c){
       </div>
       <div class="why">${why.map(w=>`<span>${w}</span>`).join('')}</div>
       <div class="cardops" style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button>
         <button type="button" class="detail-btn" onclick="showDetail('${s.n}')">詳細表示</button>
       </div>
     </div>`;
@@ -701,11 +700,10 @@ function card(c){
   tgl.onclick=()=>{ const on=!det.classList.contains('open');
     det.classList.toggle('open',on); tgl.classList.toggle('open',on);
     tgl.setAttribute('aria-expanded',on); tgl.textContent=on?'閉じる':'もっと見る'; };
-  node.querySelectorAll('.cmp').forEach(btn=>{
-    btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
-      node.querySelectorAll('.cmp').forEach(b=>{b.setAttribute('aria-pressed',on);b.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';});
-      on?S.compare.add(s.n):S.compare.delete(s.n); renderBoard(); };
-  });
+  const btn=node.querySelector('.cmp');
+  btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
+    btn.setAttribute('aria-pressed',on); btn.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';
+    on?S.compare.add(s.n):S.compare.delete(s.n); renderBoard(); };
   node.addEventListener('mouseenter',()=>{
     const d=document.querySelector(`.sdot[data-school="${s.n}"]`); if(d) d.classList.add('hot'); });
   node.addEventListener('mouseleave',()=>{
