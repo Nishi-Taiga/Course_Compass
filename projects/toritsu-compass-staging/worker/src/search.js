@@ -55,8 +55,15 @@ function scoreCandidate(row, q, tier) {
   let score = 0;
   const why = [];
 
-  // 通学は近いほど良い。60分で0点、0分で60点。
-  const commute = Math.max(0, 60 - (row.commute_minutes ?? 60));
+  /* 通学は近いほど良い。60分で0点、0分で30点。
+   *
+   * ⚠️ 以前は0〜60点で、他のどの項目（適正圏40・学科40）より重かった。
+   *    そのため進学指導指定(+10)や部活一致(+30)が付いても、通学が10分
+   *    違うだけで順位が入れ替わり、希望より距離が優先されていた。
+   *    西の判断（2026-08-19）で0〜30点に下げ、適正圏・学科一致のほうが
+   *    効くようにした。通学は「絞り込み条件」で既に効いているので、
+   *    並び順まで支配する必要はない。 */
+  const commute = Math.max(0, Math.round((60 - (row.commute_minutes ?? 60)) / 2));
   score += commute;
   if (row.commute_minutes != null) {
     // 「◯◯駅からバス」まで書く。数字だけより保護者に伝わる

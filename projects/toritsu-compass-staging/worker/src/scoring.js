@@ -219,6 +219,9 @@ export function tierOf(school, score, rough, relaxed = false) {
     if (course.includes("定時制") && !course.includes("全日制")) {
       return {
         tier: null, gap: null,
+        /* ⚠️ 保留中（西・2026-08-19）: 定時制を5教科の目安点で判定しない扱いは
+           暫定。塾の実感として妥当か判断待ちで、変えるならここと
+           school_scores.csv の定時制の行を見直す。 */
         reason: "定時制は学力検査の教科数が学校ごとに違うため、"
               + "5教科の目安点では判定していません",
       };
