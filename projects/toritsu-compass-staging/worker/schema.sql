@@ -2,6 +2,10 @@
 -- 何度流しても同じ結果になるよう、DROP → CREATE で作り直す。
 
 DROP TABLE IF EXISTS sessions;
+-- schools を参照する側から先に落とす。残っていると DROP TABLE schools が
+-- 外部キーに阻まれ、2回目以降の投入が丸ごと失敗する
+DROP TABLE IF EXISTS school_uniforms;
+DROP TABLE IF EXISTS school_achievements;
 DROP TABLE IF EXISTS school_clubs;
 DROP TABLE IF EXISTS commute_times;
 DROP TABLE IF EXISTS ward_stations;
