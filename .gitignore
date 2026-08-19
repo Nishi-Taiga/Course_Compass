@@ -26,3 +26,8 @@ data/fetched/spirit/
 data/fetched/kotairen/*.pdf
 data/fetched/clubs/
 data/fetched/uniforms/*.html
+
+# 高野連の試合結果HTML。出場選手の氏名が載っているため追跡しない
+# （parse_hbf_results.py が学校名・ラウンド・スコアだけを取り出す）。
+# fetch_hbf_results.py でいつでも取り直せる。
+data/fetched/hbf/
