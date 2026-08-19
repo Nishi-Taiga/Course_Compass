@@ -323,9 +323,28 @@ function applyContext(cand, raw, askedSlot, prev) {
  */
 export async function extractQuery(env, db, text, { askedSlot = null, prev = {}, allowLLM = true } = {}) {
   const rules = extractRules(text);
+
+  /* LLMを呼ぶかどうか。
+   *
+   * 数値と駅は規則ベースが優先されるので、尋ねた項目が正規表現で取れている
+   * 場合、LLMの結果は最終的に1つも採用されない。にもかかわらず毎回呼ぶと
+   * 4〜6秒待たされ、共通クレジット（$100）も減る。
+   * 「通学時間は？」→「60分」のような往復が会話の大半なので、効果は大きい。
+   *
+   * 自由入力（最初の相談や「希望はありますか」への答え）では規則ベースが
+   * 取りこぼすため、そこはこれまでどおりLLMに任せる。
+   */
+  const answeredBySlot = askedSlot && (
+    askedSlot === "wants"
+      ? false                                   // 希望は言い回しが多様。必ずLLMに見せる
+      : rules.cand[askedSlot] != null || rules.declined.length > 0
+  );
   // allowLLM=false は、そのセッションが呼び出し上限に達しているとき（仕様書§3.6）。
   // 会話は止めず、規則ベースだけで続ける
-  const llm = allowLLM ? await extractLLM(env, text) : { ok: false, reason: "budget_exhausted" };
+  const useLLM = allowLLM && !answeredBySlot;
+  const llm = useLLM
+    ? await extractLLM(env, text)
+    : { ok: false, reason: allowLLM ? "skipped(規則ベースで充足)" : "budget_exhausted" };
 
   const cand = { ...(llm.ok ? llm.cand : {}), ...rules.cand };
   if (llm.ok && llm.cand.wants) {
