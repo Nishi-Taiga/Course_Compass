@@ -414,7 +414,7 @@
       <span class="sp"></span>
       <button class="ghost" onclick="window.print()">印刷する</button>
     </div>
-    <h2 class="serif">くらべるシート</h2>
+    <h2 class="serif" id="sheetTitle">くらべるシート</h2>
     <div class="note">学校見学・面談に持っていける1枚。印刷して使えます。対話に戻っても内容は残ります。</div>
     <div id="sheetBody"></div>
     <div style="margin-top:14px"><b style="font-size:13px">確認したいことメモ</b>
@@ -679,7 +679,7 @@ function card(c){
       :(s.st==='no_exam'?`<span class="tier" style="background:var(--line);color:var(--muted)">別枠の選抜</span>`:'')}</div>
     <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${tag&&!(s.g&&tag.startsWith('進学'))?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}</div>
     <div class="factgrid"><div class="fact">通学の目安<b>${rangeText(m)}</b></div></div>
-    <div class="cardops"><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
+    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
     <div class="card-details">
       ${s.sn?`<div class="note" style="margin:6px 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
       <div class="factgrid">
@@ -701,10 +701,11 @@ function card(c){
   tgl.onclick=()=>{ const on=!det.classList.contains('open');
     det.classList.toggle('open',on); tgl.classList.toggle('open',on);
     tgl.setAttribute('aria-expanded',on); tgl.textContent=on?'閉じる':'もっと見る'; };
-  const btn=node.querySelector('.cmp');
-  btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
-    btn.setAttribute('aria-pressed',on); btn.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';
-    on?S.compare.add(s.n):S.compare.delete(s.n); renderBoard(); };
+  node.querySelectorAll('.cmp').forEach(btn=>{
+    btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
+      node.querySelectorAll('.cmp').forEach(b=>{b.setAttribute('aria-pressed',on);b.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';});
+      on?S.compare.add(s.n):S.compare.delete(s.n); renderBoard(); };
+  });
   node.addEventListener('mouseenter',()=>{
     const d=document.querySelector(`.sdot[data-school="${s.n}"]`); if(d) d.classList.add('hot'); });
   node.addEventListener('mouseleave',()=>{
@@ -817,6 +818,7 @@ function openSheet(){
       ${sps?`<div class="mttl2">学校の言葉<span class="sub2">学校の公式サイトから引用。合否の判定には使っていません</span></div><div class="sps">${sps}</div>`:''}
       <div class="note" style="margin-top:10px;font-size:11px">合格の目安は塾講師の監修による参考値です。面接・調査書・傾斜配点・実技などの選抜要素は考慮していません。</div>`;
   }
+  document.getElementById('sheetTitle').textContent='くらべるシート';
   document.getElementById('sheet').scrollTop=0;
   document.getElementById('sheet').classList.add('open');
 }
@@ -825,6 +827,7 @@ function showDetail(name){
   const saved=new Set(S.compare);
   S.compare=new Set([name]);
   openSheet();
+  document.getElementById('sheetTitle').textContent='詳細表示';
   S.compare=saved;
 }
 
