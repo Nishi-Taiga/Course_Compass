@@ -103,3 +103,9 @@ jobs:
             echo "::error::/api/extract が $code を返しました（デプロイが反映されていない可能性）"
             exit 1
           fi
+
+      # 公開URLに対する通しテスト。HTTPステータスだけでは
+      # 「200を返すが中身が壊れている」を見逃すため、内容まで確かめる。
+      # 例: LLMの返答の形が変わって結果が毎回捨てられていたことがある。
+      - name: Smoke test
+        run: npm run smoke
