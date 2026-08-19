@@ -127,9 +127,13 @@ def main() -> None:
                     help="rules=HTMLの構造から抜く（既定・Cloudflare不要） / llm=Workers AI")
     ap.add_argument("--dry-run", action="store_true",
                     help="LLMを呼ばず、送信するプロンプトの要約だけ表示する（--engine llm 用）")
+    ap.add_argument("--sites", default=str(SITES_CSV), help="台帳CSV")
+    ap.add_argument("--out", default=str(OUT_CSV), help="出力CSV")
     args = ap.parse_args()
 
-    with SITES_CSV.open(encoding="utf-8-sig", newline="") as f:
+    sites_csv, out_csv = Path(args.sites), Path(args.out)
+
+    with sites_csv.open(encoding="utf-8-sig", newline="") as f:
         targets = list(csv.DictReader(f))
     if args.schools:
         targets = [t for t in targets if t["name"] in args.schools]
@@ -190,8 +194,8 @@ def main() -> None:
         return
 
     if rows:
-        OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
-        with OUT_CSV.open("w", encoding="utf-8", newline="") as f:
+        out_csv.parent.mkdir(parents=True, exist_ok=True)
+        with out_csv.open("w", encoding="utf-8", newline="") as f:
             w = csv.DictWriter(f, fieldnames=[
                 "school_number", "school_name", "raw_name", "category", "source_url", "engine"
             ])
@@ -199,7 +203,7 @@ def main() -> None:
             w.writerows(rows)
 
         schools = len({r["school_number"] for r in rows})
-        print(f"\n{len(rows)}件 / {schools}校 -> {OUT_CSV}")
+        print(f"\n{len(rows)}件 / {schools}校 -> {out_csv}")
         if thin:
             print(f"⚠️ 5件未満の学校 {len(thin)}校（目視で確認）: {'、'.join(thin)}")
         if missing:

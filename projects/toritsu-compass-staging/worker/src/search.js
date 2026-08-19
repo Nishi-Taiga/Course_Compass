@@ -70,12 +70,15 @@ function scoreCandidate(row, q, tier) {
   else if (tier === "c") { score += 25; why.push("挑戦圏"); }
   else if (tier === "s") { score += 15; why.push("安全圏"); }
 
+  // 配点は 2026-08-19 に指定を受けて更新した。
+  //   適正圏 +40 / 学科一致 +40 / 部活一致 +30 / 進学指導指定 +10
+  // 挑戦圏(+25)・安全圏(+15)は指定が無かったので据え置き。
   if (q.wants?.academic && row.designation) {
-    score += 35;
+    score += 10;
     why.push(`大学進学重視 → ${row.designation}`);
   }
   if (q.wants?.dept && row.departments?.includes(q.wants.dept)) {
-    score += 30;
+    score += 40;
     why.push(`学科の希望「${q.wants.dept}」に一致`);
   }
   if (row.matched_clubs?.length) {
@@ -110,9 +113,16 @@ export async function searchSchools(db, q) {
   const joinBinds = [];
   const clubBinds = [];
   const whereBinds = [];
+  // 既定は全日制だけ。定時制・高専は**希望されたときだけ**足す（2026-08-19 決定）。
+  // 黙って混ぜると、普通に探している保護者に点数判定できない学校が並んでしまう。
+  const wantCourses = q.wants?.course_types ?? [];
+  const courseConds = ["s.course_types LIKE '%全日制%'"];
+  if (wantCourses.includes("定時制")) courseConds.push("s.course_types LIKE '%定時制%'");
+  if (wantCourses.includes("高専")) courseConds.push("s.course_types = '高専'");
+
   const where = [
     "s.no_hs_admission = 0",            // 高校からの募集停止（中高一貫5校）は出さない
-    "s.course_types LIKE '%全日制%'",
+    `(${courseConds.join(" OR ")})`,
   ];
 
   let commuteJoin = "LEFT JOIN commute_times c ON c.school_number = s.school_number AND c.from_station = ?";
@@ -143,7 +153,7 @@ export async function searchSchools(db, q) {
   }
 
   const sql = `
-    SELECT s.school_number, s.name, s.ward, s.departments, s.designation,
+    SELECT s.school_number, s.name, s.ward, s.departments, s.designation, s.course_types,
            s.target_score, s.selection_type, s.selection_note, s.score_layer,
            s.source_master, s.source_designation, s.source_target_score,
            c.minutes AS commute_minutes, c.via_station, c.access_mode
@@ -206,6 +216,17 @@ export async function searchSchools(db, q) {
     out.push({ ...encourage, encourage: true });
   }
 
+  // 希望された課程（定時制・高専）は、目安点が無いので tier が付かず pool に
+  // 入らない。そのままだと「定時制も見たい」と言われたのに1校も出ない。
+  // 通学の近い順に最大2校、明示的に足す。
+  if (wantCourses.length) {
+    const extra = judged
+      .filter((r) => !out.some((o) => o.school_number === r.school_number))
+      .filter((r) => wantCourses.some((c) => (r.course_types ?? "").includes(c)))
+      .slice(0, 2);
+    out.push(...extra.map((r) => ({ ...r, requested_course: true })));
+  }
+
   return { student, rows: decorate(out, q), all: judged, mode: "scored" };
 }
 
@@ -229,6 +250,9 @@ function decorate(rows, q) {
       selection_note: r.selection_note || SELECTION_LABEL[r.selection_type] || null,
       score_layer: r.score_layer,
       encourage: r.encourage ?? false,
+      course_types: r.course_types,
+      // 「定時制も見たい」等の希望に応えて足した学校であることを画面に出せるように
+      requested_course: r.requested_course ?? false,
       matched_clubs: r.matched_clubs ?? [],
       match_score,
       why,

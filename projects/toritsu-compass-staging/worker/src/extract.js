@@ -109,6 +109,12 @@ export function extractRules(raw) {
 
   // 表記はページ・発話のまま残す（正規化は西が監修する後段の仕事）。
   // 「サッカー部」を「サッカー」に削ってしまうと元表記に戻せない。
+  // --- 課程の希望。既定は全日制なので、明示されたときだけ拾う ---
+  const courses = [];
+  if (/定時制|夜間|夜学|働きながら|チャレンジスクール/.test(text)) courses.push("定時制");
+  if (/高専|高等専門/.test(text)) courses.push("高専");
+  if (courses.length) { wants.course_types = courses; hits.push("wants.course_types"); }
+
   const clubs = [];
   for (const w of CLUB_WORDS) {
     const m = text.match(new RegExp(`${w}(?:部|同好会|クラブ)?`));
@@ -189,6 +195,10 @@ function sanitize(obj) {
   const wants = {};
   if (w.academic === true) wants.academic = true;
   if (typeof w.dept === "string" && w.dept.trim()) wants.dept = w.dept.trim();
+  if (Array.isArray(w.course_types)) {
+    const cs = w.course_types.filter((x) => x === "定時制" || x === "高専");
+    if (cs.length) wants.course_types = cs;
+  }
   if (Array.isArray(w.clubs)) {
     const clubs = w.clubs.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim());
     if (clubs.length) wants.clubs = clubs;
@@ -435,6 +445,9 @@ export function mergeQuery(prev, cand) {
   }
   const w = cand.wants ?? {};
   if (w.academic) next.wants.academic = true;
+  if (w.course_types?.length) {
+    next.wants.course_types = [...new Set([...(next.wants.course_types ?? []), ...w.course_types])];
+  }
   if (w.dept) next.wants.dept = w.dept;
   if (w.clubs?.length) next.wants.clubs = [...new Set([...next.wants.clubs, ...w.clubs])];
   return next;

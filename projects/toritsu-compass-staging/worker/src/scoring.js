@@ -68,6 +68,7 @@ export const SELECTION_LABEL = {
   fukasawa: "特別な選抜方式です。募集要項を確認してください",
   ratio64: "当日点と内申の比率が6:4です",
   no_exam: "学力検査なし（面接・作文で選抜）",
+  kosen: "高専は入試の方式が都立高校と異なります（学力検査3教科＋調査書）",
 };
 
 /** 範囲に収まっていれば数値、外れていれば null。黙って丸めない。 */
@@ -205,6 +206,23 @@ export function tierOf(school, score, rough, relaxed = false) {
     return { tier: null, gap: null, reason: "学力検査がないため点数では判定しません" };
   }
   if (school.target_score == null) {
+    // ⚠️「未設定」と書くとデータの不備に見える。**測れない**のではなく
+    //    **測り方が違う**ことを伝える（2026-08-19）。
+    const course = school.course_types ?? "";
+    if (course === "高専") {
+      return {
+        tier: null, gap: null,
+        reason: "高専は入試の方式が異なるため（学力検査3教科＋調査書）、"
+              + "都立高校の目安点では判定していません",
+      };
+    }
+    if (course.includes("定時制") && !course.includes("全日制")) {
+      return {
+        tier: null, gap: null,
+        reason: "定時制は学力検査の教科数が学校ごとに違うため、"
+              + "5教科の目安点では判定していません",
+      };
+    }
     return { tier: null, gap: null, reason: "目安点が未設定です" };
   }
   if (score == null) {

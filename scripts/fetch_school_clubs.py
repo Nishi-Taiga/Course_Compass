@@ -181,12 +181,16 @@ def main() -> None:
     ap.add_argument("--force", action="store_true", help="取得済みも取り直す")
     ap.add_argument("--delay", type=float, default=DEFAULT_DELAY_SEC,
                     help=f"リクエスト間隔の下限秒（既定 {DEFAULT_DELAY_SEC}）")
+    ap.add_argument("--sites", default=str(SITES_CSV),
+                    help="台帳CSV（既定 school_sites.csv。定時制は school_sites_teiji.csv）")
     args = ap.parse_args()
 
-    if not SITES_CSV.is_file():
-        sys.exit(f"{SITES_CSV} がありません")
+    sites_csv = Path(args.sites)
 
-    with SITES_CSV.open(encoding="utf-8-sig", newline="") as f:
+    if not sites_csv.is_file():
+        sys.exit(f"{sites_csv} がありません")
+
+    with sites_csv.open(encoding="utf-8-sig", newline="") as f:
         targets = list(csv.DictReader(f))
     if args.schools:
         targets = [t for t in targets if t["name"] in args.schools]
