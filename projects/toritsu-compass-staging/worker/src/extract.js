@@ -306,6 +306,13 @@ function applyContext(cand, raw, askedSlot, prev) {
     cand.commute_limit = Number(bare[1]);
     return;
   }
+  if (askedSlot === "toujitsu" && cand.toujitsu == null && bare) {
+    // 「当日は何点くらい？」→「390」。裸の数字を受ける口が無く、
+    // LLMも拾えていなかったため当日点が永久に埋まらなかった
+    const v = Number(bare[1]);
+    if (v >= 0 && v <= 500) cand.toujitsu = v;
+    return;
+  }
   if (askedSlot === "naishin" && bare
       && cand.naishin5 == null && cand.jitsugi == null
       && cand.sonai == null && cand.naishin == null) {
@@ -338,17 +345,21 @@ export async function extractQuery(env, db, text, { askedSlot = null, prev = {},
      applyContext（直前に何を尋ねたか）で埋まる。判定はその後で行う。 */
   const probe = { ...rules.cand };
   applyContext(probe, text, askedSlot, prev);
+  /* 尋ねた項目が埋まったか。naishin は 5教科/実技のどちらかに入るので個別に見る。 */
+  const filledAsked = askedSlot === "naishin"
+    ? (probe.naishin5 != null || probe.jitsugi != null || probe.sonai != null)
+    : probe[askedSlot] != null;
   const answeredBySlot = askedSlot && (
     askedSlot === "wants"
       ? false                                   // 希望は言い回しが多様。必ずLLMに見せる
-      : probe[askedSlot] != null || rules.declined.length > 0
+      : filledAsked || rules.declined.length > 0
   );
   // allowLLM=false は、そのセッションが呼び出し上限に達しているとき（仕様書§3.6）。
   // 会話は止めず、規則ベースだけで続ける
   const useLLM = allowLLM && !answeredBySlot;
   const llm = useLLM
     ? await extractLLM(env, text)
-    : { ok: false, reason: allowLLM ? "skipped(規則ベースで充足)" : "budget_exhausted" };
+    : { ok: false, reason: allowLLM ? "規則ベースで充足" : "budget_exhausted" };
 
   const cand = { ...(llm.ok ? llm.cand : {}), ...rules.cand };
   if (llm.ok && llm.cand.wants) {
