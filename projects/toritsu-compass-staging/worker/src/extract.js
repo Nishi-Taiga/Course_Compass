@@ -334,10 +334,14 @@ export async function extractQuery(env, db, text, { askedSlot = null, prev = {},
    * 自由入力（最初の相談や「希望はありますか」への答え）では規則ベースが
    * 取りこぼすため、そこはこれまでどおりLLMに任せる。
    */
+  /* 「60分」「22」のような短い返事は extractRules 単体では取れず、
+     applyContext（直前に何を尋ねたか）で埋まる。判定はその後で行う。 */
+  const probe = { ...rules.cand };
+  applyContext(probe, text, askedSlot, prev);
   const answeredBySlot = askedSlot && (
     askedSlot === "wants"
       ? false                                   // 希望は言い回しが多様。必ずLLMに見せる
-      : rules.cand[askedSlot] != null || rules.declined.length > 0
+      : probe[askedSlot] != null || rules.declined.length > 0
   );
   // allowLLM=false は、そのセッションが呼び出し上限に達しているとき（仕様書§3.6）。
   // 会話は止めず、規則ベースだけで続ける
