@@ -108,20 +108,22 @@
   .rose .brass{stroke:var(--brass-soft)}
   .demo-ribbon{position:absolute; top:14px; left:28px; font-size:10.5px; letter-spacing:.22em;
     color:var(--brass-soft); border:1px solid var(--brass-soft); padding:2px 10px; border-radius:3px}
-  .hero{margin-top:auto; position:relative}
-  .hero .mark{width:58px; height:58px; margin-bottom:18px}
-  .hero h1{font-size:31.5px; font-weight:600; letter-spacing:.06em; line-height:1.3; text-wrap:balance}
-  .hero .tag{margin-top:12px; font-size:14px; color:#C4D1E4; line-height:2; max-width:20em}
-  .steps3{margin:26px 0 0; display:flex; flex-direction:column; gap:10px}
-  .steps3 div{display:flex; align-items:center; gap:12px; font-size:13.5px; color:#DAE3F0}
-  .steps3 .n{width:24px; height:24px; border-radius:50%; border:1px solid var(--brass-soft);
-    color:var(--brass-soft); display:flex; align-items:center; justify-content:center;
-    font-size:12px; flex:none; font-variant-numeric:tabular-nums}
+  .hero{margin-top:auto; position:relative; text-align:center}
+  .hero .mark{width:64px; height:64px; margin:0 auto 22px}
+  .hero h1{font-size:28px; font-weight:600; letter-spacing:.06em; line-height:1.4; text-wrap:balance}
+  .hero .tag{margin-top:14px; font-size:13.5px; color:#C4D1E4; line-height:1.9; max-width:22em; margin-left:auto; margin-right:auto}
+  .hero .subtitle{margin-top:28px; font-size:15px; color:var(--brass-soft); letter-spacing:.1em; font-weight:600}
+  .steps3{margin:20px 0 0; display:flex; flex-direction:column; gap:12px}
+  .steps3 div{display:flex; align-items:center; gap:14px; font-size:13.5px; color:#DAE3F0; background:rgba(255,255,255,.05); border-radius:10px; padding:10px 14px}
+  .steps3 .n{width:26px; height:26px; border-radius:50%; border:1.5px solid var(--brass);
+    color:var(--brass); display:flex; align-items:center; justify-content:center;
+    font-size:12px; flex:none; font-weight:600; font-variant-numeric:tabular-nums}
   .steps3 .note{font-size:11px; color:#93A5C0; margin-left:36px}
-  .cta{margin:30px 0 14px; display:block; width:100%; padding:15px; border:none; border-radius:12px;
-    background:var(--brass); color:#16213A; font-size:16px; font-weight:700; letter-spacing:.12em;
-    cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.25)}
-  .cta:hover{background:var(--brass-soft)}
+  .cta{margin:32px 0 16px; display:block; width:100%; padding:16px; border:none; border-radius:14px;
+    background:var(--brass); color:#16213A; font-size:17px; font-weight:700; letter-spacing:.14em;
+    cursor:pointer; box-shadow:0 6px 24px rgba(201,168,92,.35); transition:transform .15s, box-shadow .15s}
+  .cta:hover{background:var(--brass-soft); transform:translateY(-1px); box-shadow:0 8px 28px rgba(201,168,92,.45)}
+  .cta:active{transform:translateY(0); box-shadow:0 4px 16px rgba(201,168,92,.3)}
   .land-foot{margin-bottom:auto; padding-bottom:22px; font-size:10px; color:#7E8FAB; line-height:1.7}
 
   /* ---------- ヘッダー＋ステッパー ---------- */
@@ -365,8 +367,8 @@
         <path d="M29 50 L23.5 31.5 L29 34.6 L34.5 31.5 Z" fill="#C9A85C" opacity=".45"/>
       </svg>
       <h1 class="serif">会話で見つける<br>わが子に合う都立高校</h1>
-      <p class="tag">塾の面談のような志望校えらびを、どのご家庭にも。都立高校172校の公開データをもとに、AIがいっしょに探します。</p>
-      <p style="margin-top:24px;font-size:14px;color:#C4D1E4;letter-spacing:.08em">質問3つ　1分で見つかるぴったりの都立高校</p>
+      <p class="tag">塾の面談のような志望校えらびを、どのご家庭にも。<br>都立高校172校の公開データをもとに、AIがいっしょに探します。</p>
+      <p class="subtitle">質問3つ · 1分で見つかる</p>
       <div class="steps3">
         <div><span class="n">1</span>ご自宅の最寄り駅（住所も名前も不要）</div>
         <div><span class="n">2</span>成績の目安（わからなくても大丈夫）</div>
