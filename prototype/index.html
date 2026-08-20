@@ -420,6 +420,7 @@
     <div class="btabs" role="tablist">
       <button class="btab" role="tab" id="tabMap" aria-selected="true">マップ</button>
       <button class="btab" role="tab" id="tabCmp" aria-selected="false">くらべる</button>
+      <button class="btab" role="tab" id="tabAll" aria-selected="false">全体から探す</button>
     </div>
     <div class="bbody" id="bbody"></div>
   </aside>
@@ -1383,6 +1384,20 @@ function compareBody(){
     <tr><th>学校</th><th>通学目安</th><th>合格の目安</th><th>倍率5年推移</th></tr>${rows}</table></div>
     <div class="ovops"><button class="ghost" onclick="openSheet()">印刷用のシートを開く</button></div>`;
 }
+function browseAllBody(){
+  const schools=D.schools.filter(s=>!s.x).slice().sort((a,b)=>a.n.localeCompare(b.n,'ja'));
+  const rows=schools.map(s=>{
+    const m=commuteMin(s);
+    const tgt=targetLabel(s);
+    const z=tierOf(s);
+    return `<tr><td><b>${s.n}</b></td><td style="font-size:11px;color:var(--muted)">${s.w}</td>
+    <td>${s.d||'普通科'}</td>
+    <td>${m?rangeText(m):'—'}</td>
+    <td>${tgt}${z?`<br><span class="tier ${ZONE[z][1]}" style="font-size:10px">${ZONE[z][0]}</span>`:''}</td>
+    <td>${spark(s.r)}</td></tr>`; }).join('');
+  return `<div style="overflow-x:auto"><table>
+    <tr><th>学校</th><th>区</th><th>学科</th><th>通学目安</th><th>合格の目安</th><th>倍率</th></tr>${rows}</table></div>`;
+}
 function renderBoard(){
   boardSummary();
   document.getElementById('tabCmp').textContent=`くらべる${S.compare.size?`（${S.compare.size}）`:''}`;
@@ -1390,7 +1405,7 @@ function renderBoard(){
   bar.classList.toggle('on', S.compare.size>0);
   if(S.compare.size) document.getElementById('cmpbarBtn').textContent=`くらべるシートを見る（${S.compare.size}校）`;
   const body=document.getElementById('bbody');
-  body.innerHTML = boardTab==='map' ? compassMap() : compareBody();
+  body.innerHTML = boardTab==='map' ? compassMap() : boardTab==='cmp' ? compareBody() : browseAllBody();
   if(boardTab==='map'){
     body.querySelectorAll('.sdot').forEach(el=>{
       const name=el.dataset.school;
@@ -1405,9 +1420,11 @@ function renderBoard(){
 function selectTab(t){ boardTab=t;
   document.getElementById('tabMap').setAttribute('aria-selected',t==='map');
   document.getElementById('tabCmp').setAttribute('aria-selected',t==='cmp');
+  document.getElementById('tabAll').setAttribute('aria-selected',t==='all');
   renderBoard(); }
 document.getElementById('tabMap').onclick=()=>selectTab('map');
 document.getElementById('tabCmp').onclick=()=>selectTab('cmp');
+document.getElementById('tabAll').onclick=()=>selectTab('all');
 renderBoard();
 
 document.getElementById('infoBtn').onclick=()=>document.getElementById('info').classList.add('open');
