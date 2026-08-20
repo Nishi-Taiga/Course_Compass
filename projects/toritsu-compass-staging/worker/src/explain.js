@@ -40,6 +40,15 @@ function conditionText(q, student) {
   }
   if (q.wants?.dept) parts.push(`学科は「${q.wants.dept}」`);
   if (q.wants?.academic) parts.push("大学進学に力を入れている学校");
+  // 何をいちばん大事にして並べたのかを、最初の一文で伝える
+  const PRIORITY_TEXT = {
+    commute: "通学の近さを最優先",
+    academic: "大学進学を最優先",
+    reachable: "いま届きそうなところを最優先",
+  };
+  if (q.wants?.priority && PRIORITY_TEXT[q.wants.priority]) {
+    parts.push(PRIORITY_TEXT[q.wants.priority]);
+  }
 
   if (student?.score != null) {
     parts.push(student.rough

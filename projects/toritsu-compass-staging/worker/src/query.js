@@ -20,6 +20,20 @@ const num = (v) => (v == null || v === "" ? null : Number(v));
 export const COURSE_TYPES = ["定時制", "高専"];
 
 /**
+ * 学校選びで何をいちばん大事にするか（仕様書§5.1の「重視軸」）。
+ *
+ * ⚠️ 軸として意味があるのは、学校によって有無が分かれる項目だけ。
+ *    学科と部活は検索の絞り込みで既に効いていて、候補は全部その条件を
+ *    満たしているので、並び順で加点しても全員に同じ点が乗るだけになる。
+ *    そのため軸には入れない。
+ */
+export const PRIORITIES = {
+  commute: "通学の近さ",
+  academic: "大学進学",
+  reachable: "いま届きそうなところ",
+};
+
+/**
  * 生のリクエストボディを検索条件に整える。
  * 範囲外の値は黙って丸めず、invalid に名前を残して null にする。
  */
@@ -52,7 +66,9 @@ export function parseQuery(body = {}) {
     esat: pick("esat"),
 
     wants: {
-      academic: Boolean(body.wants?.academic),
+      // いちばん大事にしたいこと。1つだけ選ぶ（複数を重視は「重視なし」と同じ）
+      priority: body.wants?.priority in PRIORITIES ? body.wants.priority : null,
+      academic: Boolean(body.wants?.academic) || body.wants?.priority === "academic",
       // 希望された課程。既定（空）は全日制だけを見る。
       // 「定時制も見たい」「高専に興味がある」と言われたときだけ広げる
       // （2026-08-19 決定。黙って混ぜると、普通に探している保護者に
@@ -120,10 +136,14 @@ export const SLOTS = [
     label: "重視すること",
     required: false,
     filled: (q, asked) =>
-      asked.has("wants") || q.wants.academic || q.wants.dept != null || q.wants.clubs.length > 0,
+      asked.has("wants") || q.wants.priority != null || q.wants.academic
+      || q.wants.dept != null || q.wants.clubs.length > 0,
+    // ⚠️ 例示は「実際に並び順へ効くもの」に揃える。以前は部活・学科を挙げていたが、
+    //    その2つは絞り込みで効いていて、重視されても順位は変わらない。
+    //    聞いている内容と、効く内容がずれていた。
     question:
-      "学校選びで重く見たいことはありますか。"
-      + "（例: 大学進学に力を入れている / 入りたい部活がある / 学びたい分野がある）",
+      "学校選びで、いちばん大事にしたいことはどれですか。"
+      + "（通学の近さ / 大学進学 / いま届きそうなところ / 特にない）",
   },
 ];
 
