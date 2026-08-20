@@ -510,7 +510,7 @@ function setStep(n,label){ const sp=document.getElementById('stepper');
 const S={ state:'S1', station:null, limit:null, noCommuteLimit:false,
   naishin:null, naishin5:null, naishinJ:null, naishinRough:false,
   toujitsu:null, toujitsuRough:false, score:null, scoreRough:false, level:null,
-  wants:{dept:null, academic:false, club:null, teiji:false, uf:null}, shown:[], compare:new Set(), liked:new Set() };
+  wants:{dept:null, academic:false, club:null, teiji:false, uf:null, priority:null}, shown:[], compare:new Set(), liked:new Set() };
 
 /* === 合否の目安（令和8年度実施要綱 第2-10-1） ==========================
    総合得点 = 学力検査700点換算 + 調査書点300点換算 + ESAT-J 20点 = 1020点満点
@@ -624,9 +624,21 @@ function search(){
   if(S.score==null){ return cands.slice(0,4).map(c=>({...c,tier:null})); }
 
   const scored=cands.map(c=>({...c, tier:tierOf(c.s)}));
-  const pool=scored.filter(c=>c.tier);
+  let pool=scored.filter(c=>c.tier);
+  /* 重視軸（#22と同じ考え方）。
+     大学進学: 圏の枠の**中で**進学指導指定校を先に取る。並べ替えだけでは
+     「選ばれなかった学校は何をしても出ない」ため、選抜の段階で効かせる */
+  if(S.wants.priority==='academic'){
+    pool=pool.slice().sort((a,b)=>((b.s.g?1:0)-(a.s.g?1:0))||(a.m-b.m));
+  }
   const pick=(t,n)=>pool.filter(c=>c.tier===t).slice(0,n);
-  let res=[...pick('c',S.wants.academic?2:1), ...pick('m',2), ...pick('s',1)];
+  let res;
+  if(S.wants.priority==='reachable'){
+    // いま届きそうなところ: 安全圏を厚く、挑戦圏は勧めない
+    res=[...pick('s',2), ...pick('m',2)];
+  } else {
+    res=[...pick('c',S.wants.academic?2:1), ...pick('m',2), ...pick('s',1)];
+  }
   /* 成績が全校の目安を上回ると挑戦圏も適正圏も空になり、安全圏1校だけが出ていた
      （984点の子に1校＋エンカレッジ校という並び）。上振れ側は安全圏を並べて返す */
   if(!res.some(c=>c.tier==='c'||c.tier==='m')) res=pick('s',4);
@@ -642,6 +654,12 @@ function search(){
   if(encourage && !out.some(c=>c.s.n===encourage.s.n)
      && (S.scoreRough || noSafe || under || pool.length<3)){
     out.push({...encourage, tier:null, encourage:true});
+  }
+  /* 近さ最優先: 近い順に並べる。圏の枠で選んだあとの**並べ方だけ**を変える。
+     届きそう優先: 安全圏 → 適正圏の順（上回っているほうを先に見せる） */
+  if(S.wants.priority==='commute') out.sort((a,b)=>a.m-b.m);
+  if(S.wants.priority==='reachable'){
+    const rank={s:0,m:1,c:2}; out.sort((a,b)=>(rank[a.tier]??3)-(rank[b.tier]??3)||a.m-b.m);
   }
   /* ものづくり・工業系を希望されたら、高専も添える（西・2026-08-19）。
      高専は目安点を持たないので tier が付かず pool に入らない。そのままだと、
@@ -1196,10 +1214,26 @@ function askWish(){
   S.state='S4'; setStep(3,'お子さんの希望');
   aiSay('最後に、お子さんの希望はありますか？部活、校風、学びたい分野など、なんでも構いません。');
   setChips([
-    {label:'大学進学に力を入れたい',fn:()=>{S.wants.academic=true;runSearch();}},
-    {label:'ものづくり・工業系',fn:()=>{S.wants.dept='工';runSearch();}},
-    {label:'ビジネス・商業系',fn:()=>{S.wants.dept='商';runSearch();}},
-    {label:'特にない・まず見たい',fn:runSearch},
+    {label:'大学進学に力を入れたい',fn:()=>{S.wants.academic=true;askPriority();}},
+    {label:'ものづくり・工業系',fn:()=>{S.wants.dept='工';askPriority();}},
+    {label:'ビジネス・商業系',fn:()=>{S.wants.dept='商';askPriority();}},
+    {label:'特にない・まず見たい',fn:askPriority},
+  ]);
+}
+/* 重視軸（仕様書§5.1・S4「塾面談の核」）。API側は#22で実装済みで、
+   デモの本線であるプロトタイプに無いままだと、いちばん見せたい機能が
+   画面に出ない。聞き方・軸の3択はAPIと同じにする。
+   ⚠️ 希望（絞り込み）と重視（並び順）は別の質問。「吹奏楽がある」は条件、
+      「近いほうがいい」は並べ方で、混ぜるとどちらも中途半端になる。 */
+function askPriority(){
+  if(S.wants.priority){ runSearch(); return; }   // 発話で既に言われていたら聞き直さない
+  S.state='S4b'; setStep(3,'いちばん大事なこと');
+  aiSay('学校選びで、<b>いちばん大事にしたいこと</b>はどれですか？並べ方に反映します。');
+  setChips([
+    {label:'通学の近さ',fn:()=>{S.wants.priority='commute';runSearch();}},
+    {label:'大学進学',fn:()=>{S.wants.priority='academic';S.wants.academic=true;runSearch();}},
+    {label:'いま届きそうなところ',fn:()=>{S.wants.priority='reachable';runSearch();}},
+    {label:'特にない',fn:runSearch},
   ]);
 }
 /* 発話から希望を拾って S.wants に反映する。拾えたものを文で返す（拾えなければ空）。
@@ -1219,6 +1253,14 @@ function extractWish(text){
   else if(/商業|ビジネス|簿記/.test(text)) { S.wants.dept='商'; got.push('商業系'); }
   else if(/農業|園芸|動物/.test(text)) { S.wants.dept='農'; got.push('農業系'); }
   if(/大学|進学/.test(text)) { S.wants.academic=true; got.push('進学重視'); }
+  /* 重視軸（#22とAPI側で揃えた正規表現）。「45分以内」のような条件とは別物で、
+     「近ければ近いほどいい」という意思のときだけ拾う */
+  const pr =
+      /行けるところ|入れるところ|届き|受かり|確実|手堅|安全|無理のない|背伸び/.test(text) ? 'reachable'
+    : /近い|近く|近め|通いやす|通える|遠くない|時間をかけ|近所|距離/.test(text) ? 'commute'
+    : null;
+  if(pr){ S.wants.priority=pr; got.push(pr==='commute'?'通学の近さを最優先':'いま届きそうなところを最優先'); }
+  else if(S.wants.academic && !S.wants.priority){ S.wants.priority='academic'; }
   return got;
 }
 function handleWish(text){
@@ -1231,7 +1273,7 @@ function handleWish(text){
     if(!got.length) aiSay('ありがとうございます。気になる学校があれば「＋ くらべるシートに追加」を押してみてください。条件を変えたいときは「もっと近い学校がいい」なども使えます。');
     return;
   }
-  runSearch();
+  if(S.shown.length) runSearch(); else askPriority();
 }
 function runSearch(){
   S.state='S5'; setStep(null,'候補をさがしています…');
@@ -1241,8 +1283,12 @@ function runSearch(){
     const found=search();
     if(!found.length){ relax(); return; }
     S.shown=found; setStep(null,'ご提案'); renderBoard();
+    const PRI_TEXT={commute:'「通学の近さ」を最優先に、近い順で並べています。',
+      academic:'「大学進学」を最優先に、進学指導の指定校を先に取っています。',
+      reachable:'「いま届きそうなところ」を最優先に、安全圏から並べています。'};
     const head=S.score!=null
-      ? `条件に合いそうな${found.length}校が見つかりました。「適正圏」を中心に、挑戦圏と安全圏を織り交ぜています。`
+      ? `条件に合いそうな${found.length}校が見つかりました。`
+        + (PRI_TEXT[S.wants.priority] ?? '「適正圏」を中心に、挑戦圏と安全圏を織り交ぜています。')
       : `まずは通いやすい順に${found.length}校ご紹介します。内申点を教えていただくと、安全圏・適正圏・挑戦圏に分けてご提案できます。`;
     aiSay(head);
     found.forEach(c=>aiNode(card(c)));
@@ -1330,6 +1376,12 @@ document.getElementById('form').addEventListener('submit',e=>{
   else if(S.state==='S3sum') handleLevelSum(t);
   else if(S.state==='S3b') handleToujitsu(t);
   else if(S.state==='S4') handleWish(t);
+  else if(S.state==='S4b'){
+    const got=extractWish(t);
+    if(!S.wants.priority && /特にな|ない|どれも|わから/.test(t)){ runSearch(); }
+    else if(S.wants.priority){ runSearch(); }
+    else aiSay('「通学の近さ」「大学進学」「いま届きそうなところ」のどれかで教えてください。「特にない」でも大丈夫です。');
+  }
   else if(S.state==='S6'){ handleFreeInput(t); }
   else aiSay('チップから選ぶか、メッセージを送ってください。');
 });
@@ -1348,7 +1400,9 @@ function boardSummary(){
   if(S.wants.club) chips.push(`部活: ${S.wants.club[0]}`);
   if(S.wants.teiji) chips.push('定時制も含む');
   if(S.wants.uf) chips.push(S.wants.uf==='no'?'制服なし':'制服あり');
-  if(S.wants.academic) chips.push('進学重視');
+  if(S.wants.priority) chips.push({commute:'最優先: 通学の近さ',academic:'最優先: 大学進学',
+    reachable:'最優先: 届きそうなところ'}[S.wants.priority]);
+  else if(S.wants.academic) chips.push('進学重視');
   el.innerHTML='<span class="t">EXPLORER BOARD</span>'+chips.map(c=>`<span class="v">${c}</span>`).join('');
 }
 function eligibleSchools(){
@@ -1477,7 +1531,21 @@ function likedBody(){
     </div>`; }).join('');
   return `<div>${cards}</div>`;
 }
+/* いいねと比べるシートはブラウザに残す（#21レビューで判明: リロードで全消え）。
+   デモ中の誤リロードでも、いいね・比較リストからやり直せる。
+   会話の条件は保存しない — 相談は毎回はじめから聞くのがこのツールの形。 */
+function saveSets(){
+  try{ localStorage.setItem('cc_sets', JSON.stringify({
+    liked:[...S.liked], compare:[...S.compare]})); }catch(e){}
+}
+function loadSets(){
+  try{ const v=JSON.parse(localStorage.getItem('cc_sets')||'null');
+    if(v){ (v.liked||[]).forEach(n=>S.liked.add(n)); (v.compare||[]).forEach(n=>S.compare.add(n)); }
+  }catch(e){}
+}
+loadSets();
 function renderBoard(){
+  saveSets();
   boardSummary();
   document.getElementById('tabCmp').textContent=`比べるシート${S.compare.size?`（${S.compare.size}）`:''}`;
   document.getElementById('tabLiked').textContent=`いいね${S.liked.size?`（${S.liked.size}）`:''}`;
