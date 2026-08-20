@@ -295,8 +295,8 @@
   .cmp{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);
     border:1px solid var(--line); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .cmp[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
-  .heart{font-size:16px; background:none; border:none; cursor:pointer; color:var(--muted); padding:0 8px; line-height:1; min-width:28px; letter-spacing:1px}
-  .heart[aria-pressed="true"]{color:#e53935}
+  .heart{font-size:16px; background:none; border:none; cursor:pointer; color:var(--muted); padding:0 8px; line-height:1; min-width:28px; letter-spacing:1px; transition:color .2s, transform .15s}
+  .heart[aria-pressed="true"]{color:#e8889a}
   .detail-btn{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--accent);
     border:1px solid var(--accent); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .detail-btn:hover{background:var(--accent); color:var(--accent-ink)}
@@ -1390,7 +1390,7 @@ function compareBody(){
     <td>${m?rangeText(m):'—'}</td>
     <td>${tgt}${z?`<br><span class="tier ${ZONE[z][1]}" style="font-size:10px">${ZONE[z][0]}</span>`:''}</td>
     <td>${spark(s.r)}</td>
-    <td><button class="cmp-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e53935':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button></td></tr>`; }).join('');
+    <td><button class="cmp-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button></td></tr>`; }).join('');
   return `<div style="overflow-x:auto"><table>
     <tr><th>学校</th><th>通学目安</th><th>合格の目安</th><th>倍率5年推移</th><th></th></tr>${rows}</table></div>
     <div class="ovops"><button class="ghost" onclick="openSheet()">印刷用のシートを開く</button></div>`;
@@ -1418,7 +1418,7 @@ function browseAllBody(){
         <button class="browse-toggle" data-uid="${uid}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">もっと見る</button>
         <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
         <button class="browse-cmp" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:${S.compare.has(s.n)?'var(--accent)':'var(--muted)'}">${S.compare.has(s.n)?'✓ 比べるシートへ追加済み':'＋ 比べるシートへ追加'}</button>
-        <button class="browse-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e53935':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button>
+        <button class="browse-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button>
       </div>
       <div class="browse-detail" id="${uid}" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);font-size:12px">
         <div>合格の目安: ${tgt}${s.ly?'（'+s.ly+'）':''}</div>
@@ -1445,7 +1445,7 @@ function likedBody(){
       <div style="display:flex;gap:6px;margin-top:6px">
         <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
         <button class="liked-cmp" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:${S.compare.has(s.n)?'var(--accent)':'var(--muted)'}">${S.compare.has(s.n)?'✓ くらべる済み':'＋ くらべる'}</button>
-        <button class="liked-remove" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:#e53935">♥</button>
+        <button class="liked-remove" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:#e8889a">♥</button>
       </div>
     </div>`; }).join('');
   return `<div>${cards}</div>`;
