@@ -1388,7 +1388,22 @@ function compareBody(){
     <div class="ovops"><button class="ghost" onclick="openSheet()">印刷用のシートを開く</button></div>`;
 }
 function browseAllBody(){
-  const schools=D.schools.filter(s=>!s.x).slice().sort((a,b)=>a.n.localeCompare(b.n,'ja'));
+  const goju='あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん';
+  function sortKey(name){
+    let k='';
+    for(const ch of name){
+      const c=ch.charCodeAt(0);
+      if(c>=0x3041&&c<=0x3096){ k+=String.fromCharCode(0x61+(c-0x3041)); continue; }
+      if(c>=0x30A1&&c<=0x30F6){ k+=String.fromCharCode(0x61+(c-0x30A1)); continue; }
+      if(c>=0x4E00&&c<=0x9FFF){
+        k+=String.fromCharCode(0x41+(c%50));
+        continue;
+      }
+      k+=ch;
+    }
+    return k;
+  }
+  const schools=D.schools.filter(s=>!s.x).slice().sort((a,b)=>sortKey(a.n).localeCompare(sortKey(b.n)));
   const cards=schools.map(s=>{
     const m=commuteMin(s);
     const tag=schoolTag(s);
