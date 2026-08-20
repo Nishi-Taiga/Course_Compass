@@ -113,6 +113,20 @@ export function extractRules(raw) {
   const wants = {};
   if (/進学|大学|受験に強|学力|勉強/.test(text)) { wants.academic = true; hits.push("wants.academic"); }
 
+  /* いちばん大事にしたいこと（重視軸）。
+   *
+   * ⚠️ 「45分以内」のような**条件**とは別物。条件は絞り込みで効くが、
+   *    「近ければ近いほどいい」という意思はこれまで拾えず、並び順に
+   *    反映されていなかった。
+   * ⚠️ 1つだけ選ぶ。複数当てはまったら、より具体的なほうを採る
+   *    （「近くて進学もいい」は結局どちらも重視していないのと同じになる）。 */
+  const priority =
+      /行けるところ|入れるところ|届き|受かり|確実|手堅|安全|無理のない|背伸び/.test(text) ? "reachable"
+    : /近い|近く|近め|通いやす|通える|遠くない|時間をかけ|近所|距離/.test(text) ? "commute"
+    : wants.academic ? "academic"
+    : null;
+  if (priority) { wants.priority = priority; hits.push("wants.priority"); }
+
   for (const [re, code] of DEPT_WORDS) {
     if (re.test(text)) { wants.dept = code; hits.push("wants.dept"); break; }
   }
@@ -207,6 +221,7 @@ function sanitize(obj) {
   const w = obj.wants ?? {};
   const wants = {};
   if (w.academic === true) wants.academic = true;
+  if (typeof w.priority === "string" && w.priority.trim()) wants.priority = w.priority.trim();
   if (typeof w.dept === "string" && w.dept.trim()) wants.dept = w.dept.trim();
   if (Array.isArray(w.course_types)) {
     const cs = w.course_types.filter((x) => x === "定時制" || x === "高専");
@@ -458,6 +473,8 @@ export function mergeQuery(prev, cand) {
   }
   const w = cand.wants ?? {};
   if (w.academic) next.wants.academic = true;
+  // 重視軸は後から言われたもので上書きする（「やっぱり近さで」に応えるため）
+  if (w.priority) next.wants.priority = w.priority;
   if (w.course_types?.length) {
     next.wants.course_types = [...new Set([...(next.wants.course_types ?? []), ...w.course_types])];
   }

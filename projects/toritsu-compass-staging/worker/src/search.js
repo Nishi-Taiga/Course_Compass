@@ -75,8 +75,13 @@ function scoreCandidate(row, q, tier) {
    *    西の判断（2026-08-19）で0〜30点に下げ、適正圏・学科一致のほうが
    *    効くようにした。通学は「絞り込み条件」で既に効いているので、
    *    並び順まで支配する必要はない。 */
+  const priority = q.wants?.priority ?? null;
+
   const commute = Math.max(0, Math.round((60 - (row.commute_minutes ?? 60)) / 2));
-  score += commute;
+  // 「近さがいちばん大事」と言われたときだけ、通学の重みを倍に戻す（0〜60点）。
+  // 通学分数の上限は絞り込みで効いているが、それは「45分以内なら等しく良い」
+  // という意味でしかない。14分と44分の差を order に出すのが重視軸の役目。
+  score += priority === "commute" ? commute * 2 : commute;
   if (row.commute_minutes != null) {
     // 「◯◯駅からバス」まで書く。数字だけより保護者に伝わる
     const via = row.via_station ? `${row.via_station}駅から` : "";
@@ -89,11 +94,28 @@ function scoreCandidate(row, q, tier) {
   else if (tier === "c") { score += 25; why.push("挑戦圏"); }
   else if (tier === "s") { score += 15; why.push("安全圏"); }
 
+  // 「いま届きそうなところ」を重視されたら、安全圏を適正圏より上に持ち上げる。
+  // 挑戦圏は据え置き（届くかどうかが不安な人に、届かない学校を勧めない）。
+  if (priority === "reachable") {
+    // ⚠️ 安全圏を適正圏より上に置く。適正圏は「目安点とほぼ同じ」＝五分五分で、
+    //    「いま届きそうなところ」を求めている人が最初に見たいのは
+    //    上回っているほうだから。+30 だと適正圏(40)を抜けずに3番目に沈む。
+    if (tier === "s") { score += 40; why.push("いま届きそう"); }
+    else if (tier === "m") { score += 10; }
+  }
+
   // 配点は 2026-08-19 に指定を受けて更新した。
   //   適正圏 +40 / 学科一致 +40 / 部活一致 +30 / 進学指導指定 +10
   // 挑戦圏(+25)・安全圏(+15)は指定が無かったので据え置き。
+  /* 進学指導指定校への加点。
+   *
+   * ⚠️ +10 では効かない。通学は2分で1点なので、10点は通学20分ぶんでしかなく、
+   *    「大学進学を重視」と言われても近い学校に負けていた。
+   *    いちばん大事だと言われたときは、適正圏(40)・学科一致(40)と
+   *    肩を並べる +40 にする。触れられただけのときは従来どおり +10。 */
   if (q.wants?.academic && row.designation) {
-    score += 10;
+    const pts = priority === "academic" ? 40 : 10;
+    score += pts;
     why.push(`大学進学重視 → ${row.designation}`);
   }
   if (q.wants?.dept && row.departments?.includes(q.wants.dept)) {
@@ -259,7 +281,19 @@ export async function searchSchools(db, q) {
     return { student, rows: decorate(picked, q), all: judged, mode: "commute_only" };
   }
 
-  const pool = judged.filter((r) => r.tier);
+  /* 圏ごとに枠を取る。
+   *
+   * ⚠️ 以前は pool の先頭から取っていた。pool はSQLの通学時間順なので、
+   *    実際には「適正圏の中で**いちばん近い**2校」を選んでいた。
+   *    加点（学科40・部活30・進学）は、そのあと並べ替えるときにしか
+   *    効いておらず、**選ばれなかった学校は何をしても出てこない**。
+   *    重視軸を足しても、ここを直さないと順位が入れ替わるだけで終わる。
+   *    枠の中も加点の高い順で選ぶ。 */
+  const scoreOf = new Map(
+    judged.map((r) => [r.school_number, scoreCandidate(r, q, r.tier).match_score])
+  );
+  const pool = judged.filter((r) => r.tier)
+    .sort((a, b) => scoreOf.get(b.school_number) - scoreOf.get(a.school_number));
   const pick = (t, n) => pool.filter((r) => r.tier === t).slice(0, n);
   let out = [
     ...pick("c", q.wants?.academic ? 2 : 1),
@@ -268,6 +302,8 @@ export async function searchSchools(db, q) {
   ];
   // 定時制・高専に絞ると、目安点を持たないので tier が1つも付かない。
   // pool が空のままだと0件になってしまうため、通学の近い順で返す。
+  // 圏が1つも付かないとき（定時制・高専だけに絞ったとき）は通学の近い順。
+  // 点数判定をしていないので、加点で並べる根拠が無い。
   if (!out.length) out = (pool.length ? pool : judged).slice(0, 4);
 
   // 学力検査によらない学校（エンカレッジ）は点数で切らない。
@@ -389,7 +425,20 @@ function decorate(rows, q) {
         commute: "駅間所要時間の自前計算（station_database CC BY-SA 4.0 / 急行補正済）",
       },
     };
-  }).sort((a, b) => b.match_score - a.match_score);
+  }).sort((a, b) => {
+    /* 「通学の近さがいちばん大事」と言われたら、近い順にそのまま並べる。
+     *
+     * ⚠️ 加点順のままだと、圏の差（適正40・挑戦25）が通学2分ぶん(1点)より
+     *    ずっと重いので、9分・19分・7分・25分のような並びになる。
+     *    近さを最優先と言った人に、近い順でない一覧を見せることになる。
+     *    どの学校を選ぶかは圏の枠で担保しているので、並べ方だけ変える。 */
+    if (q.wants?.priority === "commute") {
+      const am = a.commute_minutes ?? 999;
+      const bm = b.commute_minutes ?? 999;
+      if (am !== bm) return am - bm;
+    }
+    return b.match_score - a.match_score;
+  });
 }
 
 const rangeText = (m) => {
