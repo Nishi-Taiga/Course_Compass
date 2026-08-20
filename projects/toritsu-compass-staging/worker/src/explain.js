@@ -35,7 +35,8 @@ function conditionText(q, student) {
       : `${q.wants.clubs.join("・")}のある学校`);
   }
   if (q.wants?.course_types?.length) {
-    parts.push(`${q.wants.course_types.join("・")}も含めて`);
+    // 「も含めて」だと足したように読めるが、実際は挙げられた課程に絞っている
+    parts.push(`${q.wants.course_types.join("・")}のある学校`);
   }
   if (q.wants?.dept) parts.push(`学科は「${q.wants.dept}」`);
   if (q.wants?.academic) parts.push("大学進学に力を入れている学校");
