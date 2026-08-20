@@ -424,7 +424,7 @@
     <div class="bsum" id="bsum"><span class="t">EXPLORER BOARD</span></div>
     <div class="btabs" role="tablist">
       <button class="btab" role="tab" id="tabMap" aria-selected="true">マップ</button>
-      <button class="btab" role="tab" id="tabCmp" aria-selected="false">くらべる</button>
+      <button class="btab" role="tab" id="tabCmp" aria-selected="false">比べるシート</button>
       <button class="btab" role="tab" id="tabAll" aria-selected="false">全体から探す</button>
       <button class="btab" role="tab" id="tabLiked" aria-selected="false">いいね</button>
     </div>
@@ -1452,7 +1452,7 @@ function likedBody(){
 }
 function renderBoard(){
   boardSummary();
-  document.getElementById('tabCmp').textContent=`くらべる${S.compare.size?`（${S.compare.size}）`:''}`;
+  document.getElementById('tabCmp').textContent=`比べるシート${S.compare.size?`（${S.compare.size}）`:''}`;
   document.getElementById('tabLiked').textContent=`いいね${S.liked.size?`（${S.liked.size}）`:''}`;
   const bar=document.getElementById('cmpbar');
   bar.classList.toggle('on', S.compare.size>0);
