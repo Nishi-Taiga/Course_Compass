@@ -295,6 +295,8 @@
   .cmp{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);
     border:1px solid var(--line); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .cmp[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+  .heart{font-size:16px; background:none; border:none; cursor:pointer; color:var(--muted); padding:0 4px; line-height:1}
+  .heart[aria-pressed="true"]{color:#e53935}
   .detail-btn{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--accent);
     border:1px solid var(--accent); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .detail-btn:hover{background:var(--accent); color:var(--accent-ink)}
@@ -424,6 +426,7 @@
       <button class="btab" role="tab" id="tabMap" aria-selected="true">マップ</button>
       <button class="btab" role="tab" id="tabCmp" aria-selected="false">くらべる</button>
       <button class="btab" role="tab" id="tabAll" aria-selected="false">全体から探す</button>
+      <button class="btab" role="tab" id="tabLiked" aria-selected="false">いいね</button>
     </div>
     <div class="bbody" id="bbody"></div>
   </aside>
@@ -507,7 +510,7 @@ function setStep(n,label){ const sp=document.getElementById('stepper');
 const S={ state:'S1', station:null, limit:null, noCommuteLimit:false,
   naishin:null, naishin5:null, naishinJ:null, naishinRough:false,
   toujitsu:null, toujitsuRough:false, score:null, scoreRough:false, level:null,
-  wants:{dept:null, academic:false, club:null, teiji:false, uf:null}, shown:[], compare:new Set() };
+  wants:{dept:null, academic:false, club:null, teiji:false, uf:null}, shown:[], compare:new Set(), liked:new Set() };
 
 /* === 合否の目安（令和8年度実施要綱 第2-10-1） ==========================
    総合得点 = 学力検査700点換算 + 調査書点300点換算 + ESAT-J 20点 = 1020点満点
@@ -776,7 +779,7 @@ function card(c){
       :(s.st==='teiji'?`<span class="tier" style="background:var(--line);color:var(--muted)">定時制</span>`:'')))}</div>
     <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${tag&&!(s.g&&tag.startsWith('進学'))?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}</div>
     <div class="factgrid"><div class="fact">通学の目安<b>${rangeText(m)}</b></div></div>
-    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
+    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button><button type="button" class="heart" aria-pressed="false">♡</button><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
     <div class="card-details">
       ${s.sn?`<div class="note" style="margin:6px 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
       <div class="factgrid">
@@ -801,6 +804,10 @@ function card(c){
   btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
     btn.setAttribute('aria-pressed',on); btn.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';
     on?S.compare.add(s.n):S.compare.delete(s.n); renderBoard(); };
+  const hrt=node.querySelector('.heart');
+  hrt.onclick=()=>{ const on=hrt.getAttribute('aria-pressed')!=='true';
+    hrt.setAttribute('aria-pressed',on); hrt.textContent=on?'♥':'♡';
+    on?S.liked.add(s.n):S.liked.delete(s.n); renderBoard(); };
   node.addEventListener('mouseenter',()=>{
     const d=document.querySelector(`.sdot[data-school="${s.n}"]`); if(d) d.classList.add('hot'); });
   node.addEventListener('mouseleave',()=>{
@@ -1388,14 +1395,11 @@ function compareBody(){
     <div class="ovops"><button class="ghost" onclick="openSheet()">印刷用のシートを開く</button></div>`;
 }
 function browseAllBody(){
-  const ORDER=['のづた','こまば','うえの','じょうとう','じょうすい','はるみそうごう','みやけ','みた','ひがし','ひがしくるめそうごう','たけのだい','たけはや','あすか','ひがしむらやま','ひがしむらやまにし','ひがしやまと','ひがしやまとみなみ','おうじそうごう','あきるだい','だいさんしょうぎょう','だいよんしょうぎょう','しんじゅく','しんじゅくやまぶき','でんえんちょうふ','たなし','たなしこうか','ふじもり','たがら','にいじま','だいごしょうぎょう','だいいちしょうぎょう','かつしかしょうぎょう','かつしかの','かつしかそうごう','はむらかさいみなみ','かさいこうか','くらまえこうか','みのりがおか','ゆきがや','ひの','ひのだい','たちかわ','みなみだいら','たちかわみどり','みなみかさい','ひびや','こまえ','にほんばし','かがくぎじゅつ','きりがおか','のうさん','のうぎょう','みはら','のうげい','ながやま','なるせ','しばしょうぎょう','かたくら','さんぎょうぎじゅつこうせん','さんぎょうぎじゅつこうせん','くるめにし','こうげい','もみじがわ','おうめそうごう','あおやま','あおい','しょうわ','そうごうこうか','そうごうげいじゅつ','しゃくじい','せたがやそうごう','せたがやいずみ','えんげい','たかしま','みずほのうげい','おぎくぼ','すぎなみ','すぎなみこうか','すぎなみそうごう','ぶんきょう','わかばそうごう','はいじま','まちだ','まちだこうか','まちだそうごう','たま','たまかがくぎじゅつ','たまこうか','さぎのみや','はちじょう','やしお','こうとうしょうぎょう','はちおうじひがし','はちおうじそうし','はちおうじたくしん','はちおうじきた','えどがわ','こうほく','むさしのきた','むさしがおか','むさしむらやま','ほんじょ','ほんじょこうか','まつばら','ねりま','ねりまこうか','まつがや','とやま','しのざき','なかのこうか','ふかがわ','ふかざわ','いたばし','いたばしゆとく','ろくごうこうか','ろっぽんぎ','ほうや','ひろお','すみだがわ','すみだがわこうか','あかばねほくおう','ろか','めぐろ','とよたま','としま','ちはや','ちとせがおか','きよせ','やまざき','いつかいち','さくらまち','にし','おがわ','こだいら','こだいらみなみ','こだいらにし','こがねいこうか','こがねいきた','おだい','いぐさ','ふちえ','こまつがわ','おやまだい','おがさわら','こいわ','あらかわこうか','ひとつばし','ふっさ','くにたち','こくさい','こくぶんじ','ちょうふみなみ','ちょうふきた','かまた','つばさそうごう','こうつ','じんだい','ふちゅう','ふちゅうひがし','ふちゅうこうか','ふちゅうにし','きたぞの','むこうがおか','きたとよしまこうか','すながわ','おおたさくらだい','あさくさ','おおえど','おおもり','おおやま','おおしま','おおしまかいようこくさい','おおいずみさくら','おおさき','たちばな','しょうよう','あだち','あだちひがし','あだちしんでん','あだちこうか','あだちにし','しのぶがおか'];
-  const orderMap=new Map(ORDER.map((n,i)=>[n,i]));
-  function orderOf(name){
-    if(orderMap.has(name)) return orderMap.get(name);
-    for(const [k,v] of orderMap){ if(name.includes(k)) return v; }
-    return 9999;
-  }
-  const schools=D.schools.filter(s=>!s.x).slice().sort((a,b)=>orderOf(a.n)-orderOf(b.n));
+  const R={'八王子東':'はちおうじひがし','立川':'たちかわ','国立':'くにたち','西':'にし','戸山':'とやま','日比谷':'ひびや','青山':'あおやま','小松川':'こまつがわ','町田':'まちだ','小山台':'こやまだい','国分寺':'こくぶんじ','駒場':'こまば','新宿':'しんじゅく','国際':'こくさい','日野台':'ひのだい','墨田川':'すみだがわ','武蔵野北':'むさしのきた','竹早':'たけはや','小金井北':'こがねいきた','三田':'みた','江戸川':'えどがわ','調布北':'ちょうふきた','江北':'こうほく','城東':'じょうとう','多摩科学技術':'たまかがくぎじゅつ','昭和':'しょうわ','北園':'きたぞの','上野':'うえの','豊多摩':'とよたま','富士':'ふじ','大泉':'おおいずみ','白鴎':'はくおう','両国':'りょうごく','武蔵':'むさし','三宅':'みやけ','新島':'にいじま','杉並工科':'すぎなみこうか','大島':'おおしま','墨田工科':'すみだこうか','神津':'こうづ','八丈':'はちじょう','五日市':'いつかいち','北豊島工科':'きたとよしまこうか','六郷工科':'ろくごうこうか','大森':'おおもり','蔵前工科':'くらまえこうか','多摩':'たま','赤羽北桜':'あかばねほくおう','小笠原':'おがさわら','野津田':'のづた','羽村':'はむら','葛西工科':'かさいこうか','田柄':'たがら','足立工科':'あだちこうか','大山':'おおやま','深沢':'ふかざわ','荒川工科':'あらかわこうか','大田桜台':'おおたさくらだい','青井':'あおい','田無工科':'たなしこうか','総合工科':'そうごうこうか','江東商業':'こうとうしょうぎょう','山崎':'やまざき','瑞穂農芸':'みずほのうげい','第四商業':'だいよんしょうぎょう','光丘':'みつかお','葛西南':'かさいみなみ','町田工科':'まちだこうか','芝商業':'しばしょうぎょう','第一商業':'だいいちしょうぎょう','中野工科':'なかのこうか','東村山西':'ひがしむらやまにし','橘':'たちばな','八潮':'やしお','練馬工科':'ねりまこうか','板橋有徳':'いたばしゆとく','農産':'のうさん','葛飾商業':'かつしかしょうぎょう','足立新田':'あだちしんでん','町田総合':'まちだそうごう','翔陽':'しょうよう','府中工科':'ふちゅうこうか','葛飾総合':'かつしかそうごう','第三商業':'だいさんしょうぎょう','拝島':'はいじま','美原':'みはら','大泉桜':'おおいずみさくら','忍岡':'しのぶがおか','篠崎':'しのざき','武蔵村山':'むさしむらやま','秋留台':'あきるだい','淵江':'ふちえ','園芸':'えんげい','久留米西':'くるめにし','永山':'ながやま','片倉':'かたくら','多摩工科':'たまこうか','若葉総合':'わかばそうごう','つばさ総合':'つばさそうごう','大島海洋国際':'おおしまかいようこくさい','世田谷総合':'せたがやそうごう','足立東':'あだちひがし','飛鳥':'あすか','足立西':'あだちにし','蒲田':'かまた','桜町':'さくらまち','千歳丘':'ちとせがおか','葛飾野':'かつしかの','八王子北':'はちおうじきた','青梅総合':'おうめそうごう','第五商業':'だいごしょうぎょう','東久留米総合':'ひがしくるめそうごう','練馬':'ねりま','府中西':'ふちゅうにし','高島':'たかしま','八王子桑志':'はちおうじくわし','福生':'ふっさ','東大和':'ひがしやまと','小平西':'こだいらにし','農芸':'のうげい','小川':'おがわ','清瀬':'きよせ','王子総合':'おうじそうごう','千早':'ちはや','成瀬':'なるせ','富士森':'ふじもり','松が谷':'まつがや','総合芸術':'そうごうげいじゅつ','日本橋':'にほんばし','田無':'たなし','南葛飾':'みなみかさい','科学技術':'かがくぎじゅつ','紅葉川':'もみじがわ','上水':'じょうすい','東村山':'ひがしむらやま','府中東':'ふちゅうひがし','松原':'まつばら','杉並':'すぎなみ','杉並総合':'すぎなみそうごう','板橋':'いたばし','工芸':'こうげい','竹台':'たけのだい','足立':'あだち','南平':'みなみだいら','東大和南':'ひがしやまとみなみ','保谷':'ほうや','小平':'こだいら','大崎':'おおさき','日野':'ひの','文京':'ぶんきょう','小平南':'こだいらみなみ','本所':'ほんじょ','武蔵丘':'むさしがおか','小岩':'こいわ','東':'ひがし','井草':'いぐさ','深川':'ふかがわ','狛江':'こまえ','農業':'のうぎょう','雪谷':'ゆきがや','向丘':'むこうがおか','府中':'ふちゅう','調布南':'ちょうふみなみ','田園調布':'でんえんちょうふ','石神井':'しゃくじい','鷺宮':'さぎのみや','芦花':'あかはな','晴海総合':'はるみそうごう','神代':'しんだい','目黒':'めぐろ','広尾':'ひろお','豊島':'としま','産業技術高専（品川）':'さんぎょうぎじゅつこうせん','産業技術高専（荒川）':'さんぎょうぎじゅつこうせん','一橋':'ひとつばし','六本木':'ろっぽんぎ','世田谷泉':'せたがやいずみ','新宿山吹':'しんじゅくやまぶき','荻窪':'おぎくぼ','稔ヶ丘':'みのりがおか','桐ヶ丘':'きりがおか','小台橋':'おおだいばし','浅草':'あさくさ','大江戸':'おおえど','本所工科':'ほんじょこうか','八王子拓真':'はちおうじたくしん','砂川':'すながわ','立川緑':'たちかわみどり','小金井工科':'こがねいこうか','調布':'ちょうふ'};
+  const schools=D.schools.filter(s=>!s.x).slice().sort((a,b)=>{
+    const ra=R[a.n]||a.n, rb=R[b.n]||b.n;
+    return ra.localeCompare(rb,'ja');
+  });
   const cards=schools.map(s=>{
     const m=commuteMin(s);
     const tag=schoolTag(s);
@@ -1412,6 +1416,7 @@ function browseAllBody(){
       <div style="display:flex;gap:6px;margin-top:6px">
         <button class="browse-toggle" data-uid="${uid}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">もっと見る</button>
         <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
+        <button class="browse-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 4px;color:${S.liked.has(s.n)?'#e53935':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button>
       </div>
       <div class="browse-detail" id="${uid}" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);font-size:12px">
         <div>合格の目安: ${tgt}${s.ly?'（'+s.ly+'）':''}</div>
@@ -1422,14 +1427,35 @@ function browseAllBody(){
     </div>`; }).join('');
   return `<div>${cards}</div>`;
 }
+function likedBody(){
+  const liked=[...S.liked].map(n=>D.schools.find(s=>s.n===n)).filter(Boolean);
+  if(!liked.length) return `<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">ハートを押した学校がここに表示されます<br>（学校カードの♡をクリック）</div>`;
+  const cards=liked.map(s=>{
+    const m=commuteMin(s);
+    const tag=schoolTag(s);
+    const z=tierOf(s);
+    return `<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
+      <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
+      ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
+      <span style="font-size:11px;color:var(--muted)">${m?rangeText(m):''}</span>
+      <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
+      <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}</div>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
+        <button class="liked-remove" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:#e53935">♥ 削除</button>
+      </div>
+    </div>`; }).join('');
+  return `<div>${cards}</div>`;
+}
 function renderBoard(){
   boardSummary();
   document.getElementById('tabCmp').textContent=`くらべる${S.compare.size?`（${S.compare.size}）`:''}`;
+  document.getElementById('tabLiked').textContent=`いいね${S.liked.size?`（${S.liked.size}）`:''}`;
   const bar=document.getElementById('cmpbar');
   bar.classList.toggle('on', S.compare.size>0);
   if(S.compare.size) document.getElementById('cmpbarBtn').textContent=`くらべるシートを見る（${S.compare.size}校）`;
   const body=document.getElementById('bbody');
-  body.innerHTML = boardTab==='map' ? compassMap() : boardTab==='cmp' ? compareBody() : browseAllBody();
+  body.innerHTML = boardTab==='map' ? compassMap() : boardTab==='cmp' ? compareBody() : boardTab==='liked' ? likedBody() : browseAllBody();
   if(boardTab==='map'){
     body.querySelectorAll('.sdot').forEach(el=>{
       const name=el.dataset.school;
@@ -1446,16 +1472,29 @@ function renderBoard(){
       const vis=d.style.display!=='none'; d.style.display=vis?'none':'block';
       b.textContent=vis?'もっと見る':'閉じる';
     });
+    body.querySelectorAll('.browse-heart').forEach(b=>b.onclick=()=>{
+      const n=b.dataset.name;
+      if(S.liked.has(n)){ S.liked.delete(n); b.textContent='♡'; b.style.color='var(--muted)'; }
+      else { S.liked.add(n); b.textContent='♥'; b.style.color='#e53935'; }
+      renderBoard();
+    });
+  }
+  if(boardTab==='liked'){
+    body.querySelectorAll('.liked-remove').forEach(b=>b.onclick=()=>{
+      S.liked.delete(b.dataset.name); renderBoard();
+    });
   }
 }
 function selectTab(t){ boardTab=t;
   document.getElementById('tabMap').setAttribute('aria-selected',t==='map');
   document.getElementById('tabCmp').setAttribute('aria-selected',t==='cmp');
   document.getElementById('tabAll').setAttribute('aria-selected',t==='all');
+  document.getElementById('tabLiked').setAttribute('aria-selected',t==='liked');
   renderBoard(); }
 document.getElementById('tabMap').onclick=()=>selectTab('map');
 document.getElementById('tabCmp').onclick=()=>selectTab('cmp');
 document.getElementById('tabAll').onclick=()=>selectTab('all');
+document.getElementById('tabLiked').onclick=()=>selectTab('liked');
 renderBoard();
 
 document.getElementById('infoBtn').onclick=()=>document.getElementById('info').classList.add('open');
