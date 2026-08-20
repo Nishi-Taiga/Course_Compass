@@ -36,6 +36,18 @@ export const CLUB_CATEGORIES = {
   理科: ["生物", "化学", "物理", "地学", "天文", "科学", "理科"],
 };
 
+/**
+ * その学校に、希望された課程があるか。
+ *
+ * course_types は都教委CSVの原文（「全日制」「定時制」「全日制・定時制」）。
+ * 高専だけは都教委の一覧に載らないため、こちらで付けた値なので完全一致で見る。
+ */
+function hasCourse(courseTypes, want) {
+  const ct = courseTypes ?? "";
+  return want === "高専" ? ct === "高専" : ct.includes(want);
+}
+
+
 function similarClubs(name) {
   const hits = new Set([name]);
   for (const members of Object.values(CLUB_CATEGORIES)) {
@@ -134,7 +146,10 @@ export async function searchSchools(db, q) {
   // ⚠️ LIKE '%定時制%' にしない。全日制を併設している39校まで拾ってしまうが、
   //    それらは全日制としてすでに候補に入っている。ここで足したいのは
   //    **定時制のみの15校**（一橋・六本木・新宿山吹など）。
-  if (courses.includes("定時制")) courseConds.push("s.course_types = '定時制'");
+  // ⚠️ 「定時制のみ」ではなく「定時制がある学校」。全日制を併設している39校にも
+  //    定時制課程はあり、定時制を探している人にとっては実際に選べる学校になる。
+  //    = '定時制' に絞っていたため、15校しか出ていなかった（2026-08-20 指摘）。
+  if (courses.includes("定時制")) courseConds.push("s.course_types LIKE '%定時制%'");
   if (courses.includes("高専")) courseConds.push("s.course_types = '高専'");
 
   const where = [
@@ -242,21 +257,35 @@ export async function searchSchools(db, q) {
   // 入らない。そのままだと「定時制も見たい」と言われたのに1校も出ない。
   // 通学の近い順に最大2校、明示的に足す。
   if (courses.length) {
-    // ⚠️ 課程ごとに枠を取る。まとめて2校にすると、定時制と高専の両方を
+    // ⚠️ 課程ごとに枠を取る。まとめて数えると、定時制と高専の両方を
     //    希望されたときに近いほうだけで枠が埋まり、片方が1校も出ない。
-    const perCourse = courses.length > 1 ? 1 : 2;
     for (const course of courses) {
+      const asSuggestion = suggestKosen && course === "高専";
+      // 本人が挙げた課程は多めに、こちらから足す提案は1校だけ
+      const slots = asSuggestion ? 1 : (courses.length > 1 ? 2 : 3);
+
       const extra = judged
         .filter((r) => !out.some((o) => o.school_number === r.school_number))
-        // 希望そのものの課程だけを足す。「定時制」の希望に全日制併設校を足すと、
-        // 定時制を見たいと言った人に全日制の学校が並ぶ
-        .filter((r) => (r.course_types ?? "") === course)
-        .slice(0, perCourse);
-      // 本人が挙げた課程は「ご希望の」、こちらから足した高専は「提案」と分ける
-      const asSuggestion = suggestKosen && course === "高専";
-      out.push(...extra.map((r) => (asSuggestion
-        ? { ...r, suggested_course: true }
-        : { ...r, requested_course: true })));
+        .filter((r) => hasCourse(r.course_types, course))
+        .slice(0, slots);
+
+      out.push(...extra.map((r) => {
+        const tagged = asSuggestion
+          ? { ...r, suggested_course: true }
+          : { ...r, requested_course: true };
+        // ⚠️ 全日制を併設している学校の目安点は**全日制入試のもの**。
+        //    定時制の候補として出すときにその判定を見せると、別の入試の
+        //    合否目安を定時制の目安として読ませることになる。判定を外し、
+        //    なぜ判定しないのかを書く（定時制のみの15校と同じ扱いに揃える）。
+        if (course === "定時制" && (r.course_types ?? "").includes("全日制")) {
+          return {
+            ...tagged, tier: null, score_gap: null,
+            tier_reason: "定時制は全日制と入試の方式が違うため、"
+              + "全日制の目安点では判定していません",
+          };
+        }
+        return tagged;
+      }));
     }
   }
 
