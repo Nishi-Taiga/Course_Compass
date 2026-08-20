@@ -35,7 +35,8 @@ function conditionText(q, student) {
       : `${q.wants.clubs.join("・")}のある学校`);
   }
   if (q.wants?.course_types?.length) {
-    parts.push(`${q.wants.course_types.join("・")}も含めて`);
+    // 「も含めて」だと足したように読めるが、実際は挙げられた課程に絞っている
+    parts.push(`${q.wants.course_types.join("・")}のある学校`);
   }
   if (q.wants?.dept) parts.push(`学科は「${q.wants.dept}」`);
   if (q.wants?.academic) parts.push("大学進学に力を入れている学校");
@@ -75,8 +76,14 @@ export function explainSchool(s) {
     bits.push("ものづくり系をお探しなので、5年制の高専も挙げています");
   }
   if (s.requested_course) {
-    const label = s.course_types === "高専" ? "高専" : "定時制";
-    bits.push(`ご希望の${label}です`);
+    if (s.course_types === "高専") {
+      bits.push("ご希望の高専です");
+    } else if ((s.course_types ?? "").includes("全日制")) {
+      // 併設校。全日制の学校として出しているのではないことを、はっきり書く
+      bits.push("全日制と定時制の両方がある学校で、ご希望の定時制課程があります");
+    } else {
+      bits.push("ご希望の定時制です");
+    }
   }
   if (s.selection_note) bits.push(s.selection_note);
 
