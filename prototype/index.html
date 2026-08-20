@@ -1414,7 +1414,7 @@ function browseAllBody(){
     return `<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
       <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
       ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
-      <span style="font-size:11px;color:var(--muted)">${m?rangeText(m):''}</span>
+      <span style="font-size:11px;color:var(--muted)">${m?rangeText(m):(S.station?'—':'')}</span>
       <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
       <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}</div>
       <div style="display:flex;gap:6px;margin-top:6px">
