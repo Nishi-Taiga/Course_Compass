@@ -721,19 +721,43 @@ function ratioWords(v){
 }
 function schoolTag(s){
   if(s.st==='no_exam') return '総合選抜';
+  if(s.st==='kosen') return '高専';
+  if(s.st==='teiji') return '定時制';
   if(s.d&&s.d.includes('工')) return '工科';
   if(s.d&&s.d.includes('商')) return '商業';
   if(s.d&&s.d.includes('農')) return '農業';
-  if(s.d&&s.d.includes('総')) return '総合選択';
   if(s.d&&s.d.includes('水')) return '水産';
-  if(s.g==='進学指導重点校') return '進学特化';
-  if(s.g==='進学指導特別推進校') return '進学特化';
-  if(s.g==='進学指導推進校') return '進学重視';
-  if(s.sp&&s.sp.includes('文武')) return '文武両道';
-  if(s.sp&&s.sp.includes('自律')) return '自律重視';
-  if(s.sp&&s.sp.includes('国际')||s.sp&&s.sp.includes('国際')) return '国際交流';
-  if(s.b>=2) return '充実校';
-  return '';
+  if(s.d&&s.d.includes('総')) return '総合選択';
+  if(s.g==='進学指導特別推進校') return '特推校';
+  if(s.g==='進学指導重点校') return '重点校';
+  if(s.g==='進学指導推進校') return '推進校';
+  const ach=s.ach||[];
+  const hasNat=ach.some(a=>a.mt&&a.mt.includes('全国'));
+  const hasKan=ach.some(a=>a.mt&&a.mt.includes('関東'));
+  const hasSousou=ach.some(a=>a.sr&&a.sr.includes('吹奏楽'));
+  const hasButai=ach.some(a=>a.sp&&(a.sp.includes('バスケ')||a.sp.includes('サッカー')||a.sp.includes('バレー')||a.sp.includes('野球')||a.sp.includes('卓球')||a.sp.includes('水泳')||a.sp.includes('陸上')));
+  const hasGeijutsu=ach.some(a=>a.sr&&a.sr.includes('美術'));
+  const tags=[];
+  if(s.sp){
+    if(s.sp.includes('文武')) tags.push('文武両道');
+    if(s.sp.includes('国際')||s.sp.includes('国际')) tags.push('国際');
+    if(s.sp.includes('自動車')) tags.push('自動車免許');
+    if(s.sp.includes('griculture')||s.sp.includes('農業')||s.sp.includes('園芸')) tags.push('農業');
+    if(s.sp.includes('情報')) tags.push('情報');
+    if(s.sp.includes('英語')) tags.push('英語');
+    if(s.sp.includes('理数')) tags.push('理数');
+    if(s.sp.includes('IT')||s.sp.includes('ロボット')) tags.push('IT');
+  }
+  if(hasNat) tags.push('全国大会');
+  else if(hasKan) tags.push('関東大会');
+  if(hasSousou) tags.push('吹奏楽');
+  if(hasButai) tags.push('部活盛ん');
+  if(hasGeijutsu) tags.push('美術');
+  if(!tags.length){
+    if(s.b>=20) tags.push('部活充実');
+    else if(s.b>=10) tags.push('部活多数');
+  }
+  return tags.length?tags[0]:'';
 }
 function scoreFact(s){
   if(s.st==='no_exam') return `<div class="fact">選抜方法<b style="font-size:12.5px">学力検査なし</b>
