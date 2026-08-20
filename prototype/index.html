@@ -1389,17 +1389,31 @@ function compareBody(){
 }
 function browseAllBody(){
   const schools=D.schools.filter(s=>!s.x).slice().sort((a,b)=>a.n.localeCompare(b.n,'ja'));
-  const rows=schools.map(s=>{
+  const cards=schools.map(s=>{
     const m=commuteMin(s);
-    const tgt=targetLabel(s);
+    const tag=schoolTag(s);
+    const lastR=[...(s.r||[])].reverse().find(v=>v!=null);
+    const tgt=s.st==='no_exam'?'学力検査なし':(s.t!=null?`${s.t}点（仮）`:'—');
     const z=tierOf(s);
-    return `<tr><td><b>${s.n}</b></td><td style="font-size:11px;color:var(--muted)">${s.w}</td>
-    <td>${s.d||'普通科'}</td>
-    <td>${m?rangeText(m):'—'}</td>
-    <td>${tgt}${z?`<br><span class="tier ${ZONE[z][1]}" style="font-size:10px">${ZONE[z][0]}</span>`:''}</td>
-    <td>${spark(s.r)}</td></tr>`; }).join('');
-  return `<div style="overflow-x:auto"><table>
-    <tr><th>学校</th><th>区</th><th>学科</th><th>通学目安</th><th>合格の目安</th><th>倍率</th></tr>${rows}</table></div>`;
+    const uid='ba-'+s.n.replace(/\s/g,'');
+    return `<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
+      <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
+      ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
+      <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
+      <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}</div>
+      <div style="font-size:12px;margin-top:4px">通学 ${m?rangeText(m):'—'}</div>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="browse-toggle" data-uid="${uid}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">もっと見る</button>
+        <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
+      </div>
+      <div class="browse-detail" id="${uid}" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);font-size:12px">
+        <div>合格の目安: ${tgt}${s.ly?'（'+s.ly+'）':''}</div>
+        ${lastR!=null?`<div>応募倍率: ${lastR.toFixed(2)}倍（R8）</div>`:''}
+        ${s.ac?`<div style="margin-top:4px">${s.ac.st}駅から ${s.ac.md==='bus'?'バス':'徒歩'}${s.ac.mi!=null?s.ac.mi+'分':''}</div>`:''}
+        ${s.sp?`<div style="margin-top:4px;color:var(--muted);font-size:11px">${esc(s.sp).slice(0,80)}…</div>`:''}
+      </div>
+    </div>`; }).join('');
+  return `<div>${cards}</div>`;
 }
 function renderBoard(){
   boardSummary();
@@ -1417,6 +1431,13 @@ function renderBoard(){
         const c=findCard(); if(c) c.style.outline='2px solid var(--brass)'; });
       el.addEventListener('mouseleave',()=>{ el.classList.remove('hot');
         const c=findCard(); if(c) c.style.outline=''; });
+    });
+  }
+  if(boardTab==='all'){
+    body.querySelectorAll('.browse-toggle').forEach(b=>b.onclick=()=>{
+      const d=document.getElementById(b.dataset.uid);
+      const vis=d.style.display!=='none'; d.style.display=vis?'none':'block';
+      b.textContent=vis?'もっと見る':'閉じる';
     });
   }
 }
