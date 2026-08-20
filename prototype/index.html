@@ -1427,7 +1427,7 @@ function browseAllBody(){
         ${s.sp?`<div style="margin-top:4px;color:var(--muted);font-size:11px">${esc(s.sp).slice(0,80)}…</div>`:''}
       </div>
     </div>`; }).join('');
-  return `<div>${cards}</div>`;
+  return `<div style="padding:4px 0 8px;font-size:12px;color:var(--muted)">50音順（${schools.length}校）</div>${cards}</div>`;
 }
 function likedBody(){
   const liked=[...S.liked].map(n=>D.schools.find(s=>s.n===n)).filter(Boolean);
