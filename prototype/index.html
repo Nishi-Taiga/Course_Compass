@@ -177,7 +177,10 @@
 
   /* ---------- 学校カード ---------- */
   .card{align-self:stretch; background:var(--frame); border:1px solid var(--line); border-radius:14px;
-    padding:14px 16px 12px; box-shadow:var(--shadow-soft)}
+    padding:14px 16px 12px; box-shadow:var(--shadow-soft); border-left:4px solid var(--accent)}
+  .card.tier-c{border-left-color:var(--challenge)}
+  .card.tier-m{border-left-color:var(--match)}
+  .card.tier-s{border-left-color:var(--safe)}
   .card:hover{box-shadow:var(--shadow)}
   .card .head{display:flex; align-items:baseline; gap:9px}
   /* 提案カードのアコーディオン（安田の画面案イメージⅠ・2026-08-16）。
@@ -760,7 +763,7 @@ function card(c){
   if(S.wants.dept&&s.d.includes(S.wants.dept)) why.push('希望の学科あり');
   const lastR=[...(s.r||[])].reverse().find(v=>v!=null);
   const tag=schoolTag(s);
-  const node=el('div','card');
+  const node=el('div','card'+(tier?' tier-'+tier:''));
   /* アコーディオン（安田の画面案イメージⅠ）。初期は校名・圏・区・学科・指定・タグと
      通学の目安まで。「もっと見る」で目安点・倍率・理由・追加ボタンを開く。
      ⚠️ #13 のマージで headrow版(＋ボタン)と card-toggle版が混ざり、
