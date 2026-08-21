@@ -33,3 +33,6 @@ data/fetched/uniforms/*.html
 data/fetched/hbf/
 data/fetched/suisou/*.pdf
 data/fetched/ifac/*.pdf
+
+# 演劇都大会の結果ページ。build_engeki_results.py でいつでも取り直せる。
+data/fetched/engeki/
