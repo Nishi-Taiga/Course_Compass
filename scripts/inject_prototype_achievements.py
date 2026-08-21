@@ -28,7 +28,7 @@ MEET_RANK = {"全国大会（インターハイ）": 3, "全国大会（定時�
              "関東大会": 2, "東京都大会": 1, "東京都大会（予選）": 1}
 # 吹奏楽コンクールは都のコンクール。大会の格としては都大会と同じ扱い
 SUISOU_MEET = "東京都高等学校吹奏楽コンクール"
-MAX_PER_SCHOOL = 4
+MAX_PER_SCHOOL = 999
 
 
 def rank_score(rank: str) -> int:
