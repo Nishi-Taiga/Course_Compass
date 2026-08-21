@@ -1502,6 +1502,13 @@ function browseAllBody(){
     const ra=R[a.n]||a.n, rb=R[b.n]||b.n;
     return ra.localeCompare(rb,'ja');
   });
+  function rowOf(ch){
+    const rows=['あ','か','さ','た','な','は','ま','や','ら','わ'];
+    for(let i=0;i<rows.length;i++) if(ch>=rows[i]&&(i===rows.length-1||ch<rows[i+1])) return 'あかさたなはまやらわ'[i];
+    return 'あ';
+  }
+  const rowLabel={'あ':'ア行','か':'カ行','さ':'サ行','た':'タ行','な':'ナ行','は':'ハ行','ま':'マ行','や':'ヤ行','ら':'ラ行','わ':'ワ行'};
+  let prevRow='';
   const cards=schools.map(s=>{
     const m=commuteMin(s);
     const tag=schoolTag(s);
@@ -1512,7 +1519,13 @@ function browseAllBody(){
       :(s.t!=null?`${s.t}点（仮）`:'—');
     const z=tierOf(s);
     const uid='ba-'+s.n.replace(/\s/g,'');
-    return `<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
+    const r=R[s.n]||'';
+    const curRow=r?rowOf(r[0]):'';
+    let header='';
+    if(curRow&&curRow!==prevRow){ prevRow=curRow;
+      header=`<div style="font-size:13px;font-weight:700;color:var(--brass);padding:10px 0 4px;border-bottom:1px solid var(--line);margin-bottom:6px">${rowLabel[curRow]||curRow}</div>`;
+    }
+    return `${header}<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
       <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
       <span style="font-size:11px;color:var(--muted)">${m?rangeText(m):(S.station?'—':'未設定')}</span>
       ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
