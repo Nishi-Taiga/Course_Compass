@@ -120,9 +120,17 @@ export function extractRules(raw) {
    *    反映されていなかった。
    * ⚠️ 1つだけ選ぶ。複数当てはまったら、より具体的なほうを採る
    *    （「近くて進学もいい」は結局どちらも重視していないのと同じになる）。 */
+  // 「重視」「いちばん」のような強調語と、何について言っているかの組み合わせで見る。
+  // ⚠️ 「吹奏楽部がある学校」だけでは軸にしない。それは**条件**であって
+  //    「部活がいちばん大事」という意思ではない（「45分以内」と同じ扱い）。
+  const EMPHASIS = /重視|優先|いちばん|一番|最優先|大事|重要|こだわ|中心/;
+  const emphasized = EMPHASIS.test(text);
+
   const priority =
       /行けるところ|入れるところ|届き|受かり|確実|手堅|安全|無理のない|背伸び/.test(text) ? "reachable"
     : /近い|近く|近め|通いやす|通える|遠くない|時間をかけ|近所|距離/.test(text) ? "commute"
+    : emphasized && /部活|クラブ/.test(text) ? "club"
+    : emphasized && /学科|専門|分野|学べる|学びたい/.test(text) ? "dept"
     : wants.academic ? "academic"
     : null;
   if (priority) { wants.priority = priority; hits.push("wants.priority"); }
