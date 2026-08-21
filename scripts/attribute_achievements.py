@@ -39,6 +39,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SEED = ROOT / "data" / "seed"
 ACHIEVE = SEED / "school_club_achievements.csv"
+
+# 連盟ごとにファイルが分かれている。管轄が違うので取得の経路も別。
+#   高体連   … school_club_achievements.csv（運動部の大半）
+#   高野連   … school_baseball_results.csv（硬式野球）
+#   吹奏楽連盟 … school_suisou_results.csv（吹奏楽コンクール）
+#   国際美術展 … school_ifac_results.csv（書道・美術）
+#   高文連系 … school_engeki_results.csv（演劇 都大会）
+EXTRA_SOURCES = [
+    SEED / "school_baseball_results.csv",
+    SEED / "school_suisou_results.csv",
+    SEED / "school_ifac_results.csv",
+    SEED / "school_engeki_results.csv",
+]
 CLUBS = SEED / "school_clubs.csv"
 CLUBS_TEIJI = SEED / "school_clubs_teiji.csv"
 EXTRA_CLUBS = SEED / "extra_school_clubs.csv"
@@ -127,6 +140,19 @@ def check_privacy(rows: list[dict], fieldnames: list[str]) -> list[str]:
 def main() -> None:
     rows = list(csv.DictReader(ACHIEVE.open(encoding="utf-8-sig")))
     fieldnames = list(rows[0].keys())
+
+    for path in EXTRA_SOURCES:
+        if not path.is_file():
+            continue
+        extra = list(csv.DictReader(path.open(encoding="utf-8-sig")))
+        if not extra:
+            continue
+        # 列が食い違ったまま混ぜると、後段で静かに欠損する
+        unknown_cols = set(extra[0].keys()) - set(fieldnames)
+        if unknown_cols:
+            sys.exit(f"{path.name} に想定外の列: {sorted(unknown_cols)}")
+        rows.extend(extra)
+        print(f"合流: {path.name} {len(extra)}件")
 
     problems = check_privacy(rows, fieldnames)
     if problems:
