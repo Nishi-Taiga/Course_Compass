@@ -1028,7 +1028,8 @@ function openSheet(){
       <td>${s.ac?`${s.ac.st}駅から<br><b>${s.ac.md==='bus'?'バス':'徒歩'}${s.ac.mi!=null?s.ac.mi+'分':''}</b>`:'—'}</td>
       <td>${tgt}${z?`<br><span class="tier ${ZONE[z][1]}" style="font-size:10px">${ZONE[z][0]}</span>`:''}</td>
       <td>${spark(s.r)}<br><span style="font-size:10px;color:var(--faint)">${lastR!=null?ratioWords(lastR):''}</span></td>
-      <td>${s.g||'—'}${s.sn?`<br><span style="font-size:10px;color:var(--faint)">${s.sn}</span>`:''}</td></tr>`; }).join('');
+      <td>${s.g||'—'}${s.sn?`<br><span style="font-size:10px;color:var(--faint)">${s.sn}</span>`:''}</td>
+      <td><button class="sheet-remove" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">削除</button></td></tr>`; }).join('');
     const maps=names.map(n=>{ const s=D.schools.find(x=>x.n===n);
       return `<tr><td style="white-space:nowrap"><b>${esc(s.n)}</b></td><td>${s.ac?accessMap(s):'—'}</td></tr>`; }).join('');
     const sps=names.map(n=>{ const s=D.schools.find(x=>x.n===n); if(!s.sp) return '';
@@ -1053,7 +1054,7 @@ function openSheet(){
       }).filter(Boolean).join('');
     body.innerHTML=`<div style="overflow-x:auto"><table>
       <tr><th>学校</th><th>最寄駅から<br><span style="font-weight:400;font-size:10px">各校公式サイト</span></th><th>合格の目安<br><span style="font-weight:400;font-size:10px">1020点満点</span></th>
-      <th>倍率5年推移<br><span style="font-weight:400;font-size:10px">点線＝定員ちょうど</span></th><th>特色・選抜方式</th></tr>${rows}</table></div>
+      <th>倍率5年推移<br><span style="font-weight:400;font-size:10px">点線＝定員ちょうど</span></th>      <th>特色・選抜方式</th><th></th></tr>${rows}</table></div>
       <div class="mttl2">位置関係<span class="sub2">比較中の学校を同じ縮尺で1枚に。番号は上の表の並び順</span></div>
       <div id="ovmapslot"></div>
       ${maps?`<div class="mttl2">ご自宅の最寄駅から学校まで<span class="sub2">${S.station?esc(S.station)+'駅':''}→乗換先の駅→学校</span></div>
@@ -1067,6 +1068,9 @@ function openSheet(){
   document.getElementById('sheetTitle').textContent='くらべるシート';
   document.getElementById('sheet').scrollTop=0;
   document.getElementById('sheet').classList.add('open');
+  body.querySelectorAll('.sheet-remove').forEach(b=>b.onclick=()=>{
+    S.compare.delete(b.dataset.name); renderBoard(); openSheet();
+  });
   // ⚠️ 1枚地図は**シートを開いたあと**に描く。閉じている間は幅が0で、
   //    画面幅から推測すると地図がシートからはみ出して左端が切れる
   const slot=document.getElementById('ovmapslot');
