@@ -119,11 +119,32 @@ function scoreCandidate(row, q, tier) {
     why.push(`大学進学重視 → ${row.designation}`);
   }
   if (q.wants?.dept && row.departments?.includes(q.wants.dept)) {
-    score += 40;
+    // ⚠️ 学科は絞り込みでも効いているので、候補は全員が該当する。
+    //    重視と言われて +30 しても、全員に同じ点が乗るだけで順位は動かない。
+    //    それでも足すのは、why に「学科の希望に一致」を残すため
+    //    （なぜこの学校なのかが画面から読めるほうが大事）。
+    score += priority === "dept" ? 70 : 40;
     why.push(`学科の希望「${q.wants.dept}」に一致`);
   }
   if (row.matched_clubs?.length) {
+    /* 部活を重視と言われたときの +30。
+     *
+     * ⚠️ ただ足すだけでは順位が動かない。部活も絞り込みで効いていて、
+     *    候補は全員が一致しているため。動くのは次の2つの場合だけ。
+     *      - 緩和で似た種目まで広げたとき
+     *        → 希望どおりの部がある学校を、似た種目だけの学校より上に戻す
+     *      - 部活を複数挙げたとき
+     *        → 多く当てはまる学校を上に
+     *    そこで、希望そのものに当たった数で加点する。 */
+    const wanted = q.wants?.clubs ?? [];
+    const exact = row.matched_clubs.filter(
+      (c) => wanted.some((w) => c.includes(w))
+    ).length;
+
     score += 30;
+    if (priority === "club") {
+      score += exact ? 30 * Math.min(exact, wanted.length || 1) : 10;
+    }
     why.push(`希望の部活: ${row.matched_clubs.join("・")}`);
   }
 

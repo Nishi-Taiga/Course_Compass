@@ -44,6 +44,8 @@ function conditionText(q, student) {
   const PRIORITY_TEXT = {
     commute: "通学の近さを最優先",
     academic: "大学進学を最優先",
+    club: "入りたい部活を最優先",
+    dept: "学びたい学科を最優先",
     reachable: "いま届きそうなところを最優先",
   };
   if (q.wants?.priority && PRIORITY_TEXT[q.wants.priority]) {
