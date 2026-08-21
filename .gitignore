@@ -36,3 +36,7 @@ data/fetched/ifac/*.pdf
 
 # 演劇都大会の結果ページ。build_engeki_results.py でいつでも取り直せる。
 data/fetched/engeki/
+
+# ダンス選手権の結果PDF（10本・3MB）。fetch_dance_results.py で取り直せる。
+# 氏名は載っていないが、抽出済みCSVのみ追跡するのは他の連盟と同じ扱い。
+data/fetched/dance/

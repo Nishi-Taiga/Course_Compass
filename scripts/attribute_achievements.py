@@ -46,11 +46,13 @@ ACHIEVE = SEED / "school_club_achievements.csv"
 #   吹奏楽連盟 … school_suisou_results.csv（吹奏楽コンクール）
 #   国際美術展 … school_ifac_results.csv（書道・美術）
 #   高文連系 … school_engeki_results.csv（演劇 都大会）
+#   ダンス選手権 … school_dance_results.csv（ダンス。どの連盟にも属さない）
 EXTRA_SOURCES = [
     SEED / "school_baseball_results.csv",
     SEED / "school_suisou_results.csv",
     SEED / "school_ifac_results.csv",
     SEED / "school_engeki_results.csv",
+    SEED / "school_dance_results.csv",
 ]
 CLUBS = SEED / "school_clubs.csv"
 CLUBS_TEIJI = SEED / "school_clubs_teiji.csv"

@@ -306,14 +306,20 @@ def main() -> None:
         out.append("")
 
     # --- 部の実績 ---
-    # 出典の異なる4系統＋各校サイト。すべて同じ列にそろえてある。
+    # 出典の異なる6系統。すべて同じ列にそろえてある。
     # ⚠️ 生徒の氏名・学年・記録は元データの時点で読み取っていない。
     #    ここでも列を作らない（列を作って空にすると後から埋められてしまう）。
+    #
+    # ⚠️ ここの一覧は attribute_achievements.py の EXTRA_SOURCES と**別物**。
+    #    向こうに足してもここに足さないと、CSVには入るのにAPIには出ない。
+    #    （演劇を足したとき実際にそうなった。CSVは33件あるのにDBには0件だった）
     ach_files = [
         (seed_dir / "school_club_achievements.csv", "東京都高等学校体育連盟"),
         (seed_dir / "school_baseball_results.csv", "東京都高等学校野球連盟"),
         (seed_dir / "school_suisou_results.csv", "東京都高等学校吹奏楽連盟"),
         (seed_dir / "school_ifac_results.csv", "高校生国際美術展"),
+        (seed_dir / "school_engeki_results.csv", "東京都高校演劇研究会"),
+        (seed_dir / "school_dance_results.csv", "日本高校ダンス部選手権"),
     ]
     ach = []
     for path, org in ach_files:
