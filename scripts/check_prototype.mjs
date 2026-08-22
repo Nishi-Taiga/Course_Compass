@@ -67,13 +67,10 @@ check("1枚地図に自宅の最寄駅が出る", ovLabels.some((t) => t.include
 check("1枚地図に学校が全部載る",
   (await sheet.locator(".ovkey span").count()) === n, `${await sheet.locator(".ovkey span").count()} / ${n}`);
 
-const access = sheet.locator(".maptbl .amap");
-check("学校ごとの地図が出る", (await access.count()) === n, `${await access.count()} / ${n}`);
-const badges = await sheet.locator(".maptbl .mbadge").allInnerTexts();
-check("学校ごとの地図が自宅の最寄駅を起点にしている",
-  badges.every((b) => b.includes("練馬駅から")), badges[0]?.replace(/\n/g, " / ") ?? "");
-check("最後の徒歩・バス区間も残っている",
-  badges.every((b) => /徒歩|バス/.test(b)));
+// 学校ごとの地図セクションは #28 で削除（1枚地図に集約）。ここでは
+// 1枚地図が帰属表示（OSMクレジット）を持つことを確認する
+check("1枚地図に帰属表示がある",
+  (await sheet.locator(".ovmapwrap .mattr").count()) === 1);
 check("シートでJSの例外が出ていない", errors.length === 0, errors[0] ?? "");
 
 console.log("\n── ものづくり志望と高専 ──");
@@ -125,7 +122,8 @@ async function ask(inputs) {
   await pg.waitForTimeout(600);
   const names = await pg.locator(".card h3").allInnerTexts();
   const state = await pg.evaluate(() => ({ wants: S.wants, limit: S.limit,
-    ok: S.shown.every((c) => !S.wants.club || !!clubMatch(c.s, S.wants.club)) }));
+    ok: S.shown.every((c) => (!S.wants.club || !!clubMatch(c.s, S.wants.club))
+      && (!S.wants.teiji || c.s.st === 'teiji' || c.s.tj === 1)) }));
   await pg.close();
   return { names, ...state };
 }
@@ -136,9 +134,11 @@ check("部活名で絞れる（軽音楽）", keion.wants.club?.[0] === "軽音�
   keion.names.join("・"));
 check("出た学校すべてに希望の部がある", keion.ok === true);
 
-// 定時制: 希望したときだけ出る
+// 定時制: 希望したら定時制のある学校（定時制のみ15校＋併設39校）に絞る（#20統一）
 const teiji = await ask(["新宿", "30分以内", "15", "10", "250", "夜間の定時制も見たい", "特にない"]);
-check("定時制の希望で定時制が出る", teiji.names.some((n) => ["新宿山吹","一橋","六本木","稔ヶ丘"].includes(n)),
+check("定時制の希望で定時制のある学校に絞る", teiji.names.length > 0 && teiji.ok !== false,
+  teiji.names.join("・"));
+check("定時制絞りで定時制のみの学校も出る", teiji.names.some((n) => ["新宿山吹","一橋","六本木","稔ヶ丘","浅草","大江戸"].includes(n)),
   teiji.names.join("・"));
 const noTeiji = await ask(["新宿", "30分以内", "15", "10", "250", "特にありません", "特にない"]);
 check("希望がなければ定時制は出ない",
@@ -165,8 +165,9 @@ check("「こだわらない」のテキスト入力が通る", nolim.limit === 
 const mono = await ask(["品川シーサイド", "40分以内", "18", "13", "300", "ものづくりがやりたい。定時制も見たい", "特にない"]);
 check("「ものづくり」を学科として扱う（部活と誤解しない）", mono.wants.club == null && mono.wants.dept === "工",
   JSON.stringify({ club: mono.wants.club, dept: mono.wants.dept }));
-check("複合希望（工業系＋定時制）で高専と定時制の両方が出る",
-  mono.names.some((n) => n.includes("高専")) && mono.names.some((n) => ["六本木","新宿山吹","世田谷泉"].includes(n)),
+// 定時制希望があるときは定時制に絞るので、高専・全日制のみは出ない（API #20と同じ）
+check("複合希望（工業系＋定時制）は定時制のある工科に絞る",
+  mono.names.length > 0 && !mono.names.some((n) => n.includes("高専")),
   mono.names.join("・"));
 // 重視軸（#22のプロトタイプ版）
 async function askPri(pri) {
@@ -186,6 +187,11 @@ async function askPri(pri) {
   await pg.close();
   return { rows, pr };
 }
+// チップと同じ文言をテキストで打つ人は多い（2026-08-22 実バグ: 「近さ」が
+// 正規表現に無く、S4bで無限に聞き返されてマップが空のままだった）
+const pcChip = await askPri("通学の近さ");
+check("チップと同じ文言のテキスト入力が通る", pcChip.pr === "commute" && pcChip.rows.length > 0,
+  `pr=${pcChip.pr} / ${pcChip.rows.length}校`);
 const pc = await askPri("なるべく近いところがいいです");
 check("「近いところがいい」で通学の近さ軸になる", pc.pr === "commute");
 check("近さ最優先は近い順に並ぶ",

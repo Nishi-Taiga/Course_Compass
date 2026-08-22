@@ -946,9 +946,13 @@ const ATTR='<div class="mattr"><a href="https://www.openstreetmap.org/copyright"
 
 /* 家の記号。自宅の最寄駅はどの地図でも同じ形で出す（読み手が探さずに済む） */
 function homePin(x,y,label){
+  // ⚠️ 呼び出し側は toFixed 済みの**文字列**を渡してくる。数値化せずに +3 すると
+  //    "256.2"+1.3 → "256.21.3" と連結され、SVGの<path>が不正になって
+  //    自宅ピンの矢印が消える（コンソールに Expected number エラー）
+  x=+x; y=+y;
   return `<circle cx="${x}" cy="${y}" r="9" fill="#fff" stroke="#8A6A1F" stroke-width="3"/>
     <path d="M${x} ${y-4.6} L${x+3} ${y+3} L${x} ${y+1.3} L${x-3} ${y+3} Z" fill="#8A6A1F"/>
-    <text x="${x}" y="${(+y)+21}" text-anchor="middle" class="mlbl" fill="#8A6A1F">${label}</text>`;
+    <text x="${x}" y="${y+21}" text-anchor="middle" class="mlbl" fill="#8A6A1F">${label}</text>`;
 }
 
 /* 自宅の最寄駅 → 学校の最寄駅 → 学校 を1枚に描く。
@@ -1317,7 +1321,7 @@ function extractWish(text){
      「近ければ近いほどいい」という意思のときだけ拾う */
   const pr =
       /行けるところ|入れるところ|届き|受かり|確実|手堅|安全|無理のない|背伸び/.test(text) ? 'reachable'
-    : /近い|近く|近め|通いやす|通える|遠くない|時間をかけ|近所|距離/.test(text) ? 'commute'
+    : /近い|近く|近さ|近め|通いやす|通える|遠くない|時間をかけ|近所|距離/.test(text) ? 'commute'
     : null;
   if(pr){ S.wants.priority=pr; got.push(pr==='commute'?'通学の近さを最優先':'いま届きそうなところを最優先'); }
   else if(S.wants.academic && !S.wants.priority){ S.wants.priority='academic'; }
