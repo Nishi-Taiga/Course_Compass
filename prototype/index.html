@@ -118,7 +118,7 @@
   /* ---------- ランディング（P1） ---------- */
   #landing{position:absolute; inset:0; z-index:20; display:flex; flex-direction:column;
     background:linear-gradient(165deg,#0F1B2D 0%,#162A4A 40%,#1A3355 70%,#0F1B2D 100%); color:var(--hero-ink);
-    padding:0 24px; overflow-y:auto; align-items:center; overscroll-behavior:none; touch-action:pan-y pinch-zoom}
+    padding:0 24px; overflow:hidden; align-items:center; overscroll-behavior:none; touch-action:none}
   #landing::before{content:''; position:absolute; top:0; left:0; right:0; height:50%;
     background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(168,127,47,.12) 0%,transparent 70%); pointer-events:none}
   .hero,.land-foot{width:min(520px,100%)}
@@ -857,9 +857,9 @@ function card(c){
       :(s.st==='no_exam'?`<span class="tier" style="background:var(--line);color:var(--muted)">別枠の選抜</span>`
       :(s.st==='kosen'?`<span class="tier" style="background:var(--line);color:var(--muted)">5年制・高専</span>`
       :(s.st==='teiji'?`<span class="tier" style="background:var(--line);color:var(--muted)">定時制</span>`:'')))}</div>
-    <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${STU[s.n]?`・生徒数${STU[s.n]}名`:''}${tag&&!(s.g&&tag.startsWith('進学'))?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}</div>
+    <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${STU[s.n]?`・生徒数${STU[s.n]}名`:''}${tag&&!(s.g&&tag.startsWith('進学'))?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}${(function(){ if(!S.wants.club) return ''; const hit=clubMatch(s,S.wants.club); return hit?`<span style="margin-left:8px;font-size:10px;color:#2e7d32;border:1px solid #2e7d32;border-radius:10px;padding:1px 7px">✓ ${hit}部あり</span>`:''; })()}</div>
     <div class="factgrid"><div class="fact">通学の目安<b>${rangeText(m)}</b></div></div>
-    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button><button type="button" class="heart" aria-pressed="false">♡</button><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
+    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button><button type="button" class="heart" aria-pressed="false">♡</button><button type="button" class="detail-btn" onclick="showDetail('${s.n}')">詳細表示</button><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
     <div class="card-details">
       ${s.sn?`<div class="note" style="margin:6px 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
       <div class="factgrid">
@@ -872,9 +872,6 @@ function card(c){
         ${spark(s.r)}
       </div>`:''}
       <div class="why">${why.map(w=>`<span>${w}</span>`).join('')}</div>
-      <div class="cardops" style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="detail-btn" onclick="showDetail('${s.n}')">詳細表示</button>
-      </div>
     </div>`;
   const tgl=node.querySelector('.card-toggle');
   const det=node.querySelector('.card-details');
@@ -1061,7 +1058,9 @@ function openSheet(){
       <td>${tgt}${z?`<br><span class="tier ${ZONE[z][1]}" style="font-size:10px">${ZONE[z][0]}</span>`:''}</td>
       <td>${spark(s.r)}<br><span style="font-size:10px;color:var(--faint)">${lastR!=null?ratioWords(lastR):''}</span>${s.ly?`<br><span style="font-size:10px;color:var(--faint)">${lyLabel(s.ly)}</span>`:''}</td>
       <td>${s.g||'—'}${s.sn?`<br><span style="font-size:10px;color:var(--faint)">${s.sn}</span>`:''}</td>
-      <td><button class="sheet-remove" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">削除</button></td></tr>`; }).join('');
+      <td><button class="sheet-remove" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">削除</button>
+      <button class="sheet-detail" data-name="${s.n}" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細</button>
+      <button class="sheet-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button></td></tr>`; }).join('');
     const maps=names.map(n=>{ const s=D.schools.find(x=>x.n===n);
       return `<tr><td style="white-space:nowrap"><b>${esc(s.n)}</b></td><td>${s.ac?accessMap(s):'—'}</td></tr>`; }).join('');
     const sps=names.map(n=>{ const s=D.schools.find(x=>x.n===n); if(!s.sp) return '';
@@ -1091,8 +1090,6 @@ function openSheet(){
       <th>倍率5年推移<br><span style="font-weight:400;font-size:10px">点線＝定員ちょうど</span></th><th>特色・選抜方式</th></tr>${rows}</table></div>
       <div class="mttl2">位置関係<span class="sub2">比較中の学校を同じ縮尺で1枚に。番号は上の表の並び順</span></div>
       <div id="ovmapslot"></div>
-      ${maps?`<div class="mttl2">ご自宅の最寄駅から学校まで<span class="sub2">${S.station?esc(S.station)+'駅':''}→乗換先の駅→学校</span></div>
-        <div style="overflow-x:auto"><table class="maptbl">${maps}</table></div>`:''}
       ${achs?`<div class="mttl2">部の実績<span class="sub2">都高体連・都高野連・都吹奏楽連盟・高校生国際美術展の公式記録と各校公式サイト。競技ごとの最上位のみ</span></div><div class="sps">${achs}</div>
         ${noAch.length?`<div class="anote">${noAch.map(esc).join('・')} は、上の3年度の記録に掲載がありませんでした。<b>実績がないという意味ではありません</b>（都大会は上位4位まで、関東・全国は出場者のみが記録されるため）。部の活動の様子は学校の説明会でご確認ください。</div>`:''}`:''}
       ${ufs?`<div class="mttl2">制服<span class="sub2">各校公式サイトの記述から。写真は公式サイトでご覧ください</span></div><div class="sps">${ufs}</div>`:''}
@@ -1104,6 +1101,14 @@ function openSheet(){
   document.getElementById('sheet').classList.add('open');
   body.querySelectorAll('.sheet-remove').forEach(b=>b.onclick=()=>{
     S.compare.delete(b.dataset.name); renderBoard(); openSheet();
+  });
+  body.querySelectorAll('.sheet-detail').forEach(b=>b.onclick=()=>{
+    closeSheet(); showDetail(b.dataset.name);
+  });
+  body.querySelectorAll('.sheet-heart').forEach(b=>b.onclick=()=>{
+    const n=b.dataset.name;
+    if(S.liked.has(n)) S.liked.delete(n); else S.liked.add(n);
+    openSheet();
   });
   body.querySelectorAll('.alist-toggle').forEach(b=>b.onclick=()=>{
     const ul=document.getElementById(b.dataset.target);
@@ -1412,7 +1417,7 @@ function handleFreeInput(text){
 
 // ---------- 入出力 ----------
 document.getElementById('form').addEventListener('submit',e=>{
-  e.preventDefault(); const t=$input.value.trim(); if(!t) return;
+  e.preventDefault(); const t=$input.value.trim().replace(/[０-９]/g,s=>String.fromCharCode(s.charCodeAt(0)-0xFEE0)); if(!t) return;
   $input.value=''; $chips.innerHTML=''; userSay(t);
   if(S.state==='S2') handleStation(t);
   else if(S.state==='S2b'){
@@ -1525,12 +1530,15 @@ function compareBody(){
 }
 const CAP={"芝商業":100,"江東商業":105,"第三商業":105,"第一商業":131,"第四商業":105,"葛飾商業":126,"第五商業":126,"大田桜台":105,"千早":126,"工芸":125,"蔵前工科":107,"墨田工科":114,"総合工科":88,"中野工科":84,"杉並工科":111,"荒川工科":112,"北豊島工科":97,"練馬工科":105,"足立工科":95,"葛西工科":122,"府中工科":106,"町田工科":108,"多摩工科":109,"田無工科":111,"六郷工科":96,"科学技術":144,"多摩科学技術":147,"園芸":99,"農芸":92,"農産":84,"農業":113,"瑞穂農芸":124,"大島海洋国際":42,"赤羽北桜":148,"忍岡":173,"野津田":152,"立川":254,"総合芸術":112,"駒場":248,"国際":163,"大島":115,"三宅":75,"八丈":115,"橘":148,"八王子桑志":126,"晴海総合":192,"つばさ総合":164,"世田谷総合":164,"杉並総合":150,"王子総合":164,"葛飾総合":136,"青梅総合":164,"町田総合":164,"東久留米総合":164,"若葉総合":2789,"日比谷":253,"三田":254,"戸山":252,"竹早":190,"向丘":220,"上野":252,"日本橋":189,"本所":189,"城東":252,"東":189,"深川":241,"大崎":221,"小山台":252,"八潮":188,"目黒":189,"大森":127,"蒲田":109,"田園調布":188,"雪谷":221,"桜町":252,"千歳丘":221,"松原":156,"青山":221,"広尾":154,"鷺宮":220,"武蔵丘":253,"杉並":253,"豊多摩":252,"西":252,"豊島":252,"文京":284,"竹台":171,"板橋":221,"大山":157,"北園":253,"高島":252,"井草":221,"石神井":252,"田柄":152,"練馬":189,"光丘":185,"青井":164,"足立":220,"足立新田":222,"足立西":156,"足立東":138,"江北":252,"淵江":189,"葛飾野":253,"南葛飾":171,"江戸川":253,"葛西南":190,"小岩":284,"小松川":253,"篠崎":222,"紅葉川":189,"片倉":245,"八王子北":158,"八王子東":252,"富士森":249,"松が谷":244,"武蔵野北":189,"多摩":163,"府中":252,"府中西":235,"府中東":253,"昭和":252,"拝島":221,"神代":252,"調布北":188,"調布南":189,"小川":252,"成瀬":221,"町田":253,"山崎":166,"小金井北":189,"小平":213,"小平西":222,"小平南":221,"日野":253,"日野台":254,"南平":253,"東村山":136,"東村山西":189,"国立":252,"福生":221,"狛江":253,"東大和":221,"東大和南":220,"清瀬":220,"久留米西":188,"武蔵村山":221,"永山":246,"羽村":204,"秋留台":166,"五日市":129,"田無":252,"保谷":253,"新島":40,"神津":40,"小笠原":30,"新宿":284,"墨田川":252,"美原":156,"深沢":130,"芦花":220,"飛鳥":170,"板橋有徳":156,"大泉桜":156,"翔陽":188,"国分寺":252,"上水":188};
 const STU={"日比谷":965,"三田":864,"大崎":820,"八潮":569,"小山台":955,"雪谷":825,"大森":260,"田園調布":692,"蒲田":410,"つばさ総合":680,"六郷工科":374,"美原":545,"芝商業":500,"大田桜台":409,"戸山":951,"駒場":1026,"目黒":702,"新宿":961,"青山":838,"広尾":628,"松原":611,"桜町":904,"千歳丘":771,"深沢":472,"世田谷総合":678,"芦花":818,"第一商業":547,"総合工科":339,"園芸":413,"国際":716,"総合芸術":486,"鷺宮":805,"富士":418,"武蔵丘":947,"西":952,"豊多摩":949,"杉並":937,"石神井":871,"井草":859,"大泉":366,"練馬":676,"光丘":607,"田柄":442,"杉並総合":696,"大泉桜":564,"第四商業":459,"中野工科":330,"杉並工科":185,"練馬工科":418,"農芸":401,"竹早":738,"向丘":863,"豊島":945,"文京":1043,"北園":951,"板橋":860,"大山":478,"高島":934,"王子総合":691,"飛鳥":690,"板橋有徳":557,"千早":607,"工芸":528,"北豊島工科":257,"赤羽北桜":507,"白鴎":432,"忍岡":651,"上野":936,"竹台":754,"足立":842,"江北":933,"淵江":676,"足立西":570,"足立東":527,"青井":388,"足立新田":787,"晴海総合":819,"蔵前工科":437,"荒川工科":248,"足立工科":272,"両国":379,"墨田川":935,"本所":744,"葛飾野":939,"南葛飾":686,"日本橋":734,"深川":952,"東":777,"城東":989,"小松川":955,"江戸川":989,"小岩":1055,"葛西南":524,"篠崎":811,"紅葉川":733,"葛飾総合":566,"葛飾商業":597,"江東商業":440,"第三商業":475,"墨田工科":347,"葛西工科":401,"科学技術":621,"農産":393,"橘":542,"富士森":986,"片倉":934,"八王子東":939,"八王子北":587,"松が谷":1023,"日野":981,"日野台":941,"南平":943,"町田":948,"野津田":336,"成瀬":818,"小川":936,"山崎":489,"町田総合":671,"翔陽":654,"町田工科":482,"八王子桑志":589,"立川":967,"昭和":948,"拝島":780,"東大和":822,"武蔵村山":809,"東大和南":830,"多摩":392,"福生":820,"秋留台":623,"羽村":595,"五日市":259,"青梅総合":689,"上水":708,"多摩工科":455,"瑞穂農芸":501,"武蔵":417,"武蔵野北":714,"小金井北":705,"保谷":954,"久留米西":676,"田無":930,"小平":876,"小平西":807,"東村山":559,"国分寺":952,"清瀬":868,"小平南":829,"東村山西":626,"東久留米総合":696,"田無工科":419,"多摩科学技術":634,"神代":944,"調布北":709,"調布南":710,"狛江":995,"府中":863,"府中東":936,"府中西":928,"国立":952,"永山":895,"若葉総合":667,"第五商業":612,"府中工科":471,"農業":520,"大島":114,"新島":36,"神津":46,"大島海洋国際":179,"三宅":23,"八丈":111,"小笠原":53};
+function rowOf(ch){var g=["\u3042\u3044\u3046\u3048\u304a","\u304b\u304d\u304f\u3051\u3053\u304c\u304e\u3050\u3052\u3054","\u3055\u3057\u3059\u305b\u305d\u3056\u3058\u305a\u305e\u305c","\u305f\u3061\u3064\u3066\u3068\u3060\u3062\u3065\u3067\u3069","\u306a\u306b\u306c\u306d\u306e","\u306f\u3072\u3075\u3078\u307b\u3070\u3073\u3076\u3079\u307c\u3071\u3074\u3077\u307a\u307d","\u307e\u307f\u3080\u3081\u3082","\u3084\u3086\u3088","\u3089\u308a\u308b\u308c\u308d","\u308f"];var ids=["a","k","s","t","n","h","m","y","r","w"];for(var i=0;i<g.length;i++){if(g[i].indexOf(ch)>=0)return ids[i];}return "w";}
+const rowLabel={a:"\u3042\u884c",k:"\u304b\u884c",s:"\u3055\u884c",t:"\u305f\u884c",n:"\u306a\u884c",h:"\u306f\u884c",m:"\u307e\u884c",y:"\u3084\u884c",r:"\u3089\u884c",w:"\u308f\u884c"};
 function browseAllBody(){
   const R={'八王子東':'はちおうじひがし','立川':'たちかわ','国立':'くにたち','西':'にし','戸山':'とやま','日比谷':'ひびや','青山':'あおやま','小松川':'こまつがわ','町田':'まちだ','小山台':'こやまだい','国分寺':'こくぶんじ','駒場':'こまば','新宿':'しんじゅく','国際':'こくさい','日野台':'ひのだい','墨田川':'すみだがわ','武蔵野北':'むさしのきた','竹早':'たけはや','小金井北':'こがねいきた','三田':'みた','江戸川':'えどがわ','調布北':'ちょうふきた','江北':'こうほく','城東':'じょうとう','多摩科学技術':'たまかがくぎじゅつ','昭和':'しょうわ','北園':'きたぞの','上野':'うえの','豊多摩':'とよたま','富士':'ふじ','大泉':'おおいずみ','白鴎':'はくおう','両国':'りょうごく','武蔵':'むさし','三宅':'みやけ','新島':'にいじま','杉並工科':'すぎなみこうか','大島':'おおしま','墨田工科':'すみだこうか','神津':'こうづ','八丈':'はちじょう','五日市':'いつかいち','北豊島工科':'きたとよしまこうか','六郷工科':'ろくごうこうか','大森':'おおもり','蔵前工科':'くらまえこうか','多摩':'たま','赤羽北桜':'あかばねほくおう','小笠原':'おがさわら','野津田':'のづた','羽村':'はむら','葛西工科':'かさいこうか','田柄':'たがら','足立工科':'あだちこうか','大山':'おおやま','深沢':'ふかざわ','荒川工科':'あらかわこうか','大田桜台':'おおたさくらだい','青井':'あおい','田無工科':'たなしこうか','総合工科':'そうごうこうか','江東商業':'こうとうしょうぎょう','山崎':'やまざき','瑞穂農芸':'みずほのうげい','第四商業':'だいよんしょうぎょう','光丘':'ひかりがおか','葛西南':'かさいみなみ','町田工科':'まちだこうか','芝商業':'しばしょうぎょう','第一商業':'だいいちしょうぎょう','中野工科':'なかのこうか','東村山西':'ひがしむらやまにし','橘':'たちばな','八潮':'やしお','練馬工科':'ねりまこうか','板橋有徳':'いたばしゆとく','農産':'のうさん','葛飾商業':'かつしかしょうぎょう','足立新田':'あだちしんでん','町田総合':'まちだそうごう','翔陽':'しょうよう','府中工科':'ふちゅうこうか','葛飾総合':'かつしかそうごう','第三商業':'だいさんしょうぎょう','拝島':'はいじま','美原':'みはら','大泉桜':'おおいずみさくら','忍岡':'しのぶがおか','篠崎':'しのざき','武蔵村山':'むさしむらやま','秋留台':'あきるだい','淵江':'ふちえ','園芸':'えんげい','久留米西':'くるめにし','永山':'ながやま','片倉':'かたくら','多摩工科':'たまこうか','若葉総合':'わかばそうごう','つばさ総合':'つばさそうごう','大島海洋国際':'おおしまかいようこくさい','世田谷総合':'せたがやそうごう','足立東':'あだちひがし','飛鳥':'あすか','足立西':'あだちにし','蒲田':'かまた','桜町':'さくらまち','千歳丘':'ちとせがおか','葛飾野':'かつしかの','八王子北':'はちおうじきた','青梅総合':'おうめそうごう','第五商業':'だいごしょうぎょう','東久留米総合':'ひがしくるめそうごう','練馬':'ねりま','府中西':'ふちゅうにし','高島':'たかしま','八王子桑志':'はちおうじくわし','福生':'ふっさ','東大和':'ひがしやまと','小平西':'こだいらにし','農芸':'のうげい','小川':'おがわ','清瀬':'きよせ','王子総合':'おうじそうごう','千早':'ちはや','成瀬':'なるせ','富士森':'ふじもり','松が谷':'まつがや','総合芸術':'そうごうげいじゅつ','日本橋':'にほんばし','田無':'たなし','南葛飾':'みなみかつしか','科学技術':'かがくぎじゅつ','紅葉川':'もみじがわ','上水':'じょうすい','東村山':'ひがしむらやま','府中東':'ふちゅうひがし','松原':'まつばら','杉並':'すぎなみ','杉並総合':'すぎなみそうごう','板橋':'いたばし','工芸':'こうげい','竹台':'たけのだい','足立':'あだち','南平':'みなみだいら','東大和南':'ひがしやまとみなみ','保谷':'ほうや','小平':'こだいら','大崎':'おおさき','日野':'ひの','文京':'ぶんきょう','小平南':'こだいらみなみ','本所':'ほんじょ','武蔵丘':'むさしがおか','小岩':'こいわ','東':'ひがし','井草':'いぐさ','深川':'ふかがわ','狛江':'こまえ','農業':'のうぎょう','雪谷':'ゆきがや','向丘':'むこうがおか','府中':'ふちゅう','調布南':'ちょうふみなみ','田園調布':'でんえんちょうふ','石神井':'しゃくじい','鷺宮':'さぎのみや','芦花':'ろか','晴海総合':'はるみそうごう','神代':'しんだい','目黒':'めぐろ','広尾':'ひろお','豊島':'としま','産業技術高専（品川）':'さんぎょうぎじゅつこうせん','産業技術高専（荒川）':'さんぎょうぎじゅつこうせん','一橋':'ひとつばし','六本木':'ろっぽんぎ','世田谷泉':'せたがやいずみ','新宿山吹':'しんじゅくやまぶき','荻窪':'おぎくぼ','稔ヶ丘':'みのりがおか','桐ヶ丘':'きりがおか','小台橋':'おだいばし','浅草':'あさくさ','大江戸':'おおえど','本所工科':'ほんじょこうか','八王子拓真':'はちおうじたくしん','砂川':'すながわ','立川緑':'たちかわみどり','小金井工科':'こがねいこうか','調布':'ちょうふ'};
   const schools=D.schools.filter(s=>!s.x).slice().sort((a,b)=>{
     const ra=R[a.n]||a.n, rb=R[b.n]||b.n;
     return ra.localeCompare(rb,'ja');
   });
+  let prevRow='';
   const cards=schools.map(s=>{
     const m=commuteMin(s);
     const tag=schoolTag(s);
@@ -1541,12 +1549,18 @@ function browseAllBody(){
       :(s.t!=null?`${s.t}点（仮）`:'—');
     const z=tierOf(s);
     const uid='ba-'+s.n.replace(/\s/g,'');
-    return `<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
+    const r=R[s.n]||'';
+    const curRow=r?rowOf(r[0]):'';
+    let header='';
+    if(curRow&&curRow!==prevRow){ prevRow=curRow;
+      header=`<div style="font-size:13px;font-weight:700;color:var(--brass);padding:10px 0 4px;border-bottom:1px solid var(--line);margin-bottom:6px">${rowLabel[curRow]||curRow}</div>`;
+    }
+    return `${header}<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
       <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
       <span style="font-size:11px;color:var(--muted)">${m?'通学時間'+rangeText(m):(S.station?'—':'')}</span>
       ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
       <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
-      <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}</div>
+      <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}${(function(){ if(!S.wants.club) return ''; const hit=clubMatch(s,S.wants.club); return hit?` <span style="font-size:10px;color:#2e7d32">✓ ${hit}部あり</span>`:''; })()}</div>
       <div style="display:flex;gap:6px;margin-top:6px">
         <button class="browse-toggle" data-uid="${uid}">もっと見る</button>
         <button class="browse-detail-btn" onclick="showDetail('${s.n}')">詳細表示</button>
@@ -1574,7 +1588,7 @@ function likedBody(){
       ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
       <span style="font-size:11px;color:var(--muted)">${m?rangeText(m):''}</span>
       <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
-      <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}</div>
+      <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}${(function(){ if(!S.wants.club) return ''; const hit=clubMatch(s,S.wants.club); return hit?` <span style="font-size:10px;color:#2e7d32">✓ ${hit}部あり</span>`:''; })()}</div>
       <div style="display:flex;gap:6px;margin-top:6px">
         <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
         <button class="liked-cmp" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:${S.compare.has(s.n)?'var(--accent)':'var(--muted)'}">${S.compare.has(s.n)?'✓ くらべる済み':'＋ くらべる'}</button>
