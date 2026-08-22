@@ -63,9 +63,15 @@
   }
   .board{display:none}
   @media (min-width:940px){
-    .app{width:min(1100px,100%)}
-    .phone{width:50%; flex:none; border-right:1px solid var(--line)}
-    .board{display:flex; width:50%; flex-direction:column; background:var(--surface)}
+    /* ⚠️ 以前は .app を 1100px で止めていたので、1920pxの画面では左右に
+       410pxずつ灰色の帯が残っていた。1600pxまで伸ばすと、よくあるノートPC
+       （1440・1536px）では帯が消え、大きな外部モニタでも160px程度に収まる。
+       ⚠️ 全幅まで伸ばさないのは、対話が読みにくくなるため。チャットは
+       560pxで止め、**広がったぶんはボードに渡す**。地図も比べるシートの表も
+       横に広いほうが読みやすく、余った幅が活きるのはこちら側。 */
+    .app{width:min(1600px,100%)}
+    .phone{width:min(560px,50%); flex:none; border-right:1px solid var(--line)}
+    .board{display:flex; flex:1; min-width:0; flex-direction:column; background:var(--surface)}
   }
   /* --- ボード --- */
   .bsum{display:flex; gap:6px; flex-wrap:wrap; padding:13px 16px 10px; border-bottom:1px solid var(--line);
@@ -94,7 +100,9 @@
     .app.mob-open .phone .overlay.open{display:flex}
     .app.mob-open .phone .mobtab{display:flex !important}
   }
-  #mapwrap{margin:auto; width:100%; max-width:540px}
+  /* ⚠️ 540px で止めたままボードだけ広げると、地図の左右に新しい空白ができる。
+     ボードの広がりに合わせて上限も上げる（SVGは幅100%で追従する） */
+  #mapwrap{margin:auto; width:100%; max-width:min(760px,100%)}
   #mapwrap svg{width:100%; height:auto; display:block}
   .ringlbl{fill:var(--faint); font-size:10px}
   .ring{fill:none; stroke:var(--line); stroke-dasharray:3 4}
@@ -356,7 +364,6 @@
   .send{background:var(--accent); color:var(--accent-ink); border:none; border-radius:22px;
     padding:0 19px; font-size:14px; font-weight:600; cursor:pointer}
   .send:hover{filter:brightness(1.1)}
-  footer{font-size:9.5px; color:var(--faint); text-align:center; padding:2px 16px 9px; flex:none; line-height:1.6}
 
   /* ---------- オーバーレイ ---------- */
   .overlay{position:absolute; inset:0; background:var(--frame); z-index:10; display:none;
@@ -449,7 +456,6 @@
     <input type="text" id="input" placeholder="メッセージを入力" aria-label="メッセージを入力">
     <button class="send" type="submit">送信</button>
   </form>
-  <footer>公開データに基づく参考情報です。最終確認は学校公式サイト・説明会で。合否の判定は行いません。<br><a href="./privacy.html" target="_blank" rel="noopener" style="color:var(--accent)">入力された情報の取り扱いについて</a></footer>
   <nav class="mobtab" id="mobtab">
     <button class="mobtab-btn" data-view="chat" aria-selected="true"><span class="mobtab-icon">💬</span>チャット</button>
     <button class="mobtab-btn" data-view="map"><span class="mobtab-icon">🗺</span>マップ</button>
@@ -486,6 +492,11 @@
       <button class="ghost" onclick="window.print()">印刷する</button>
       <button class="ghost" onclick="closeSheet()">対話にもどる</button>
     </div>
+    <!-- ⚠️ 対話画面のフッターにあった断り書きをここへ移した（2026-08-22 指示）。
+         チャットの下に常時出ていて、会話の邪魔になっていた。出典と並べたほうが
+         読む場面も揃う（比べるシートは印刷して持っていく1枚なので、断り書きが
+         いちばん要るのもここ）。 -->
+    <div class="note">公開データに基づく参考情報です。最終確認は学校公式サイト・説明会で。合否の判定は行いません。</div>
     <div class="note">出典: 東京都教育委員会 公開資料（学校一覧・入学者選抜応募状況）を加工／学校位置は「国土数値情報（学校データ）」（国土交通省）を加工／地図は © OpenStreetMap contributors／交通案内・校風は各校公式サイト／部の実績は東京都高等学校体育連盟・東京都高等学校吹奏楽連盟・高校生国際美術展の公式記録<br>入力された情報の取り扱いについては <a href="./privacy.html" target="_blank" rel="noopener">こちら</a></div>
   </div>
 
@@ -593,6 +604,12 @@ const CLUB_ALIAS={ 'バスケ':['バスケットボール'], 'バレー':['バ�
   '情報':['コンピューター','パソコン','情報'], 'IT':['コンピューター','パソコン','情報'],
   '軽音':['軽音楽'], 'ブラスバンド':['吹奏楽'], 'お茶':['茶道'], 'ダンス':['ダンス'] };
 const DEPT_RE=/工業|ものづくり|機械|電気|商業|ビジネス|簿記|農業|園芸|動物/g;
+/* 部活名を画面に出すときの形。
+   ⚠️ 部活名の一覧には「CAS部」「CG部」のように**既に「部」で終わるもの**が
+      47件ある。素直に「部」を足すと「CAS部部」になる。 */
+function clubLabel(name){
+  return /(部|同好会|愛好会|班|クラブ)$/.test(name) ? name : name+'部';
+}
 function findClubWords(text){
   let best=null;
   // 「◯◯部」と明示されたら、学科の言い回しと重なる語でも部活として拾う
@@ -846,7 +863,7 @@ function card(c){
   if(c.encourage) why.push('学力検査によらない選抜');
   if(c.suggest) why.push('ものづくり系をお探しなので');
   if(c.requested) why.push(s.st==='teiji'?'ご希望の定時制です':'全日制と定時制の両方がある学校です');
-  if(S.wants.club){ const hit=clubMatch(s,S.wants.club); if(hit) why.push(`${hit}部があります`); }
+  if(S.wants.club){ const hit=clubMatch(s,S.wants.club); if(hit) why.push(`${clubLabel(hit)}があります`); }
   if(S.wants.uf==='no' && s.uf) why.push('制服なし（服装自由）');
   if(S.wants.uf==='yes' && s.uf) why.push(`制服あり（${s.uf.t}）`);
   if(s.g) why.push(s.g);
@@ -1331,7 +1348,7 @@ function askPriority(){
 function extractWish(text){
   const got=[];
   const club=findClubWords(text);
-  if(club){ S.wants.club=club; got.push(`${club[0]}のある学校`); }
+  if(club){ S.wants.club=club; got.push(`${clubLabel(club[0])}のある学校`); }
   else if(/部活|運動部|文化部/.test(text)){
     aiSay('部活のご希望ですね。「吹奏楽」「サッカー」のように部活名で教えていただくと、その部がある学校に絞ってお探しします。');
   }
@@ -1485,7 +1502,7 @@ function boardSummary(){
   if(S.level) chips.push(`${S.level} → 見込み ${S.score}点${S.scoreRough?'（概算）':''}`);
   else if(S.state!=='S1'&&S.state!=='S2'&&S.state!=='S2b'&&S.score==null&&S.limit) chips.push('成績: 未入力');
   if(S.wants.dept) chips.push(`学科: ${S.wants.dept}系`);
-  if(S.wants.club) chips.push(`部活: ${S.wants.club[0]}`);
+  if(S.wants.club) chips.push(`部活: ${clubLabel(S.wants.club[0])}`);
   if(S.wants.teiji) chips.push('定時制も含む');
   if(S.wants.uf) chips.push(S.wants.uf==='no'?'制服なし':'制服あり');
   if(S.wants.priority) chips.push({commute:'最優先: 通学の近さ',academic:'最優先: 大学進学',
