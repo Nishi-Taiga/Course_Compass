@@ -80,6 +80,18 @@
   .bbody{flex:1; overflow:auto; padding:14px 16px; display:flex; flex-direction:column}
   .bempty{margin:auto; text-align:center; color:var(--faint); font-size:13px; line-height:2}
   .bempty svg{opacity:.5; margin-bottom:10px}
+  /* --- モバイル下部タブバー --- */
+  .mobtab{display:none}
+  @media (max-width:939px){
+    .mobtab{display:flex; border-top:1px solid var(--line); background:var(--frame); flex:none; z-index:15}
+    .mobtab-btn{flex:1; background:none; border:none; border-top:2px solid transparent; color:var(--faint);
+      font-size:10px; padding:7px 0 9px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px}
+    .mobtab-btn .mobtab-icon{font-size:17px}
+    .mobtab-btn[aria-selected="true"]{color:var(--accent); border-top-color:var(--brass); font-weight:600}
+    .app.mob-open .board{display:flex; position:absolute; inset:0; z-index:12; width:100%; flex-direction:column; background:var(--surface)}
+    .app.mob-open .phone>*:not(.overlay){display:none}
+    .app.mob-open .phone .overlay.open{display:flex}
+  }
   #mapwrap{margin:auto; width:100%; max-width:540px}
   #mapwrap svg{width:100%; height:auto; display:block}
   .ringlbl{fill:var(--faint); font-size:10px}
@@ -95,12 +107,18 @@
   .maplegend i{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:4px; vertical-align:-1px}
   .mapnote{text-align:center; font-size:10.5px; color:var(--faint); margin-top:4px}
   button{font-family:inherit}
+  .browse-toggle, .browse-cmp{background:#fff;border:1px solid var(--line);border-radius:16px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--ink);font-weight:600;transition:transform .15s,box-shadow .15s;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .browse-toggle:hover, .browse-cmp:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1)}
+  .browse-toggle:active, .browse-cmp:active{transform:translateY(0);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .browse-detail-btn{background:none;border:1px solid var(--accent);border-radius:16px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--accent);font-weight:600;transition:background .15s}
+  .browse-detail-btn:hover{background:rgba(51,82,126,.08)}
+  .browse-detail-btn:active{background:rgba(51,82,126,.15)}
   button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--brass); outline-offset:2px}
 
   /* ---------- ランディング（P1） ---------- */
   #landing{position:absolute; inset:0; z-index:20; display:flex; flex-direction:column;
     background:linear-gradient(165deg,#0F1B2D 0%,#162A4A 40%,#1A3355 70%,#0F1B2D 100%); color:var(--hero-ink);
-    padding:0 24px; overflow-y:auto; align-items:center}
+    padding:0 24px; overflow-y:auto; align-items:center; overscroll-behavior:none; touch-action:pan-y pinch-zoom}
   #landing::before{content:''; position:absolute; top:0; left:0; right:0; height:50%;
     background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(168,127,47,.12) 0%,transparent 70%); pointer-events:none}
   .hero,.land-foot{width:min(520px,100%)}
@@ -426,6 +444,12 @@
     <button class="send" type="submit">送信</button>
   </form>
   <footer>公開データに基づく参考情報です。最終確認は学校公式サイト・説明会で。合否の判定は行いません。<br><a href="./privacy.html" target="_blank" rel="noopener" style="color:var(--accent)">入力された情報の取り扱いについて</a></footer>
+  <nav class="mobtab" id="mobtab">
+    <button class="mobtab-btn" data-view="chat" aria-selected="true"><span class="mobtab-icon">💬</span>チャット</button>
+    <button class="mobtab-btn" data-view="map"><span class="mobtab-icon">🗺</span>マップ</button>
+    <button class="mobtab-btn" data-view="all"><span class="mobtab-icon">📋</span>全体</button>
+    <button class="mobtab-btn" data-view="liked"><span class="mobtab-icon">❤</span>いいね</button>
+  </nav>
 
   </div><!-- /.phone -->
 
@@ -1519,14 +1543,14 @@ function browseAllBody(){
     const uid='ba-'+s.n.replace(/\s/g,'');
     return `<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
       <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
+      <span style="font-size:11px;color:var(--muted)">${m?'通学時間'+rangeText(m):(S.station?'—':'')}</span>
       ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
-      <span style="font-size:11px;color:var(--muted)">${m?rangeText(m):(S.station?'—':'')}</span>
       <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
       <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}</div>
       <div style="display:flex;gap:6px;margin-top:6px">
-        <button class="browse-toggle" data-uid="${uid}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">もっと見る</button>
-        <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
-        <button class="browse-cmp" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:${S.compare.has(s.n)?'var(--accent)':'var(--muted)'}">${S.compare.has(s.n)?'✓ 比べるシートへ追加済み':'＋ 比べるシートへ追加'}</button>
+        <button class="browse-toggle" data-uid="${uid}">もっと見る</button>
+        <button class="browse-detail-btn" onclick="showDetail('${s.n}')">詳細表示</button>
+        <button class="browse-cmp" data-name="${s.n}">${S.compare.has(s.n)?'✓ 比べるシートへ追加済み':'＋ 比べるシートへ追加'}</button>
         <button class="browse-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button>
       </div>
       <div class="browse-detail" id="${uid}" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);font-size:12px">
@@ -1654,4 +1678,20 @@ document.getElementById('startBtn').onclick=()=>{
   document.getElementById('landing').classList.add('hide');
   start();
 };
+document.querySelectorAll('.mobtab-btn').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.mobtab-btn').forEach(x=>x.setAttribute('aria-selected','false'));
+    b.setAttribute('aria-selected','true');
+    const v=b.dataset.view;
+    const app=document.querySelector('.app');
+    if(v==='chat'){
+      app.classList.remove('mob-open');
+    } else {
+      app.classList.add('mob-open');
+      if(v==='map') selectTab('map');
+      else if(v==='all') selectTab('all');
+      else if(v==='liked') selectTab('liked');
+    }
+  };
+});
 </script>
