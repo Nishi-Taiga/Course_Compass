@@ -72,10 +72,15 @@ def main():
     coords = {r['name']: (float(r['lat']), float(r['lon']))
               for r in csv.DictReader(open(SEED / 'school_coords.csv', encoding='utf-8'))
               if r['lat']}
+    # 校風は2つのファイルに分かれている。
+    #   school_spirit.csv        本体（決め打ちURLで取れた168校）
+    #   school_spirit_extra.csv  そこから漏れた19校。fetch_missing_spirit.py が埋める
+    # ⚠️ 後から読むほうを優先する。extra は個別にページを見て決めた出典なので、
+    #    本体と重なった場合はそちらのほうが確か。
     spirit = {}
-    sp = SEED / 'school_spirit.csv'
-    if sp.exists():
-        spirit = {r['name']: r for r in csv.DictReader(open(sp, encoding='utf-8'))}
+    for sp in (SEED / 'school_spirit.csv', SEED / 'school_spirit_extra.csv'):
+        if sp.exists():
+            spirit.update({r['name']: r for r in csv.DictReader(open(sp, encoding='utf-8'))})
 
     stc = load_raw_station_coords()
     stc.update(load_station_coords())      # 駅マスタを優先
