@@ -64,20 +64,14 @@ OVERRIDE = {
     "六郷工科": "https://rokugokoka-h.metro.ed.jp/zen/about_school.html",
     # CMS製。カテゴリ一覧は中身が空で、記事ページを直に指す必要がある
     "八潮": "https://yashio-h.metro.ed.jp/site/zen/page_0000000_00015.html",
+    # jQuery が content_tokusyoku.html を読み込む枠。AJAX_INCLUDE が実体へ辿る
+    "六郷工科": "https://rokugokoka-h.metro.ed.jp/zen/tokusyoku.html",
+    # ⚠️ 校風を書いたページが無く、ここが学校について語っている唯一のページ。
+    #    就任のあいさつなので、拾えるのは「理想的な教育環境を実現している本校」
+    #    の一文だけになる。学校自身の言葉ではあるので、そのまま出す。
+    "広尾": "https://hiroo-h.metro.ed.jp/01koutyo/aisatsu.html",
 }
 
-# ⚠️ どうしても取れなかった学校。追いかけた経緯を残す。
-#
-#   広尾     本文が外部CMS（pweb.jp）の iframe 内にあり、JavaScript を
-#            動かさないと中身が出てこない。校長あいさつのページは辿れるが、
-#            そこに書いてあるのは「日頃から御理解と御協力を…」の定型句だけ。
-#   六郷工科 サイトに教育目標にあたるページが存在しない。about_school.html は
-#            見出しだけの2.8KBで本文を持たず、全日制・定時制のどちらの側にも
-#            該当ページが無い（実際に辿って確認した）。
-#
-# 無理に何かを載せるより、空欄のままにする。学校の言葉は**学校自身の記述**を
-# そのまま出す欄なので、別のページの文章で埋めると欄の意味が変わってしまう。
-UNAVAILABLE = ("広尾", "六郷工科")
 
 # トップページから辿る先。上にあるものほど校風が書かれている見込みが高い
 LINK_WORDS = [
@@ -104,13 +98,23 @@ DIRECT = ["our_school/education.html", "our_school/index.html"]
 
 # 行頭の番号・記号。「コ 言語活動を…」のような単独カナの見出しも落とす
 ENUM = re.compile(r"^\s*(?:[①-⑳]|[（(]\s*[0-9０-９]+\s*[)）]|[ア-ン]\s+|[0-9０-９]+[.．)）]\s*)")
-# 校内向けの施策・校長挨拶の定型句。学校の校風の説明ではない
+# 校内向けの施策・校長挨拶の定型句。学校の校風の説明ではない。
+# ⚠️「着任」では弾かない。広尾はあいさつ文の中の「理想的な教育環境を実現して
+#    いる本校に着任できた」が、学校について語っている唯一の一文になる。
+#    就任の告知そのもの（拝命・第◯代校長）だけを弾く。
 PLAN = re.compile(r"全教職員|立番|授業時数を確保|意図的・計画的|周知徹底|"
-                  r"浅学菲才|微力|所存|着任|よろしくお願い|ホームページをご覧|御理解と御協力|ご理解とご協力|ありがとうございます|申し上げます")
+                  r"浅学菲才|微力|所存|拝命|代校長|よろしくお願い|ホームページをご覧|御理解と御協力|ご理解とご協力|ありがとうございます|申し上げます")
 # 文末に紛れ込む組織名
 ORGJUNK = re.compile(r"^(一般)?財団法人|^学校法人|^東京都教育委員会$|教育財団$")
 # パンくず・共通の注意書き。素朴版の取り出しはこれらを落とさないので、ここで落とす
-CRUMB = re.compile(r"^(トップ|ホーム)\s*[>＞»]|[>＞]\s*(学校案内|教育目標)|JavaScript|Copyright|©|このサイトでは")
+CRUMB = re.compile(r"^(トップ|ホーム)\s*[>＞»→]|[>＞]\s*(学校案内|教育目標)|"
+                   r"JavaScript|Copyright|©|このサイトでは|本文へスキップ|^-->$")
+# ⚠️ 校長あいさつのページには**校長の氏名**が載っている（「校長 中 野 清 吾」）。
+#    学校の言葉は学校について書く欄で、個人名を持ち込む場所ではない。
+#    姓名を空白で区切って組む書き方をするので、その形の行ごと落とす。
+PERSON = re.compile(r"^(校長|副校長|統括校長|校長先生)?\s*"
+                    r"([一-龥]\s+){1,3}[一-龥]\s*$|"
+                    r"(校長|副校長)\s*[一-龥]{2,4}\s*$")
 
 
 def complete(line: str) -> bool:
@@ -126,7 +130,8 @@ def refine(lines: list[str]) -> list[str]:
     out = []
     for l in lines:
         l = ENUM.sub("", l).strip()
-        if not l or PLAN.search(l) or ORGJUNK.search(l) or CRUMB.search(l) or not complete(l):
+        if (not l or PLAN.search(l) or ORGJUNK.search(l) or CRUMB.search(l)
+                or PERSON.search(l) or not complete(l)):
             continue
         out.append(l)
     return out
@@ -171,7 +176,7 @@ def main() -> None:
     # 埋めたい学校＝マスタにあって校風が無いもの ＋ 高専
     targets: dict[str, str] = {}
     for name in list(master) + list(OVERRIDE):
-        if name in have or name in UNAVAILABLE:
+        if name in have:
             continue
         url = OVERRIDE.get(name) or (sites.get(name) or {}).get("top_url")
         if url:
@@ -209,6 +214,14 @@ def main() -> None:
                 time.sleep(INTERVAL)
                 if not page:
                     continue
+                # 枠だけのページなら、本文を読み込んでいる先へ1段だけ辿る
+                inc = AJAX_INCLUDE.search(page.decode("utf-8", "replace"))
+                if inc:
+                    real = urllib.parse.urljoin(url, inc.group(1))
+                    body2 = get(real)
+                    time.sleep(INTERVAL)
+                    if body2:
+                        page, url = body2, real
                 motto, spirit = pick(refine(main_text_from(page)))
                 if spirit:
                     dest.write_bytes(page)
@@ -244,6 +257,44 @@ def main() -> None:
         print("  " + "・".join(ng))
 
 
+# jQuery で本文を後から読み込むページ。$('#content').load('X') の X が実体。
+#
+# ⚠️ 六郷工科がこの作り。tokusyoku.html 自体は 2.8KB の枠だけで本文を持たず、
+#    ブラウザで見ると中身が出るのに、取得しただけでは空に見える。
+#    JavaScript を動かさなくても、読み込み先は素直に書いてあるので辿れる。
+AJAX_INCLUDE = re.compile(r"""\$\(\s*['"]#content['"]\s*\)\s*\.load\(\s*['"]([^'"]+)['"]""")
+
+
+def unwrap(lines: list[str]) -> list[str]:
+    """途中で折り返された行をつなぐ。
+
+    ⚠️ 広尾の校長あいさつが1文を2行に割っている。
+
+        教職員と保護者の皆様、さらに生徒諸君が一丸となって、理想的な教育環境を実現してい
+        る本校に着任できたことはこの上ない喜びであります。
+
+       そのまま拾うと「実現してい」で切れた文が「学校の言葉」に出る。
+
+    ⚠️ 判定に使うのは**つなぐ前の行の長さ**。つないだ後の長さで見ると、
+       一度つながった行が伸び続けて後ろの行を飲み込む。実際、六郷工科で
+       「学校の特色 | 東京都立六郷工科高等学校」という見出しが本文を丸ごと
+       吸い込んだ。見出しは短いので、元の長さで見れば巻き込まれない。
+    """
+    out: list[str] = []
+    prev_len = 0                     # つなぐ前の、直前の行の長さ
+    for l in lines:
+        wrapped = (out and prev_len >= 30                       # 幅で折り返された行
+                   and not re.search(r"[。．！？」』：:、]$", out[-1])
+                   and len(l) >= 10
+                   and not re.match(r"^[■●◆・\-–—>＞|｜]", l))
+        if wrapped:
+            out[-1] += l
+        else:
+            out.append(l)
+        prev_len = len(l)
+    return out
+
+
 def plain_text(body: bytes) -> list[str]:
     """タグを落とすだけの素朴な本文取り出し。
 
@@ -273,8 +324,10 @@ def main_text_from(body: bytes) -> list[str]:
         lines = main_text(tmp)
     finally:
         tmp.unlink(missing_ok=True)
+    # 折り返しのつなぎは**どちらの経路でも**通す。広尾は共通テンプレート側で
+    # 拾えるが、1文が2行に割れていて、つながないと途中で切れた文が残る
     if sum(1 for l in lines if len(l) >= 30) >= 2:
-        return lines
+        return unwrap(lines)
     return plain_text(body)
 
 
