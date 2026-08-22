@@ -1272,11 +1272,12 @@ function askLimit(){
 function askWish(){
   S.state='S4'; setStep(3,'お子さんの希望');
   aiSay('最後に、お子さんの希望はありますか？部活、校風、学びたい分野など、なんでも構いません。');
+  /* ⚠️ 選択肢は「特にない」だけにする（2026-08-22 指示）。
+        以前は「大学進学」「ものづくり」などを並べていたが、押した人にも
+        続けて重視軸を聞いていたため、同じことを二度聞かれている形になっていた。
+        希望がある人は自由入力で言ってもらい、そのときだけ重視軸を尋ねる。 */
   setChips([
-    {label:'大学進学に力を入れたい',fn:()=>{S.wants.academic=true;askPriority();}},
-    {label:'ものづくり・工業系',fn:()=>{S.wants.dept='工';askPriority();}},
-    {label:'ビジネス・商業系',fn:()=>{S.wants.dept='商';askPriority();}},
-    {label:'特にない・まず見たい',fn:askPriority},
+    {label:'特にない・まず見たい',fn:runSearch},
   ]);
 }
 /* 重視軸（仕様書§5.1・S4「塾面談の核」）。API側は#22で実装済みで、
@@ -1286,8 +1287,8 @@ function askWish(){
       「近いほうがいい」は並べ方で、混ぜるとどちらも中途半端になる。 */
 function askPriority(){
   if(S.wants.priority){ runSearch(); return; }   // 発話で既に言われていたら聞き直さない
-  S.state='S4b'; setStep(3,'いちばん大事なこと');
-  aiSay('学校選びで、<b>いちばん大事にしたいこと</b>はどれですか？並べ方に反映します。');
+  S.state='S4b'; setStep(3,'重視したい条件');
+  aiSay('他に学校選びで<b>重視したい条件</b>はありますか？並べ方に反映します。');
   setChips([
     {label:'通学の近さ',fn:()=>{S.wants.priority='commute';runSearch();}},
     {label:'大学進学',fn:()=>{S.wants.priority='academic';S.wants.academic=true;runSearch();}},
