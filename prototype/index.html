@@ -249,7 +249,6 @@
     padding-bottom:6px; border-bottom:2px solid var(--brass)}
   .mttl2::before{content:""; width:4px; height:16px; background:var(--brass); border-radius:2px}
   .mttl2 .sub2{font-weight:400; font-size:10.5px; color:var(--muted); margin-left:auto}
-  .maps{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px}
   /* 最寄駅からの地図は学校ごとの行で見せる（#13で表形式に変更） */
   .maptbl{width:100%; border-collapse:collapse}
   .maptbl td{border-top:1px solid var(--line-soft); padding:10px 8px; vertical-align:top;
@@ -265,7 +264,8 @@
   .amap svg{position:absolute; left:0; top:0}
   .mlbl{font-size:10.5px; font-weight:700; stroke:#fff; stroke-width:3; paint-order:stroke}
   .mbadge{position:absolute; left:6px; top:6px; background:rgba(255,255,255,.94);
-    border:1px solid var(--line); border-radius:4px; padding:2px 8px; font-size:11px; font-weight:700}
+    border:1px solid #D7DDE8; border-radius:4px; padding:2px 8px; font-size:11px; font-weight:700;
+    color:#1A2333}  /* 背景が白固定なので文字も固定。継承だとダークで白地に白文字になる */
   .mattr{position:absolute; right:4px; bottom:3px; background:rgba(255,255,255,.86);
     padding:1px 5px; font-size:8.5px; color:#556; border-radius:3px}
   .mattr a{color:#556; text-decoration:none}
@@ -764,26 +764,6 @@ function spark(r){
     ${xLabels}
   </svg>`;
 }
-function dirWidget(school){
-  const b=bearingTo(school); if(!b) return '<div class="dircell"></div>';
-  if(b.km<1.5) return `<div class="dircell">
-    <svg class="dir" viewBox="0 0 44 44" role="img" aria-label="最寄りエリア">
-      <circle cx="22" cy="22" r="19"/>
-      <circle cx="22" cy="22" r="4.5" fill="var(--brass)" stroke="none"/>
-    </svg>
-    <div class="cap">駅の近く</div>
-  </div>`;
-  return `<div class="dircell">
-    <svg class="dir" viewBox="0 0 44 44" role="img" aria-label="学校の方角">
-      <circle cx="22" cy="22" r="19"/>
-      <text x="22" y="9.5" text-anchor="middle">N</text>
-      <g transform="rotate(${b.deg.toFixed(0)} 22 22)">
-        <path d="M22 8.5 L26 24 L22 21.4 L18 24 Z"/>
-      </g>
-    </svg>
-    <div class="cap">約${b.km<10?b.km.toFixed(1):Math.round(b.km)}km</div>
-  </div>`;
-}
 const TIER=ZONE;
 /* 倍率を保護者の言葉に置き換える。倍率は「人気」であって「難易度」ではないので、
    難しさの表現には使わず、事実の言い換えに留める。 */
@@ -976,59 +956,7 @@ function homePin(x,y,label){
     <text x="${x}" y="${y+21}" text-anchor="middle" class="mlbl" fill="#8A6A1F">${label}</text>`;
 }
 
-/* 自宅の最寄駅 → 学校の最寄駅 → 学校 を1枚に描く。
-   ⚠️ 以前は「学校の最寄駅→学校」だけだった（2026-08-19 西の指摘で変更）。
-      保護者が知りたいのは**うちからどこにあるか**で、学校の周辺図だけでは
-      その学校が家から見てどちらの方角にどれだけ離れているかが分からない。
-   ⚠️ ただし最後の徒歩・バス区間を捨てない。遠い学校では縮尺が広がって
-      線が短くなるため、区間の説明はバッジの文字で必ず補う。 */
-function accessMap(s){
-  if(s.la==null || !s.ac) return '';
-  const home=S.station&&D.xy[S.station];
-  const SCH=[s.la,s.lo], NEAR=[s.ac.la,s.ac.lo];
-  const sameStation = home && s.ac.st===S.station;
-  const pts = home&&!sameStation ? [home,NEAR,SCH] : [NEAR,SCH];
-  const v=fitView(pts,MAPW,MAPH,MAPPAD);
-  const P=(p)=>{ const [x,y]=lonlatToPx(p[0],p[1],v.z); return [(x-v.left).toFixed(1),(y-v.top).toFixed(1)]; };
-  const [sx,sy]=P(SCH), [tx,ty]=P(NEAR);
-
-  const last = s.ac.mi!=null
-    ? `${s.ac.st}駅から${s.ac.md==='bus'?'バス':'徒歩'}${s.ac.mi}分`
-    : `${s.ac.st}駅から${s.ac.md==='bus'?'バス':'徒歩'}`;
-  const m = commuteMin(s);
-  const badge = home&&!sameStation
-    ? `${S.station}駅から${m!=null?rangeText(m):''}<span class="mb2">${last}</span>`
-    : last;
-
-  let ride='', hp='';
-  if(home&&!sameStation){
-    const [hx,hy]=P(home);
-    // 電車の区間は実際の線路をなぞれない。直線であることが伝わるよう細い実線にし、
-    // 徒歩・バスの区間（破線）と描き分ける
-    ride=`<line x1="${hx}" y1="${hy}" x2="${tx}" y2="${ty}" stroke="#8A6A1F" stroke-width="2" opacity=".75"/>`;
-    hp=homePin(hx,hy,`${S.station}駅`);
-  }
-  return `<div class="amap" style="width:${MAPW}px;height:${MAPH}px">${tileLayer(v,MAPW,MAPH)}
-    <svg viewBox="0 0 ${MAPW} ${MAPH}" width="${MAPW}" height="${MAPH}" aria-label="${home&&!sameStation?S.station+'駅から':''}${s.n}高校までの地図">
-      ${ride}
-      <line x1="${tx}" y1="${ty}" x2="${sx}" y2="${sy}"
-            stroke="#B3261E" stroke-width="2.2" stroke-dasharray="5 4" stroke-linecap="round"/>
-      <circle cx="${tx}" cy="${ty}" r="6.5" fill="#fff" stroke="#1F4FD8" stroke-width="3"/>
-      <text x="${tx}" y="${ty-12}" text-anchor="middle" class="mlbl" fill="#1F4FD8">${s.ac.st}駅</text>
-      ${hp}
-      <path d="M${sx} ${sy} l-7 -12 h14 z" fill="#B3261E"/>
-      <circle cx="${sx}" cy="${sy-16}" r="8.5" fill="#B3261E" stroke="#fff" stroke-width="2"/>
-      <text x="${sx}" y="${sy-12.5}" text-anchor="middle" fill="#fff" font-size="9.5" font-weight="700">校</text>
-      <text x="${sx}" y="${(+sy)+14}" text-anchor="middle" class="mlbl" fill="#B3261E">${s.n}</text>
-    </svg>
-    <div class="mbadge">${badge}</div>
-    ${ATTR}</div>
-    ${s.ac.dt?`<div class="mdt">${esc(s.ac.dt)}</div>`:''}`;
-}
-
-/* 比べるシートの1枚地図。自宅の最寄駅と、比較中の学校を全部同じ縮尺で並べる。
-   学校ごとの地図は縮尺がばらばらなので「どれが近いか」が比べられない。
-   番号は上の表の行順と合わせる（別の並びにすると突き合わせができない）。 */
+/* 学校ごとのアクセス地図は #28 で1枚地図に集約して廃止（accessMap削除済み） */
 function overviewMap(names){
   const home=S.station&&D.xy[S.station];
   const list=names.map(n=>D.schools.find(x=>x.n===n)).filter(s=>s&&s.la!=null);
@@ -1089,8 +1017,7 @@ function openSheet(){
       ${S.detail?'':`<td><button type="button" class="sheet-detail" data-name="${esc(s.n)}">詳細表示</button></td>`}
       <td><button class="sheet-remove" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--muted)">削除</button>
       <button class="sheet-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button></td></tr>`; }).join('');
-    const maps=names.map(n=>{ const s=D.schools.find(x=>x.n===n);
-      return `<tr><td style="white-space:nowrap"><b>${esc(s.n)}</b></td><td>${s.ac?accessMap(s):'—'}</td></tr>`; }).join('');
+
     /* ⚠️ 学校の言葉が無い学校は、黙って欄から消さない。並べて比べている最中に
           1校だけ現れないと、比較の材料が無いのか取れていないのかが分からない。
           部の実績と同じで、載っていない理由を書き添える。 */
@@ -1282,7 +1209,8 @@ function handleToujitsu(text){
     return;
   }
   if(/わから|未定|不明|まだ|受けて|ない/.test(text)){ S.toujitsu=null; S.toujitsuRough=false; finishLevel(); return; }
-  const num=text.match(/(\d{2,3})/);
+  // 1桁も受ける。範囲チェックは0〜500を許すのに正規表現だけ2桁以上だと不整合
+  const num=text.match(/(\d{1,3})/);
   if(!num){ aiSay('5教科の合計点を数字で教えてください。「まだどちらもない」でも大丈夫です。'); return; }
   const v=+num[1];
   if(v<0||v>500){ aiSay('500点満点の数字で教えてください。'); return; }
@@ -1485,6 +1413,12 @@ document.getElementById('form').addEventListener('submit',e=>{
     const got=extractWish(t);
     if(!S.wants.priority && /特にな|ない|どれも|わから/.test(t)){ runSearch(); }
     else if(S.wants.priority){ runSearch(); }
+    else if(/内申|点|成績|分以内|時間/.test(t) && /\d/.test(t)){
+      // 成績や通学時間の変更をここで言われても拾えない。候補を出してから
+      // 変更してもらう導線に乗せる（S6ではhandleFreeInputが拾える）
+      aiSay('先に今の条件で候補をお出ししますね。成績や通学時間の変更は、候補が出たあとに「内申22」「30分以内」のように送ってください。');
+      runSearch();
+    }
     else aiSay('「通学の近さ」「大学進学」「いま届きそうなところ」のどれかで教えてください。「特にない」でも大丈夫です。');
   }
   else if(S.state==='S6'){ handleFreeInput(t); }
