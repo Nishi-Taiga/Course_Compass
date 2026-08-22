@@ -106,7 +106,9 @@ export function extractRules(raw) {
   const kansan = numberNear(text, "換算内申");
   if (kansan != null) { cand.naishin = kansan; hits.push("naishin"); }
 
-  const exam = numberNear(text, "(?:当日点|本番|模試|入試|得点)", { max: 14 });
+  // 「当日は390点」のように「点」を伴わない言い方が実際に多い。
+  // 当日点だけを要求すると規則側で拾えず、LLMが空応答のときに取りこぼす
+  const exam = numberNear(text, "(?:当日点?|本番|模試|入試|得点)", { max: 14 });
   if (exam != null) { cand.toujitsu = exam; hits.push("toujitsu"); }
 
   // --- 重視すること ---
