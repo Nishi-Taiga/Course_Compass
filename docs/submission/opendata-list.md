@@ -22,6 +22,6 @@
 
 ## 画面キャプチャ（1600×900px・3点）
 
-1. `capture1_kaiwa_teian.png` — 対話と提案（3つの圏・コンパスマップ）
+1. `capture1_kaiwa_teian.png` — 対話と提案（3つの圏・自宅の最寄駅からの地図）
 2. `capture2_kuraberu_sheet.png` — くらべるシート（1枚地図・倍率5年推移）
 3. `capture3_hyoshi.png` — 表紙画像
