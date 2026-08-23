@@ -101,7 +101,12 @@
     .app.mob-open .board{display:flex; position:absolute; inset:0; z-index:12; width:100%; flex-direction:column; background:var(--surface)}
     .app.mob-open .board .btabs{display:none}
     .app.mob-open .phone>*:not(.overlay):not(.mobtab){display:none}
-    .app.mob-open .phone .overlay.open{display:flex}
+    /* ⚠️ #sheet は .phone の**兄弟**で子ではない。`.phone .overlay.open` では
+       1件も当たらず、開いたシートが z-index:12 のボードの下に潜っていた。
+       「全体から探す」から詳細表示を押しても画面が変わらず、ボタンが
+       死んでいるように見えていた（2026-08-23 指摘）。子孫の指定を外し、
+       ボードより上・下タブ(15)より下に重ねる。 */
+    .app.mob-open .overlay.open{display:flex; z-index:14}
     .app.mob-open .phone .mobtab{display:flex !important}
   }
   /* ⚠️ 540px で止めたままボードだけ広げると、地図の左右に新しい空白ができる。
@@ -371,6 +376,16 @@
     .cardops{gap:5px}
     .cardops button{font-size:11px; padding:5px 8px}
   }
+  /* ⚠️ 折り返さない代わりに「＋ くらべるに追加」が省略記号で切られていた
+     （実測 360px幅で 102px しか無く 108px 必要、320pxでは62px）。しかも押すと
+     「✓ くらべるに追加済み」に伸びて切れ方が変わるので、押すたびに文字が
+     動いて見える。いちばん押してほしいボタンなので、狭い画面では1行占有させて
+     全文を出し、残りの3つを下の行に回す。こうすると押しても幅が動かない。 */
+  @media (max-width:419px){
+    .cardops{flex-wrap:wrap; row-gap:6px}
+    .cardops .cmp{flex:1 0 100%; overflow:visible; text-overflow:clip; text-align:center}
+    .cardops .detail-btn,.cardops .card-toggle{flex:1 1 auto; text-align:center}
+  }
   .cmp{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);
     border:1px solid var(--line); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .cmp[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
@@ -442,7 +457,17 @@
   @media (max-width:719px){
     /* ⚠️ 幅を詰めきらない。倍率の図と操作が読める最低幅を確保して、
        あふれるぶんは .cmpwrap の横スクロールに任せる。 */
-    .cmpsheet table{min-width:560px; table-layout:fixed; width:100%}
+    /* ⚠️ 560pxだと倍率の列が96pxしか取れず、図が90×27まで潰れて
+       5年分の点も年度も読めなかった（2026-08-23 指摘）。図の素の大きさ
+       200×60 が入る幅を倍率の列に与える。
+       ⚠️ 6列を1画面に収める幅は無いので、前の3列は「何の学校か」「どこから」
+          「届くか」が読める最小限まで詰め、倍率の図が少しでも早く現れるようにする。
+          あふれるぶんは これまでどおり .cmpwrap の横スクロールに任せる（PR #42 の判断）。 */
+    .cmpsheet table{min-width:610px; table-layout:fixed; width:100%}
+    .cmpsheet th:nth-child(1),.cmpsheet td:nth-child(1){width:84px}
+    .cmpsheet th:nth-child(2),.cmpsheet td:nth-child(2){width:80px}
+    .cmpsheet th:nth-child(3),.cmpsheet td:nth-child(3){width:72px}
+    .cmpsheet th:nth-child(4),.cmpsheet td:nth-child(4){width:200px}
     .cmpsheet th,.cmpsheet td{padding:6px 3px; font-size:11px; word-break:break-word}
     /* ⚠️ 共通の th{white-space:nowrap} が効いていて、見出しが列からはみ出し
        隣の見出しと重なっていた（「倍率5年推移特色・選抜方式詳細」と続いて見える）。
