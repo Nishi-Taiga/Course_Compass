@@ -388,6 +388,12 @@
   th,td{border-bottom:1px solid var(--line); padding:8px 6px; text-align:left; vertical-align:top}
   th{color:var(--muted); font-weight:600; font-size:11px; letter-spacing:.06em; white-space:nowrap}
   td b{font-variant-numeric:tabular-nums}
+  /* くらべるシートの表は親が overflow-x:auto の横スクロール前提。最小幅が無いと
+     狭い画面で表がコンテナ幅まで縮み、「杉並区・生徒数952名」が1文字ずつ
+     縦に折り返って読めなくなる（スクロールもされない）。列幅を確保して、
+     はみ出したぶんは横スクロールで見せる。印刷時はA4幅に収めるため解除する。 */
+  #sheetBody table{min-width:720px}
+  #sheetBody td:first-child{white-space:nowrap}
   textarea{width:100%; min-height:72px; border:1px solid var(--line); border-radius:10px;
     background:var(--surface); color:var(--ink); font-family:inherit; font-size:13px; padding:9px; margin-top:6px}
   .diff li{margin:9px 0 9px 1.2em; font-size:13px}
@@ -409,6 +415,7 @@
     .overlay.open{position:static; height:auto; overflow:visible}
     /* チャット面はvisibilityだけだと高さが残り、先頭に空白ページが2枚付く */
     .ovops,.shead,.board,#chat,#chips,#form,header,#landing,#cmpbar{display:none}
+    #sheetBody table{min-width:0}
   }
 </style>
 
