@@ -399,31 +399,11 @@
   .cmpsheet .cmpwrap{overflow-x:auto}
   .cmpsheet table{min-width:720px}
   .cmpsheet td:first-child{white-space:nowrap}
-  /* 狭い画面は1校ぶんを縦に積んだカードに組み替える（2026-08-23 西の指示）。
-     ⚠️ 横スクロールのままだと、スマホでは校名の列しか見えず、合格の目安も
-        倍率も指で送らないと出てこない。持ち歩く1枚の代わりに読む画面なので、
-        縦に積んで一度に見えるほうがよい。見出し行は各セルの data-l に持たせる。 */
-  @media (max-width:719px){
-    .cmpsheet .cmpwrap{overflow-x:visible}
-    .cmpsheet table,.cmpsheet tbody,.cmpsheet tr,.cmpsheet td{display:block; width:auto}
-    .cmpsheet table{min-width:0}
-    .cmpsheet tr.cmphead{display:none}
-    .cmpsheet tr{border:1px solid var(--line); border-radius:10px; padding:10px 12px;
-      margin-bottom:10px; background:var(--surface)}
-    .cmpsheet td{border:none; padding:5px 0; white-space:normal;
-      display:grid; grid-template-columns:5.6em minmax(0,1fr); gap:10px; align-items:start}
-    /* ⚠️ align-items:baseline にすると、倍率の欄は中身がSVGなので
-       ベースラインが図の下端になり、見出しだけが図の下まで落ちる。 */
-    .cmpsheet td::before{content:attr(data-l); color:var(--muted); font-size:10.5px;
-      letter-spacing:.04em; line-height:1.6; padding-top:2px}
-    .cmpsheet td .tier{width:auto; display:inline-block}
-    .cmpsheet .v svg{max-width:100%; height:auto}
-    .cmpsheet td:first-child{display:block; padding:0 0 7px; margin-bottom:5px;
-      border-bottom:1px solid var(--line); font-size:14px}
-    .cmpsheet td:first-child::before,.cmpsheet td.cmpops::before{content:none}
-    .cmpsheet td.cmpops{display:flex; gap:8px; align-items:center; padding-top:9px}
-    .cmpsheet td .tier{margin-left:0}
-  }
+  /* ⚠️ 狭い画面で1校ぶんを縦カードに組み替えていたが、元の表に戻した
+     （2026-08-23 指示）。横スクロールでも、学校どうしを同じ行で見比べられる
+     ほうが「くらべる」の目的に合う。縦に積むと1校ずつ読む画面になり、
+     並べて比べるという行為そのものができなくなっていた。
+     ⚠️ 表のままなので .cmpwrap の overflow-x:auto がそのまま効く。 */
   textarea{width:100%; min-height:72px; border:1px solid var(--line); border-radius:10px;
     background:var(--surface); color:var(--ink); font-family:inherit; font-size:13px; padding:9px; margin-top:6px}
   .diff li{margin:9px 0 9px 1.2em; font-size:13px}
@@ -431,6 +411,10 @@
   .ghost{background:none; border:1px solid var(--line); color:var(--muted); border-radius:9px;
     padding:7px 15px; font-size:13px; cursor:pointer}
   .ghost:hover{border-color:var(--accent); color:var(--accent)}
+  /* ⚠️ モバイルでは「対話にもどる」を出さない（2026-08-23 指示）。
+     下のタブバーに「チャット」があり、戻り道が2つ並ぶ。上下2箇所とも消す。
+     デスクトップはタブバーが無いので、こちらは残す。 */
+  @media (max-width:939px){ .shead .back, .ovops .back{display:none} }
   .shead{position:sticky; top:-20px; z-index:5; display:flex; gap:8px; align-items:center;
     margin:-20px -18px 14px; padding:11px 18px; background:var(--frame);
     border-bottom:1px solid var(--line)}
@@ -546,7 +530,7 @@
       <textarea placeholder="説明会で聞きたいこと、見ておきたい場所など"></textarea></div>
     <div class="ovops">
       <button class="ghost" onclick="window.print()">印刷する</button>
-      <button class="ghost" onclick="closeSheet()">対話にもどる</button>
+      <button class="ghost back" onclick="closeSheet()">対話にもどる</button>
     </div>
     <!-- ⚠️ 対話画面のフッターにあった断り書きをここへ移した（2026-08-22 指示）。
          チャットの下に常時出ていて、会話の邪魔になっていた。出典と並べたほうが
