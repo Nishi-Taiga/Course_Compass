@@ -810,14 +810,6 @@ function commuteMin(school){
   const m=row[wi]; return m>0?m:null;
 }
 const rangeText=m=>{ const lo=Math.max(5,Math.floor(m/15)*15); return `${lo}〜${lo+15}分`; };
-function bearingTo(school){
-  const a=D.xy[S.station], rep=D.rep[school.w], b=rep&&D.xy[rep];
-  if(!a||!b) return null;
-  const dLng=(b[1]-a[1])*Math.cos((a[0]+b[0])/2*Math.PI/180);
-  const deg=Math.atan2(dLng, b[0]-a[0])*180/Math.PI;
-  const km=Math.hypot(b[0]-a[0], dLng)*111;
-  return {deg, km};
-}
 
 // ---------- 検索（S5） ----------
 function search(){
@@ -1658,9 +1650,6 @@ document.getElementById('form').addEventListener('submit',e=>{
 // ---------- 探索ボード（右パネル） ----------
 const TIER_COLOR={c:'var(--challenge)',m:'var(--match)',s:'var(--safe)'};
 let boardTab='map';
-/* ⚠️ 以前は「通学時間で見る（同心円）」と「地図で見る」を切り替えていたが、
-   地図だけにした（2026-08-22 指示）。同心円は compassMap() として残してある。
-   駅の座標が無いときに geoMap() が落ちる先が要るため、消してはいけない。 */
 function boardSummary(){
   const el=document.getElementById('bsum');
   const chips=[];
@@ -1685,15 +1674,15 @@ function eligibleSchools(){
     const m=commuteMin(s); if(m==null||m>S.limit) continue; out.push({s,m}); }
   return out;
 }
-/* マップタブの実地図ビュー（西の要望 8/23）。
-   コンパス表示（距離=通学時間）と切り替えて使う。既定はコンパス —
-   タイルはOSMからのリアルタイム読み込みで、会場の回線が悪いと
-   灰色になるため、ネットに依存しない表示を先に見せる。
-   ⚠️ こちらは距離=実際の位置。近く見えても通学時間は駅・路線で変わる
-      ことを注記で必ず言う（コンパスと逆の割り切り）。 */
+/* マップタブの表示。以前は同心円（距離=通学時間）と切り替えていたが、
+   地図だけに一本化した（2026-08-22 指示、8/23 削除確定）。
+   ⚠️ 距離は実際の位置。近く見えても通学時間は駅・路線で変わるため、
+      その注記を画面から外さないこと。 */
 function geoMap(){
   const all=eligibleSchools();
-  if(!all.length||!D.xy[S.station]) return compassMap();
+  if(!all.length||!D.xy[S.station]) return `<div class="bempty">
+    <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="var(--line)" stroke-width="2"/><path d="M27 8 L31.5 25 L27 22.2 L22.5 25 Z" fill="var(--line)"/></svg>
+    <div>会話が進むと、ここに<br>「自宅からの通学マップ」が育ちます。</div></div>`;
   const home=D.xy[S.station];
   const box=document.getElementById('bbody');
   const W=Math.max(280,Math.min(720,((box&&box.clientWidth)||560)-16));
@@ -1733,77 +1722,6 @@ function geoMap(){
       <span><i style="background:var(--accent)"></i>ご提案中</span><span><i style="background:var(--faint);opacity:.5"></i>圏内のほかの都立（${all.length}校）</span></div>
     <div class="mapnote">実際の位置です。近く見えても通学時間は駅・路線で変わります</div></div>`;
 }
-function hashAngle(name){ let h=0; for(const ch of name) h=(h*31+ch.charCodeAt(0))>>>0; return (h%360); }
-function compassMap(){
-  const all=eligibleSchools();
-  if(!all.length) return `<div class="bempty">
-    <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="var(--line)" stroke-width="2"/><path d="M27 8 L31.5 25 L27 22.2 L22.5 25 Z" fill="var(--line)"/></svg>
-    <div>会話が進むと、ここに<br>「自宅からの通学マップ」が育ちます。</div></div>`;
-  const shownNames=new Map(S.shown.map(c=>[c.s.n,c.tier]));
-  /* 外周は通学上限に合わせる。60分固定だと「30分以内」の相談で全学校が
-     半径の半分に押し込められ、点とラベルが中心で団子になる（8/23 実機で発覚） */
-  const W=520,C=W/2,outer=S.noCommuteLimit?90:Math.max(S.limit,30),R=C-46;
-  const rr=m=>18+(m/outer)*(R-18);
-  const rings=[15,30,45,60,75,90].filter(v=>v<=outer);
-  let g='';
-  rings.forEach(v=>{ g+=`<circle class="ring" cx="${C}" cy="${C}" r="${rr(v)}"/>
-    <text class="ringlbl" x="${C+4}" y="${C-rr(v)-4}">${v}分</text>`; });
-  const placed=[];
-  for(const {s,m} of all){
-    const b=bearingTo(s);
-    let deg=b?b.deg:hashAngle(s.n);
-    if(b&&b.km<1.5) deg=hashAngle(s.n);
-    const rec=shownNames.has(s.n);
-    const tier=shownNames.get(s.n);
-    // 方位は区の代表駅から取るため、同じ区・同じ時間帯の学校は座標が
-    // ほぼ一致して重なる。近接していたら角度を少しずつ回して離す（決定的）
-    let x,y;
-    for(let k=0;k<10;k++){
-      const d=deg+k*((hashAngle(s.n)%2)?7:-7);
-      x=C+rr(m)*Math.sin(d*Math.PI/180); y=C-rr(m)*Math.cos(d*Math.PI/180);
-      const minGap=rec?15:9;
-      if(!placed.some(q=>Math.hypot(q.x-x,q.y-y)<minGap)) break;
-    }
-    placed.push({s,m,x,y,tier,rec});
-  }
-  placed.sort((a,b)=>(a.rec?1:0)-(b.rec?1:0));
-  let dots='';
-  const labels=[];   // 置いたラベルの位置。重なるときは点の下へ逃がす
-  for(const p of placed){
-    if(p.rec){
-      const col=p.tier?TIER_COLOR[p.tier]:'var(--accent)';
-      // ラベルは 上→下→右→左 の順で、他のラベル・他の提案点・自宅表記と
-      // 重ならない置き場を探す（中央付近は提案校が団子になりやすい）
-      const cands=[[p.x,p.y-11,'middle'],[p.x,p.y+22,'middle'],
-                   [p.x+12,p.y+4,'start'],[p.x-12,p.y+4,'end']];
-      const clash=(lx,ly)=>labels.some(q=>Math.abs(q.x-lx)<76&&Math.abs(q.y-ly)<16)
-        || Math.hypot(C-lx,C-ly)<40
-        || placed.some(q=>q.rec&&q.s!==p.s&&Math.abs(q.x-lx)<38&&Math.abs(q.y-ly)<12);
-      let pick=cands[cands.length-1];
-      for(const c of cands){ if(!clash(c[0],c[1])){ pick=c; break; } }
-      const [lx,ly,anc]=pick;
-      labels.push({x:lx,y:ly});
-      dots+=`<g class="sdot" data-school="${p.s.n}">
-        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="${col}"/>
-        <text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}">${p.s.n}</text></g>`;
-    } else {
-      dots+=`<g class="sdot dim" data-school="${p.s.n}"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="var(--faint)"><title>${p.s.n}（${rangeText(p.m)}）</title></circle></g>`;
-    }
-  }
-  const home=`<g><circle cx="${C}" cy="${C}" r="10" fill="var(--frame)" stroke="var(--brass)" stroke-width="2"/>
-    <path class="homeglyph" d="M${C} ${C-4.5} L${C+2.6} ${C+3} L${C} ${C+1.4} L${C-2.6} ${C+3} Z"/>
-    <text x="${C}" y="${C+24}" text-anchor="middle" style="font-size:11px;fill:var(--ink);font-weight:600">${S.station}</text></g>`;
-  return `<div id="mapwrap"><svg viewBox="0 0 ${W} ${W}" role="img" aria-label="自宅からの通学マップ">
-      <text class="ringlbl" x="${C}" y="16" text-anchor="middle">N</text>${g}${dots}${home}</svg>
-    <div class="maplegend"><span><i style="background:var(--challenge)"></i>挑戦圏</span>
-      <span><i style="background:var(--match)"></i>適正圏</span>
-      <span><i style="background:var(--safe)"></i>安全圏</span>
-      <span><i style="background:var(--accent)"></i>ご提案中</span><span><i style="background:var(--faint);opacity:.5"></i>圏内のほかの都立（${all.length}校）</span></div>
-    <div class="mapnote">方位=学校のあるエリアの方角 / 距離=通学時間の目安（駅間概算）</div></div>`;
-}
-/* 右のボードの「くらべる」タブ。全画面シートと同じ中身を出す。
-   以前はここだけ簡易表で、同じ名前の画面なのに中身が違っていた。 */
-let boardDetail=null;          // ボードで詳細表示している校名（null なら一覧）
 function compareBody(){
   if(boardDetail && D.schools.some(x=>x.n===boardDetail)){
     S.detail=true; S.detailBack=S.compare.size;

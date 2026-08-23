@@ -276,16 +276,17 @@ console.log("\n── デスクトップ: くらべるシートは右のボー�
   await pg.close();
 }
 
-console.log("\n── スマホ: シートの学校情報を縦に積む ──");
+console.log("\n── スマホ: シートは表のまま並べて比べる ──");
 {
-  /* 横スクロールの表のままだと、校名の列しか見えず「合格の目安」も倍率も
-     指で送らないと出てこない（持ち歩く1枚の代わりに読む画面なので致命的） */
+  /* 一度は1校ずつの縦カードに組み替えたが、8/23 に表へ戻した。
+     縦に積むと1校ずつ読む画面になり、学校どうしを同じ行で見比べる
+     という「くらべる」の目的そのものができなくなるため。 */
   const pg = await seeded({ width: 390, height: 844 });
   await pg.evaluate(() => window.openCompare());
   await pg.waitForTimeout(700);
   check("スマホは全画面シート", await isOpen(pg));
   const disp = await pg.locator("#sheetBody .cmpsheet table").evaluate((e) => getComputedStyle(e).display);
-  check("表がカードに組み替わる", disp === "block", `display:${disp}`);
+  check("表の形のまま出す", disp === "table", `display:${disp}`);
   const w = await pg.locator("#sheetBody .cmpwrap").evaluate((e) => [e.scrollWidth, e.clientWidth]);
   check("横スクロールが要らない", w[0] <= w[1] + 1, `${w[0]} <= ${w[1]}`);
   const labels = await pg.locator("#sheetBody .cmpsheet tr:not(.cmphead)").first()
