@@ -68,7 +68,7 @@ s.addText("都知事杯オープンデータ・ハッカソン2026 サービス�
 s = p.addSlide();
 s.background = { color: C.frame };
 title(s, "どこから見ればいいか、分からない");
-s.addText("都立高校は189校あります。", { x: 0.7, y: 1.35, w: 12, h: 0.4,
+s.addText("都内では毎年およそ7.9万人が中学を卒業し、都立高校は189校あります。", { x: 0.7, y: 1.35, w: 12, h: 0.4,
   fontFace: F, fontSize: 17, color: C.muted, margin: 0 });
 
 const NC = 27, NR = 7, SP = 0.26, DT = 0.13;
@@ -91,8 +91,11 @@ s.addShape("line", { x: cx, y: 2.16, w: 0, h: by - 2.16, line: { color: C.brass,
 s.addText("塾に通うご家庭は、先生が「まずこの数校から」と絞ってくれます", {
   x: cx - 3.2, y: 1.84, w: 6.4, h: 0.32, align: "center",
   fontFace: F, fontSize: 14, bold: true, color: C.brass, margin: 0 });
-s.addText("● ＝ 都立高校 1校", { x: 4.0, y: 1.44, w: 3.0, h: 0.3,
+s.addText("● ＝ 都立高校 1校", { x: 8.75, y: 1.44, w: 3.0, h: 0.3,
   fontFace: F, fontSize: 11.5, color: C.faint, margin: 0 });
+// 出典は最下段へ。上に置くと本文と金の注記の間に割り込む
+s.addText("卒業者数は東京都教育委員会「中学校卒業者の進路状況」令和7年度速報（78,627人）", {
+  x: 0.7, y: 7.02, w: 11, h: 0.28, fontFace: F, fontSize: 9.5, color: C.faint, margin: 0 });
 s.addText("塾に通っていないご家庭は、この189校から自分で絞ることになります。", {
   x: 0.7, y: 5.0, w: 12, h: 0.45, align: "center",
   fontFace: F, fontSize: 18, bold: true, color: C.ink, margin: 0 });
@@ -109,7 +112,7 @@ img(s, `${D}/n_chat.png`, 0.9, 1.55, 5.5, dims.n_chat);
 [["1", "最寄り駅と、通える時間",
    "住所は聞きません。最寄り駅と、通える時間だけをうかがいます。"],
  ["2", "成績の目安",
-   "内申は5教科と実技を分けてうかがい、1020点満点での見込みを計算します。\nまだ分からない場合は飛ばせます。"],
+   "内申と当日点の見込みをうかがい、1020点満点に換算します。\nまだ分からない場合は飛ばせます。"],
  ["3", "希望と、重視したいこと",
    "「吹奏楽をやりたい」「制服がない学校がいい」など、自由に入力できます。\n最後に、並べ方の基準を1つ選びます。"],
 ].forEach(([n, t, d], i) => {
@@ -130,38 +133,57 @@ s.addText("お子さんの見込み点を基準に、3つに分けています�
 
 const CX = 3.5, HALF = 2.8, SPAN = 150;
 const px = (rel) => CX + (rel / SPAN) * HALF;
-[[C.safe, "余裕をもって臨める", -SPAN, -60], [C.match, "いまの見込みで届く", -60, 60], [C.chal, "あと一歩", 60, SPAN]]
-.forEach(([col, t, a, b]) => {
-  s.addShape("rect", { x: px(a), y: 2.72, w: px(b) - px(a), h: 0.52, fill: { color: col }, line: { type: "none" } });
-  s.addText(t, { x: px(a), y: 2.72, w: px(b) - px(a), h: 0.52, align: "center", valign: "middle",
-    fontFace: F, fontSize: 12.5, bold: true, color: "FFFFFF", margin: 0 });
-});
-s.addText("実際に提案された4校", { x: 0.7, y: 1.66, w: 5.8, h: 0.3, fontFace: F, fontSize: 11.5, bold: true, color: C.muted, margin: 0 });
-/* ⚠️ 北園と竹早はマーカーが0.13インチしか離れていないのに、ラベルは重なりを避けて
-   左右0.42インチずらしてある。そのままだとどちらのラベルがどちらの点なのか
-   読めない（8/23 レビューで指摘）。ラベルから点まで引き出し線をつなぐ。 */
-[["練馬", -93, C.safe, 0], ["北園", 12, C.match, -0.42], ["竹早", 19, C.match, 0.42], ["西", 127, C.chal, 0]]
-.forEach(([n, rel, col, dx]) => {
+const BY = 2.80, BH = 0.62;   // 帯の上端と高さ
+
+s.addText("実際に提案された4校", { x: 0.7, y: 1.66, w: 5.8, h: 0.3,
+  fontFace: F, fontSize: 11.5, bold: true, color: C.muted, margin: 0 });
+
+/* ⚠️ 北園と竹早は点が0.13インチしか離れていないのに、ラベルは重なりを避けて
+   左右0.42インチずらしてある。引き出し線を同じ高さで曲げると2本の横線が
+   重なって1本の括弧に見え、どちらの点を指すのか結局読めない（8/23 2回目の
+   レビューで指摘）。曲げる高さを1校ずつ変えて、線が交わらないようにする。 */
+[["練馬", -93, C.safe, 0, 0], ["北園", 12, C.match, -0.42, 2.34],
+ ["竹早", 19, C.match, 0.42, 2.44], ["西", 127, C.chal, 0, 0]]
+.forEach(([n, rel, col, dx, elbow]) => {
   const mx = px(rel), lx = mx + dx;
   const LEAD = { color: C.faint, width: 0.75 };
   if (dx === 0) {
-    s.addShape("line", { x: mx, y: 2.28, w: 0, h: 0.16, line: LEAD });
+    s.addShape("line", { x: mx, y: 2.28, w: 0, h: 0.24, line: LEAD });
   } else {
-    s.addShape("line", { x: lx, y: 2.28, w: 0, h: 0.08, line: LEAD });          // ラベルから下へ
-    s.addShape("line", { x: Math.min(mx, lx), y: 2.36, w: Math.abs(dx), h: 0, line: LEAD }); // 横に寄せる
-    s.addShape("line", { x: mx, y: 2.36, w: 0, h: 0.08, line: LEAD });          // 点へ下ろす
+    s.addShape("line", { x: lx, y: 2.28, w: 0, h: elbow - 2.28, line: LEAD });
+    s.addShape("line", { x: Math.min(mx, lx), y: elbow, w: Math.abs(dx), h: 0, line: LEAD });
+    s.addShape("line", { x: mx, y: elbow, w: 0, h: 2.52 - elbow, line: LEAD });
   }
-  s.addShape("ellipse", { x: mx - 0.09, y: 2.44, w: 0.18, h: 0.18, fill: { color: col }, line: { color: "FFFFFF", width: 1.2 } });
+  s.addShape("ellipse", { x: mx - 0.09, y: 2.52, w: 0.18, h: 0.18,
+    fill: { color: col }, line: { color: "FFFFFF", width: 1.2 } });
   s.addText(n, { x: lx - 0.6, y: 2.02, w: 1.2, h: 0.26, align: "center",
     fontFace: F, fontSize: 11.5, bold: true, color: C.ink, margin: 0 });
 });
-/* 見込み点の基準線。引き出し線と重ならないよう、点より下だけを通す */
-s.addShape("line", { x: CX, y: 2.58, w: 0, h: 0.80, line: { color: C.brass, width: 2, dashType: "dash" } });
-s.addText("お子さんの見込み 793点", { x: CX - 1.5, y: 3.42, w: 3.0, h: 0.3, align: "center",
-  fontFace: F, fontSize: 12.5, bold: true, color: C.brass, margin: 0 });
-s.addText("← 合格の目安が低い　　　　　　　　　　　高い →", { x: 0.7, y: 3.74, w: 5.6, h: 0.28,
-  align: "center", fontFace: F, fontSize: 10.5, color: C.faint, margin: 0 });
-s.addText("帯の境目は、見込み点との差 60点です。", { x: 0.7, y: 4.0, w: 5.6, h: 0.28,
+
+/* 帯。見出しは短い語で、その下に意味を添える（見出しの3語と一致させる） */
+[[C.safe, "余裕", "余裕をもって臨める", -SPAN, -60],
+ [C.match, "ちょうど", "いまの見込みで届く", -60, 60],
+ [C.chal, "あと一歩", "いまは少し足りない", 60, SPAN]]
+.forEach(([col, short, long, a2, b2]) => {
+  s.addShape("rect", { x: px(a2), y: BY, w: px(b2) - px(a2), h: BH,
+    fill: { color: col }, line: { type: "none" } });
+  s.addText([{ text: short + "\n", options: { fontSize: 13, bold: true } },
+             { text: long, options: { fontSize: 9 } }],
+    { x: px(a2), y: BY, w: px(b2) - px(a2), h: BH, align: "center", valign: "middle",
+      fontFace: F, color: "FFFFFF", lineSpacingMultiple: 0.9, margin: 0 });
+});
+
+/* ⚠️ 「境目は60点」と書くだけでは図の上で確かめられない（2回目のレビューで指摘）。
+   基準線と境目の目盛りを軸として置き、数字を図の中で読めるようにする。 */
+s.addShape("line", { x: CX, y: 2.66, w: 0, h: BH + 0.28, line: { color: C.brass, width: 2, dashType: "dash" } });
+[[-60, "−60点"], [60, "+60点"]].forEach(([rel, lab]) => {
+  s.addShape("line", { x: px(rel), y: BY + BH, w: 0, h: 0.09, line: { color: C.muted, width: 1 } });
+  s.addText(lab, { x: px(rel) - 0.5, y: BY + BH + 0.10, w: 1.0, h: 0.26, align: "center",
+    fontFace: F, fontSize: 10, color: C.muted, margin: 0 });
+});
+s.addText("見込み 793点", { x: CX - 0.9, y: BY + BH + 0.36, w: 1.8, h: 0.28, align: "center",
+  fontFace: F, fontSize: 12, bold: true, color: C.brass, margin: 0 });
+s.addText("← 合格の目安が低い　　　　　　　　　　　高い →", { x: 0.7, y: BY + BH + 0.70, w: 5.6, h: 0.28,
   align: "center", fontFace: F, fontSize: 10.5, color: C.faint, margin: 0 });
 img(s, `${D}/d_board.png`, 6.55, 1.55, 3.95, dims.d_board);
 img(s, `${D}/n_cards.png`, 11.35, 3.05, 2.55, dims.n_cards);
@@ -184,9 +206,10 @@ s.background = { color: C.frame };
 title(s, "気になった学校を1枚にまとめて印刷できます");
 img(s, `${D}/d_sheet.png`, 0.7, 1.6, 3.55, dims.d_sheet);
 img(s, `${D}/n_sheetmap.png`, 0.7, 5.35, 1.55, dims.n_sheetmap);
-// この1枚だけ説明が無く、上の地図が2回出ているように見えていた（8/23 レビューで指摘）
-s.addText("スマートフォンでも同じものが見られます。", { x: 0.7, y: 6.95, w: 4.6, h: 0.3,
-  fontFace: F, fontSize: 11, color: C.faint, margin: 0 });
+/* この1枚だけ説明が無く、上の地図が2回出ているように見えていた。
+   最下端に置いたらフッター注記に見えたので、画像の右の空きに本文の重さで置く。 */
+s.addText("スマートフォンでも\n同じものが見られます。", { x: 2.55, y: 5.75, w: 3.2, h: 0.6,
+  fontFace: F, fontSize: 13, color: C.muted, margin: 0 });
 /* ⚠️ 説明の順を、左の画像の並び（上=表 / 下=地図）に合わせてある。
    逆に並べると目線が上→下→上と往復する（8/23 レビューで指摘）。
    ⚠️ 3枚目で「住所は聞きません」と言っているので、ここも「自宅から」ではなく
@@ -219,10 +242,12 @@ title(s, "9つの公開データを組み合わせています");
   s.addText(t, { x: x + 0.22, y: y + 0.08, w: 3.4, h: 0.4, fontFace: F, fontSize: 13.5, bold: true, color: C.ink, margin: 0 });
   s.addText(d, { x: x + 0.22, y: y + 0.45, w: 3.4, h: 0.35, fontFace: F, fontSize: 10.5, color: C.muted, margin: 0 });
 });
+s.addText("地図タイルは OpenStreetMap（ODbL）を使っています。", {
+  x: 0.7, y: 4.62, w: 12, h: 0.3, fontFace: F, fontSize: 10.5, color: C.faint, margin: 0 });
 s.addText("PDF・HTML・表など形式の違うデータを、1つの画面にまとめています。", {
-  x: 0.7, y: 4.9, w: 12, h: 0.45, fontFace: F, fontSize: 14.5, color: C.ink, margin: 0 });
+  x: 0.7, y: 4.98, w: 12, h: 0.45, fontFace: F, fontSize: 14.5, color: C.ink, margin: 0 });
 s.addText("すべての表示に出典を付けています。学校の公式サイトや都の資料に、そのまま進めます。", {
-  x: 0.7, y: 5.4, w: 12, h: 0.45, fontFace: F, fontSize: 14.5, color: C.ink, margin: 0 });
+  x: 0.7, y: 5.46, w: 12, h: 0.45, fontFace: F, fontSize: 14.5, color: C.ink, margin: 0 });
 /* ⚠️ 扱い方の2行は、2分のプレゼンでは口頭で拾えない（8/23 通しで発覚）。
    声が届かない前提で、目だけで拾えるよう囲って区別する。 */
 s.addShape("roundRect", { x: 0.7, y: 5.95, w: 12, h: 1.0, rectRadius: 0.08,
@@ -236,7 +261,7 @@ s.addText("大会実績は部の実績として扱っています。生徒の氏
 s = p.addSlide();
 s.background = { color: C.navy };
 rose(s, 13.1, 7.3, 2.0, C.brassSoft, 90);
-s.addText("チームと、これから", { x: 0.7, y: 0.5, w: 12, h: 0.85, fontFace: F, fontSize: 32, bold: true, color: C.heroInk, margin: 0 });
+s.addText("チーム", { x: 0.7, y: 0.5, w: 12, h: 0.85, fontFace: F, fontSize: 32, bold: true, color: C.heroInk, margin: 0 });
 [["西", "企画・データ整備", "塾で保護者と面談している立場から、\n必要な情報と伝え方を決めています。"],
  ["寒河江", "推薦ロジック・API", "区分の判定と並べ方、Cloudflare上の\n検索APIを担当しています。"],
  ["安田", "UI・画面設計", "保護者が迷わない画面と、\n印刷して使えるシートを設計しています。"],
@@ -247,35 +272,75 @@ s.addText("チームと、これから", { x: 0.7, y: 0.5, w: 12, h: 0.85, fontF
   s.addText(r, { x: x + 0.28, y: 2.22, w: 3.2, h: 0.35, fontFace: F, fontSize: 12.5, color: C.brassSoft, margin: 0 });
   s.addText(d, { x: x + 0.28, y: 2.65, w: 3.2, h: 0.9, fontFace: F, fontSize: 11.5, color: "93A1B9", margin: 0 });
 });
-/* ⚠️ ここは2段落・各2行の文章だったが、チーム紹介と締めで16秒を使い切るため
-   まるごと無言のまま画面が変わっていた（8/23 通しで発覚）。技術と運用の材料が
-   ここに集中しているので、読み上げない前提で目に飛び込む短い札に置き換える。 */
-[["つくり方", ["デモは単一HTML・API呼び出しなし", "本番の検索は Workers + D1",
-               "通学時間 10.5万通りを事前計算", "自動テスト 51項目"]],
- ["続け方", ["更新は GitHub Actions で自動", "運用費 月数百円",
-             "次は私立高校と校風", "やさしい日本語・多言語"]],
-].forEach(([lab, items], row) => {
-  const y = 4.05 + row * 0.95;
-  s.addText(lab, { x: 0.7, y: y + 0.08, w: 1.25, h: 0.42, fontFace: F, fontSize: 14,
+
+/* 札の中身は読み上げない前提。目に飛び込む短さにしてある。
+   ⚠️ 「デモは単一HTML」を先頭に置いたら、技術の話が制限の申告に読めると
+   指摘された（8/23 2回目）。実体である検索基盤を先に出す。 */
+function chips(sl, lab, items, y) {
+  sl.addText(lab, { x: 0.7, y: y + 0.08, w: 1.35, h: 0.42, fontFace: F, fontSize: 14,
     bold: true, color: C.brassSoft, margin: 0 });
-  let x = 2.0;
+  let x = 2.1;
   for (const it of items) {
-    // 全角と半角で字幅が倍違う。文字数だけで測ると和文の札は折れ、
-    // 欧文の札は間延びする（8/23 の描画で両方出た）。全角1・半角0.5で数える
-    const em = [...it].reduce((a, ch) => a + (/[\x20-\x7E]/.test(ch) ? 0.5 : 1), 0);
-    const w = 0.30 + em * 0.17;   // 12pt の全角はおよそ 0.167 インチ。詰めると札の中で折れる
-    s.addShape("roundRect", { x, y, w, h: 0.58, rectRadius: 0.1,
+    // 全角と半角で字幅が倍違う。全角1・半角0.5で数える（12pt の全角は約0.167インチ）
+    const em = [...it].reduce((acc, ch) => acc + (/[\x20-\x7E]/.test(ch) ? 0.5 : 1), 0);
+    const w = 0.30 + em * 0.17;
+    sl.addShape("roundRect", { x, y, w, h: 0.58, rectRadius: 0.1,
       fill: { color: "141B2A" }, line: { color: "2B3650", width: 1 } });
-    s.addText(it, { x, y, w, h: 0.58, align: "center", valign: "middle",
+    sl.addText(it, { x, y, w, h: 0.58, align: "center", valign: "middle",
       fontFace: F, fontSize: 12, color: "C3CDDF", margin: 0 });
     x += w + 0.22;
   }
+}
+chips(s, "つくり方", ["検索は Cloudflare Workers + D1", "配布用デモは単一HTMLで完結",
+                     "通学時間 10.5万通りを事前計算", "自動テスト 51項目"], 4.15);
+chips(s, "続け方", ["データ更新は GitHub Actions で自動", "運用費 月数百円"], 5.15);
+s.addText("年に一度の入試情報の更新を、少人数のまま回せる形にしてあります。", {
+  x: 0.7, y: 6.15, w: 12, h: 0.4, fontFace: F, fontSize: 13, color: "93A1B9", margin: 0 });
+
+/* ── 8. これから ─────────────────────────── */
+s = p.addSlide();
+s.background = { color: C.navy };
+/* 飾りは入れない。下段の囲みと最後の2行に線が重なる */
+s.addText("これから", { x: 0.7, y: 0.5, w: 12, h: 0.85, fontFace: F, fontSize: 32, bold: true, color: C.heroInk, margin: 0 });
+s.addText("いまは都立高校の189校だけを扱っています。ここから増やしていきます。", {
+  x: 0.7, y: 1.32, w: 12, h: 0.4, fontFace: F, fontSize: 15, color: "93A1B9", margin: 0 });
+
+[["扱う学校を増やす", C.brassSoft,
+  [["私立高校を候補に加える", "都立と私立は併願で決めるものなので、都立だけでは選び終わりません。"],
+   ["中高一貫校・高専の拡充", "入試の方式が違う学校も、測り方の違いを書いたうえで並べます。"]]],
+ ["学校を知る手がかりを増やす", C.brassSoft,
+  [["校風", "各校公式サイトの教育目標やスクールポリシーから拾います。判定には使わず、知る手がかりとして出します。"],
+   ["進学・進路の実績", "卒業後の進路を、公表されている範囲で並べます。"]]],
+ ["使える人を増やす", C.brassSoft,
+  [["やさしい日本語と多言語", "日本語で情報を集めるのが難しいご家庭にも届くようにします。"],
+   ["学校説明会・見学の情報", "候補が決まったあと、次に何をすればいいかまで案内します。"]]],
+].forEach(([head, col, items], i) => {
+  const x = 0.7 + i * 4.1;
+  s.addShape("roundRect", { x, y: 1.95, w: 3.75, h: 3.15, rectRadius: 0.12,
+    fill: { color: "141B2A" }, line: { color: "2B3650", width: 1 } });
+  s.addText(head, { x: x + 0.28, y: 2.15, w: 3.2, h: 0.4, fontFace: F, fontSize: 15,
+    bold: true, color: col, margin: 0 });
+  items.forEach(([t, d], j) => {
+    const y = 2.68 + j * 1.15;
+    s.addText(t, { x: x + 0.28, y, w: 3.2, h: 0.3, fontFace: F, fontSize: 12.5,
+      bold: true, color: C.heroInk, margin: 0 });
+    s.addText(d, { x: x + 0.28, y: y + 0.32, w: 3.2, h: 0.78, fontFace: F, fontSize: 10.5,
+      color: "93A1B9", margin: 0 });
+  });
 });
-/* ⚠️ ここは19pt・太字・金・単独配置で、文そのものより「扱い」がキメ台詞だった
-   （8/23 レビューで指摘）。大きさと色を本文側に寄せる。
-   2枚目の「最初の数校」と語が重なっていたので、言い方も変えている。 */
+
+/* 増やさないものも書く。出典を出せないデータは載せない、が本PJの前提なので、
+   拡張計画の中でそこだけ線を引いておく */
+s.addShape("roundRect", { x: 0.7, y: 5.35, w: 12, h: 0.72, rectRadius: 0.1,
+  fill: { color: "141B2A" }, line: { color: C.brass, width: 1.2 } });
+s.addText([{ text: "増やさないもの　", options: { bold: true, color: C.brassSoft } },
+           { text: "口コミは載せません。出典を出せないデータは、表示にも判定にも使いません。", options: { color: "C3CDDF" } }],
+  { x: 1.0, y: 5.35, w: 11.4, h: 0.72, valign: "middle", fontFace: F, fontSize: 13, margin: 0 });
+
+s.addText("保護者から利用料はいただきません。無料のまま続けられる形を、収益の側で用意しています。", {
+  x: 0.7, y: 6.25, w: 12, h: 0.4, fontFace: F, fontSize: 13, color: "93A1B9", margin: 0 });
 s.addText("塾に通っていないご家庭が、学校選びを始められる場所にしたいと考えています。", {
-  x: 0.7, y: 6.35, w: 12, h: 0.5, fontFace: F, fontSize: 15, color: "C3CDDF", margin: 0 });
+  x: 0.7, y: 6.68, w: 12, h: 0.45, fontFace: F, fontSize: 15, color: "C3CDDF", margin: 0 });
 
 /* ページ番号。表紙とチーム紹介は濃い背景なので文字色を分ける */
 p.slides.forEach((sl, i) => {
