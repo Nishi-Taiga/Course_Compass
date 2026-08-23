@@ -8,8 +8,15 @@
      区別すると同校の部活が検索から漏れる
   Q3 表記ゆれ → 誤記と別名は統合する。硬式テニス／ソフトテニスは別物のまま
 
-Q1・Q2 は辞書生成の時点で満たされていた。このスクリプトは Q3 の統合だけを
-上乗せし、辞書を school_clubs に反映する。
+追加の指示（2026-08-23）
+  Q1 の「分けたまま」は**行を分けたまま**という意味で、名前に男女を混ぜる必要は
+  なかった。種目名（normalized）と男女（gender）を別の列に分ける。合同でない
+  という実態は gender 列がそのまま表しており、「バスケがしたい」に種目名1語で
+  当たるようになる（以前は男子・女子の2語が当たり、同じ部が2件に見えていた）。
+
+Q1・Q2 は辞書生成の時点で満たされている。このスクリプトは Q3 の統合を
+上乗せし、辞書を school_clubs に反映する。gender 列がまだ無い古い辞書は
+ここで種目名から切り出して補う（何度流しても結果は変わらない）。
 
 ⚠️ raw_name は書き換えない（元の表記に戻せなくなるため・仕様書§6.2）。
    normalized 列だけを埋める。
@@ -28,7 +35,8 @@ OUT = SEED / "club_normalize.csv"
 
 # Q3: 誤記・別名の統合。左を右に寄せる。
 # 「同じものを指しているのに別語として検索に出る」ものだけを入れる。
-# 硬式テニス／ソフトテニス、男子／女子のように**別物**は入れない。
+# 硬式テニス／ソフトテニスのように**別物**は入れない
+# （男女は名前ではなく gender 列で分けるので、ここには関係しない）。
 MERGE = {
     "バトミントン": "バドミントン",       # 誤記
     "ものつくり": "ものづくり",           # 表記ゆれ
@@ -39,13 +47,15 @@ MERGE = {
 }
 
 
-def apply_merge(value: str) -> str:
-    """男女の接頭辞は保ったまま、本体だけを寄せる。"""
-    for prefix in ("男子", "女子", "男女"):
-        if value.startswith(prefix):
-            body = value[len(prefix):]
-            return prefix + MERGE.get(body, body)
-    return MERGE.get(value, value)
+GENDER_PREFIX = ("男女", "男子", "女子")
+
+
+def split_gender(value: str) -> tuple[str, str]:
+    """種目名に男女が混ざっていれば切り出す。gender 列のある辞書では何もしない。"""
+    for prefix in GENDER_PREFIX:
+        if value.startswith(prefix) and value[len(prefix):]:
+            return value[len(prefix):], prefix
+    return value, ""
 
 
 def main() -> None:
@@ -53,24 +63,40 @@ def main() -> None:
         sys.exit(f"{DICT} がありません。")
     rows = list(csv.DictReader(open(DICT, encoding="utf-8")))
 
-    changed = []
+    fields = list(rows[0].keys())
+    if "gender" not in fields:                       # 古い辞書に列を足す
+        fields.insert(fields.index("normalized") + 1, "gender")
+
+    split, changed = [], []
     for r in rows:
+        body, gender = split_gender(r["normalized"])
+        if gender:
+            split.append((r["raw_name"], r["normalized"], body, gender))
+        # 既に gender 列がある行はそちらを優先し、無い/空なら切り出した値を入れる
+        r["normalized"] = body
+        r["gender"] = r.get("gender") or gender
+
         before = r["normalized"]
-        after = apply_merge(before)
+        after = MERGE.get(before, before)
         if before != after:
             r["normalized"] = after
             r["decided_by"] = "西の監修(2026-08-19)"
             changed.append((r["raw_name"], before, after))
 
     with open(OUT, "w", encoding="utf-8", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
+        w = csv.DictWriter(fh, fieldnames=fields)
         w.writeheader()
         w.writerows(rows)
 
     print(f"辞書 {len(rows)}行 / 統合した表記 {len(changed)}件")
     for raw, b, a in changed:
         print(f"  {raw}: {b} → {a}")
-    print(f"normalized の異なり: {len({r['normalized'] for r in rows})}語")
+    if split:
+        print(f"種目名から男女を切り出した行 {len(split)}件")
+        for raw, b, body, g in split[:5]:
+            print(f"  {raw}: {b} → {body} + gender={g}")
+    print(f"normalized の異なり: {len({r['normalized'] for r in rows})}語"
+          f" / 男女つき {sum(1 for r in rows if r['gender'])}行")
 
 
 if __name__ == "__main__":

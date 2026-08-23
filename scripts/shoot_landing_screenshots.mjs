@@ -38,9 +38,11 @@ function tile(url) {
 
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });
 
-/* clipToMap=true のときは、位置関係の地図の下端で切る。ビューポートの高さを
-   決め打ちにすると、行の高さが変わるたびに地図が途中で切れる。 */
-async function shoot(name, viewport, deviceScaleFactor, clipToMap) {
+/* surface="board" はデスクトップの見え方。くらべるシートは画面を覆わず、
+   右のボードのタブに出る（対話と候補を左に残したまま見くらべる形）ので、
+   アプリ全体をそのまま撮る。
+   surface="sheet" はモバイルの見え方。ボードが無いので全画面のシートを開く。 */
+async function shoot(name, viewport, deviceScaleFactor, surface) {
   const ctx = await browser.newContext({
     viewport, deviceScaleFactor,
     colorScheme: "light",   // ページに載せる図は明るいほうで揃える
@@ -69,27 +71,25 @@ async function shoot(name, viewport, deviceScaleFactor, clipToMap) {
   if (n === 0) throw new Error(`${name}: 学校カードが1枚も出ていない`);
   for (let i = 0; i < n; i++) { await addable.nth(i).click(); await page.waitForTimeout(150); }
 
-  await page.evaluate(() => window.openSheet());
+  if (surface === "board") await page.click("#tabCmp");
+  else await page.evaluate(() => window.openSheet());
   await page.waitForTimeout(1200);
   try { await page.waitForLoadState("networkidle", { timeout: 15000 }); } catch { /* タイルは無くても撮る */ }
 
+  const root = surface === "board" ? "#bbody" : "#sheetBody";
+  if (await page.locator(`${root} .cmpsheet`).count() !== 1) {
+    throw new Error(`${name}: くらべるシートが ${root} に出ていない`);
+  }
   const tiles = await page.locator(".amap img")
     .evaluateAll((els) => els.filter((e) => e.complete && e.naturalWidth > 0).length);
   if (tiles === 0) console.warn(`  ⚠️ ${name}: 地図タイルが1枚も読めていない`);
 
-  if (clipToMap) {
-    const box = await page.locator("#ovmapslot .ovmapwrap").boundingBox();
-    if (box) {
-      await page.setViewportSize({ width: viewport.width, height: Math.ceil(box.y + box.height + 14) });
-      await page.waitForTimeout(500);
-    }
-  }
   await page.screenshot({ path: `${OUT}/${name}.jpg`, type: "jpeg", quality: 86 });
   if (errors.length) throw new Error(`${name}: JSの例外 — ${errors[0]}`);
   console.log(`  ✅ ${name}.jpg  (${n}校・タイル${tiles}枚)`);
   await ctx.close();
 }
 
-await shoot("cmp-desktop", { width: 1280, height: 860 }, 2, true);
-await shoot("cmp-mobile", { width: 390, height: 844 }, 2, false);
+await shoot("cmp-desktop", { width: 1440, height: 900 }, 2, "board");
+await shoot("cmp-mobile", { width: 390, height: 844 }, 2, "sheet");
 await browser.close();

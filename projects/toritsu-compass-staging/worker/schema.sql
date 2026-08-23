@@ -96,11 +96,17 @@ CREATE INDEX idx_commute_from_min ON commute_times(from_station, minutes);
 
 -- 部活・特色（Step2/6で投入）。抽出時は正規化せず生の文字列で保存し、
 -- 正規化は後段でかける（西が辞書を監修するため、先に潰すと直せなくなる）。
+-- ⚠️ 男女は normalized に混ぜず gender 列で持つ（2026-08-23 西の指示）。
+--    「男子バスケットボール」「女子バスケットボール」という別々の種目名にすると、
+--    「バスケがしたい」に2語が当たって同じ部が2件に見える。種目名は
+--    「バスケットボール」1語にし、男女の別は gender で表す。行は男女で分かれた
+--    ままなので、合同で活動していないという実態は失われない。
 CREATE TABLE school_clubs (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   school_number TEXT NOT NULL REFERENCES schools(school_number),
   raw_name      TEXT NOT NULL,            -- 学校サイト上の表記そのまま
-  normalized    TEXT,                     -- 正規化後（後段で埋める）
+  normalized    TEXT,                     -- 正規化後の種目名（男女を含まない）
+  gender        TEXT,                     -- 男子 / 女子 / 男女 / 空（区別なし）
   category      TEXT,                     -- 運動部 / 文化部 など
   source_url    TEXT,
   fetched_at    TEXT

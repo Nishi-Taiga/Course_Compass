@@ -4,7 +4,7 @@
     python3 scripts/build_club_normalize_list.py
 
 出力:
-    data/seed/club_normalize.csv        機械的に寄せた案（raw_name → normalized）
+    data/seed/club_normalize.csv        機械的に寄せた案（raw_name → normalized + gender）
     data/seed/club_normalize_review.md  判断が要るものだけを抜き出した確認用
 
 ## 分担
@@ -19,13 +19,14 @@
   - 全角半角    ﾊﾞｽｹｯﾄﾎﾞｰﾙ → バスケットボール（NFKC）
   - 分かち書き  「卓 球」「水 泳」→ 卓球・水泳（装飾の空白）
   - 括弧書き    演劇(同好会) → 演劇
+  - 男女        男子バスケットボール部 / バスケットボール部(女) →
+                normalized=バスケットボール ＋ gender=男子/女子
 
 ⚠️ normalized を埋めても raw_name は書き換えない。サイト上の表記は残す
    （元表記に戻せなくなるため。仕様書§6.2の方針）。
 
 ## 判断が要るもの（review.md に出す）
 
-  - 男女別を1つとして扱うか（「バスケがしたい」に男女2件返すか1件か）
   - 同好会・班を部と同列に検索へ出すか
   - 似ているが別物のペアを取り違えていないか（硬式テニス／ソフトテニス 等）
   - 略称と正式名（ESS／英語部 など）
@@ -48,10 +49,10 @@ SUFFIX_RE = re.compile(r"(部|班|同好会|愛好会|クラブ|同好会|会)$"
 BRACKET_RE = re.compile(r"[（(][^）)]*[）)]")
 
 # 似ているが別物。まとめてはいけない組。取り違えると検索結果が嘘になる。
+# 男女はここに入れない。名前ではなく gender 列で分ける（下の normalize 参照）。
 DISTINCT_PAIRS = [
     ("硬式テニス", "ソフトテニス"),
     ("硬式野球", "軟式野球"),
-    ("男子", "女子"),
 ]
 
 # 同じものを指している可能性が高い略称・別名。西さんの確認待ち。
@@ -66,24 +67,32 @@ ALIAS_CANDIDATES = [
 
 GENDER_IN_BRACKET_RE = re.compile(r"[（(]([^）)]*)[）)]")
 
+# 前置きの男女。1文字の「男」「女」は入れない —「女声合唱」の頭を落としてしまう。
+# 括弧書きの「（男）」「（女）」は GENDER_IN_BRACKET_RE で別に拾う。
+GENDER_PREFIX_RE = re.compile(r"^(男女|男子|女子)")
+BRACKET_GENDER = {"男子": "男子", "男": "男子", "女子": "女子", "女": "女子",
+                  "男女": "男女", "男・女": "男女"}
 
-def normalize(name: str) -> str:
-    """機械的に決まるところだけ寄せる。
 
-    ⚠️ 括弧の中の男女だけは捨てない。「サッカー部（男子）」を「サッカー」に
-       してしまうと、「男子サッカー部」と書く学校とは別扱いのままなのに、
-       同じ学校の男女が1つに潰れる。前に出して揃える。
+def normalize(name: str) -> tuple[str, str]:
+    """機械的に決まるところだけ寄せて、(正規化名, 男女) を返す。
+
+    ⚠️ 男女は名前から切り離し、別の欄で持つ（2026-08-23 西の指示で変更）。
+       以前は「男子バスケットボール」「女子バスケットボール」という別々の語に
+       していたが、そうすると「バスケがしたい」に2語が当たり、画面上は
+       同じ部が2件に見える。名前は「バスケットボール」1語にして、
+       男子/女子は gender 列（DBは school_clubs.gender）に逃がす。
+
+    ⚠️ 括弧の中の男女も捨てない。「サッカー部（男子）」を「サッカー」だけに
+       すると、同じ学校の男女が1つに潰れて数が合わなくなる。
     """
     s = unicodedata.normalize("NFKC", name)
 
     gender = ""
     for inner in GENDER_IN_BRACKET_RE.findall(s):
         flat = re.sub(r"[\s　]", "", inner)
-        if flat in ("男子", "男"):
-            gender = "男子"
-        elif flat in ("女子", "女"):
-            gender = "女子"
-        # 「（男・女）」は男女両方を1項目で書いている。分けずにそのまま残す
+        if flat in BRACKET_GENDER:
+            gender = BRACKET_GENDER[flat]
 
     s = BRACKET_RE.sub("", s)                 # 演劇(同好会) → 演劇
     s = re.sub(r"[\s　・]", "", s)             # 「卓 球」→ 卓球
@@ -91,9 +100,11 @@ def normalize(name: str) -> str:
         s = SUFFIX_RE.sub("", s)
     s = s.strip()
 
-    if gender and not s.startswith(("男子", "女子")):
-        s = gender + s
-    return s
+    m = GENDER_PREFIX_RE.match(s)
+    if m and s[m.end():]:                     # 「男子」だけの名前は種目が無いので触らない
+        gender = m.group(1) if m.group(1) != "男女" else "男女"
+        s = s[m.end():]
+    return s, gender
 
 
 def org_type(name: str) -> str:
@@ -112,17 +123,19 @@ def main() -> None:
     for r in rows:
         schools_of[r["raw_name"]].add(r["school_name"])
 
-    groups: dict[str, list[str]] = defaultdict(list)
+    # キーは (正規化名, 男女)。男女は名前に混ぜず、別の列で持つ
+    groups: dict[tuple[str, str], list[str]] = defaultdict(list)
     for raw in schools_of:
         groups[normalize(raw)].append(raw)
 
     # --- 案のCSV ---
     out = []
-    for norm, raws in sorted(groups.items(), key=lambda kv: -sum(len(schools_of[r]) for r in kv[1])):
+    for (norm, gender), raws in sorted(groups.items(), key=lambda kv: -sum(len(schools_of[r]) for r in kv[1])):
         for raw in sorted(raws, key=lambda r: -len(schools_of[r])):
             out.append({
                 "raw_name": raw,
                 "normalized": norm,
+                "gender": gender,
                 "org_type": org_type(raw),
                 "schools": len(schools_of[raw]),
                 "variants_in_group": len(raws),
@@ -134,22 +147,23 @@ def main() -> None:
         w.writerows(out)
 
     # --- 判断が要るものだけ抜き出す ---
-    gendered = sorted({n for n in groups if n.startswith(("男子", "女子"))})
-    gender_pairs = sorted({n[2:] for n in gendered if ("男子" + n[2:]) in groups and ("女子" + n[2:]) in groups})
+    gender_pairs = sorted({n for n, g in groups if (n, "男子") in groups and (n, "女子") in groups})
 
     org_mixed = []
-    for norm, raws in groups.items():
+    for (norm, _g), raws in groups.items():
         kinds = {org_type(r) for r in raws} - {""}
         if len(kinds) > 1:
             org_mixed.append((norm, sorted(raws, key=lambda r: -len(schools_of[r]))))
     org_mixed.sort(key=lambda kv: -sum(len(schools_of[r]) for r in kv[1]))
 
+    all_names = {n for n, _g in groups}
     aliases = [(a, b) for a, b in ALIAS_CANDIDATES
-               if any(a in n for n in groups) and any(b in n for n in groups)]
+               if any(a in n for n in all_names) and any(b in n for n in all_names)]
 
     # 略称らしい組を自動で拾う（「バスケ」は「バスケットボール」の先頭）
-    names = sorted(groups)
-    weight = {n: sum(len(schools_of[r]) for r in groups[n]) for n in names}
+    names = sorted(all_names)
+    weight = {n: sum(len(schools_of[r]) for g in ("", "男子", "女子", "男女")
+                     for r in groups.get((n, g), [])) for n in names}
     abbrev = []
     for short in names:
         if len(short) < 3:
@@ -171,9 +185,6 @@ def main() -> None:
         for b in names[i + 1:]:
             if not close(a, b):
                 continue
-            # 男女ペアは誤記ではない。1で扱うのでここには出さない
-            if {a[:2], b[:2]} == {"男子", "女子"}:
-                continue
             typos.append((a, b))
     typos.sort(key=lambda kv: -(weight[kv[0]] + weight[kv[1]]))
 
@@ -191,19 +202,17 @@ def main() -> None:
         "",
         "---",
         "",
-        "## 1. 男女別を1つの部として扱いますか",
+        "## 1. 男女別の扱い（決定済み・確認のみ）",
         "",
-        "保護者が「バスケがしたい」と言ったとき、男子と女子を**2件返すか1件にまとめるか**です。",
-        "いまは別々のままにしてあります。",
+        "種目名と男女は**別の欄**にしています（`normalized` と `gender`）。",
+        "「バスケがしたい」には種目名1語で当たり、画面には",
+        "「バスケットボール部（男子・女子）」のように男女を添えて出します。",
         "",
-        "対象の種目:",
+        "男子・女子の両方がある種目:",
         "",
     ]
     lines += [f"- {n}（男子・女子ともに存在）" for n in gender_pairs]
     lines += [
-        "",
-        "> ⚠️ まとめる場合、検索結果に「男子バスケットボール部」とだけ書くと",
-        "> 女子生徒には誤解になります。表示の文言も併せて決めていただけると助かります。",
         "",
         "---",
         "",
@@ -240,8 +249,8 @@ def main() -> None:
         "",
     ]
     for a, b in aliases:
-        ex_a = [n for n in groups if a in n][:3]
-        ex_b = [n for n in groups if b in n][:3]
+        ex_a = [n for n in names if a in n][:3]
+        ex_b = [n for n in names if b in n][:3]
         lines.append(f"- **{a}** と **{b}** … 例: {'・'.join(ex_a)} / {'・'.join(ex_b)}")
     lines += [
         "",
@@ -279,7 +288,8 @@ def main() -> None:
 
     print(f"{OUT_CSV.relative_to(ROOT)} -> {len(out)}行")
     print(f"{OUT_MD.relative_to(ROOT)} -> 監修用")
-    print(f"  異なり表記 {len(schools_of)}種 → 正規化後 {len(groups)}語")
+    print(f"  異なり表記 {len(schools_of)}種 → 正規化後 {len(all_names)}語"
+          f"（男女つき {sum(1 for _n, g in groups if g)}組）")
     print(f"  男女ペアのある種目 {len(gender_pairs)}件")
     print(f"  部/同好会/班が混在 {len(org_mixed)}語")
     print(f"  1校のみの名前 {len(solo)}件")

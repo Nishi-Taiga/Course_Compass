@@ -231,6 +231,132 @@ check("モバイル幅で入力直後のチップが1回で効く",
 
 check("追加シナリオでJSの例外が出ていない", errors.length === 0, errors[0] ?? "");
 
+/* ---- 2026-08-23 の画面の直し（西の指示5点）の再発防止 ---- */
+
+/* 対話をひととおり済ませ、くらべるシートに3校入れた状態のページを作る */
+async function seeded(viewport, answers = ["練馬", "40分以内", "22", "16", "380", "バスケがやりたい", "特にない"]) {
+  const pg = await browser.newPage({ viewport, reducedMotion: "reduce" });
+  pg.on("pageerror", (e) => errors.push(String(e)));
+  await pg.route("**://tile.openstreetmap.org/**", (r) => r.abort());
+  await pg.goto(FILE);
+  await pg.click("#startBtn");
+  for (const t of answers) {
+    await pg.fill("#input", t);
+    await pg.press("#input", "Enter");
+    await pg.waitForTimeout(400);
+  }
+  await pg.waitForTimeout(700);
+  const n = Math.min(3, await pg.locator(".card .cmp").count());
+  for (let i = 0; i < n; i++) { await pg.locator(".card .cmp").nth(i).click(); await pg.waitForTimeout(120); }
+  return pg;
+}
+const isOpen = (pg) => pg.locator("#sheet").evaluate((e) => e.classList.contains("open"));
+
+console.log("\n── デスクトップ: くらべるシートは右のボードのタブ ──");
+{
+  // 全画面が覆いかぶさると、左の対話も候補カードも見えなくなる（#38後の指示）
+  const pg = await seeded({ width: 1440, height: 900 });
+  await pg.click("#tabCmp");
+  await pg.waitForTimeout(600);
+  check("ボードのタブにシートが出る", (await pg.locator("#bbody .cmpsheet").count()) === 1);
+  check("全画面シートは開かない", !(await isOpen(pg)));
+  check("ボードのシートに1枚地図が出る", (await pg.locator("#bbody .cmpsheet .ovmapwrap").count()) === 1);
+  // 詳細表示もボードの中で切り替える
+  await pg.locator("#bbody .sheet-detail[data-name]").first().click();
+  await pg.waitForTimeout(500);
+  check("詳細表示もボードの中", !(await isOpen(pg)) && (await pg.locator("#bbody .sheet-back").count()) === 1);
+  await pg.locator("#bbody .sheet-back").click();
+  await pg.waitForTimeout(500);
+  const back = await pg.locator("#bbody .cmpsheet tbody tr:not(.cmphead)").count();
+  check("詳細から一覧に戻れる", back === 3, `${back}校`);
+  // 印刷はA4の1枚なので、そこだけ全画面シートを開く
+  await pg.locator("#bbody .ovops .ghost").click();
+  await pg.waitForTimeout(500);
+  check("「印刷用に開く」で全画面シートが開く", await isOpen(pg));
+  await pg.close();
+}
+
+console.log("\n── スマホ: シートの学校情報を縦に積む ──");
+{
+  /* 横スクロールの表のままだと、校名の列しか見えず「合格の目安」も倍率も
+     指で送らないと出てこない（持ち歩く1枚の代わりに読む画面なので致命的） */
+  const pg = await seeded({ width: 390, height: 844 });
+  await pg.evaluate(() => window.openCompare());
+  await pg.waitForTimeout(700);
+  check("スマホは全画面シート", await isOpen(pg));
+  const disp = await pg.locator("#sheetBody .cmpsheet table").evaluate((e) => getComputedStyle(e).display);
+  check("表がカードに組み替わる", disp === "block", `display:${disp}`);
+  const w = await pg.locator("#sheetBody .cmpwrap").evaluate((e) => [e.scrollWidth, e.clientWidth]);
+  check("横スクロールが要らない", w[0] <= w[1] + 1, `${w[0]} <= ${w[1]}`);
+  const labels = await pg.locator("#sheetBody .cmpsheet tr:not(.cmphead)").first()
+    .evaluate((tr) => [...tr.querySelectorAll("td[data-l]")].map((td) => td.dataset.l));
+  check("各項目に見出しが付く", labels.includes("合格の目安") && labels.includes("倍率5年推移"), labels.join("/"));
+  /* ⚠️ td を grid にすると <br> で切れた文字列が**別のマス**に落ちる。
+        中身は .v で包んで、必ず「見出し + 値」の2マスにする */
+  const cells = await pg.locator("#sheetBody .cmpsheet tbody td[data-l]")
+    .evaluateAll((tds) => tds.every((td) => td.children.length === 1 && td.firstElementChild.classList.contains("v")));
+  check("値は1つの箱にまとまっている", cells);
+  await pg.close();
+}
+
+console.log("\n── 特色の無い学校に肩書きを作らない ──");
+{
+  const pg = await seeded({ width: 1100, height: 900 });
+  const tags = await pg.evaluate(() => D.schools.filter((s) => !s.x).map((s) => schoolTag(s)));
+  // 部活は全校にあり、都大会の記録も広く出る。数や有無から作る肩書きは飾りにしかならない
+  check("部活の数・有無から肩書きを作らない",
+    !tags.some((t) => ["部活充実", "部活多数", "部活盛ん"].includes(t)));
+  check("指定・実績のある学校には肩書きが残る", tags.filter(Boolean).length > 100,
+    `${tags.filter(Boolean).length}校`);
+  check("肩書きの無い学校は空欄にする", tags.filter((t) => !t).length > 0,
+    `${tags.filter((t) => !t).length}校`);
+  await pg.close();
+}
+
+console.log("\n── 全体から探す: 校名 → 通学時間 … 圏 → 区 ──");
+{
+  const pg = await seeded({ width: 1440, height: 900 });
+  await pg.click("#tabAll");
+  await pg.waitForTimeout(800);
+  const order = await pg.evaluate(() => {
+    const t = document.querySelector("#bbody .tier");
+    if (!t) return null;
+    const row = t.closest("div[style*='display:flex']");
+    return [...row.children].map((k) => k.tagName + ":" + k.innerText.replace(/\s+/g, " ").trim());
+  });
+  check("並びは 校名 → 通学時間 →（圏 + 区）",
+    order?.length === 3 && order[0].startsWith("B:")
+    && /通学時間/.test(order[1]) && /圏/.test(order[2]) && /[区市町村]/.test(order[2]),
+    JSON.stringify(order));
+  await pg.close();
+}
+
+console.log("\n── 部活の男女 ──");
+{
+  const pg = await seeded({ width: 1100, height: 900 });
+  const r = await pg.evaluate(() => {
+    const s = D.schools.find((x) => x.n === "練馬");
+    return {
+      inWords: D.cw.filter((w) => /^(男子|女子|男女)/.test(w)).length,
+      hit: clubMatch(s, findClubWords("バスケがやりたい")),
+      bits: clubGender(s, "バスケットボール"),
+      label: clubLabel("バスケットボール") + "あり" + genderNote(clubGender(s, "バスケットボール")),
+      neutral: clubGender(s, "吹奏楽"),
+    };
+  });
+  // 男女を種目名に混ぜると「バスケがしたい」に2語が当たり、同じ部が2件に見える
+  check("種目名に男女を混ぜていない", r.inWords === 0, `${r.inWords}語`);
+  check("「バスケがやりたい」が種目名1語に当たる", r.hit === "バスケットボール", String(r.hit));
+  check("男女の別を持っている", r.bits === 3, String(r.bits));
+  check("表示に男女が付く", r.label === "バスケットボール部あり（男子・女子）", r.label);
+  check("男女で分けない部には付けない", r.neutral === 0);
+  const badge = await pg.locator(".card .meta").first().innerText();
+  check("カードのバッジにも出る", /部あり（(男子|女子|男子・女子)）/.test(badge), badge.slice(-30));
+  await pg.close();
+}
+
+check("2026-08-23の画面でJSの例外が出ていない", errors.length === 0, errors[0] ?? "");
+
 await browser.close();
 const ng = results.filter((r) => !r.ok);
 console.log(`\n${results.length - ng.length} / ${results.length} 件 通過`);

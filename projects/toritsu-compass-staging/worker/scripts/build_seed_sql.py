@@ -281,21 +281,22 @@ def main() -> None:
     clubs_csv = club_files[0]
     if clubs_csv.is_file():
         clubs = [r for f in club_files if f.is_file() for r in read_csv(f)]
-        # 正規化辞書（西の監修済み・2026-08-19）。raw_name → normalized。
-        # raw_name は書き換えない。normalized を足すだけ（仕様書§6.2）
+        # 正規化辞書（西の監修済み・2026-08-19）。raw_name → normalized + gender。
+        # raw_name は書き換えない。normalized と gender を足すだけ（仕様書§6.2）
         norm_csv = seed_dir / "club_normalize.csv"
-        norm = ({r["raw_name"]: r["normalized"] for r in read_csv(norm_csv)}
-                if norm_csv.is_file() else {})
+        norm = ({r["raw_name"]: (r["normalized"], r.get("gender") or "")
+                 for r in read_csv(norm_csv)} if norm_csv.is_file() else {})
         known = {r["school_number"] for r in master}
         unknown = sorted({r["school_number"] for r in clubs} - known)
         if unknown:
             # 黙って落とすと「部活が無い学校」に化ける。名寄せ漏れは必ず止める
             sys.exit(f"school_clubs.csv に未知の学校番号: {unknown}")
         emit_inserts(out, "school_clubs",
-                   ["school_number", "raw_name", "normalized", "category",
+                   ["school_number", "raw_name", "normalized", "gender", "category",
                     "source_url", "fetched_at"],
                    [[sql_str(r["school_number"]), sql_str(r["raw_name"]),
-                     sql_str(norm.get(r["raw_name"], "")),   # 監修済みの正規化名
+                     sql_str(norm.get(r["raw_name"], ("", ""))[0]),  # 監修済みの種目名
+                     sql_str(norm.get(r["raw_name"], ("", ""))[1]),  # 男子 / 女子 / 男女
                      sql_str(r.get("category") or ""), sql_str(r.get("source_url") or ""),
                      sql_str(FETCHED_AT)]
                     for r in clubs],
