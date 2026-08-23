@@ -257,20 +257,24 @@ s.addText("出典を確認できたデータだけを使っています。", {
 s.addText("大会実績は部の実績として扱っています。生徒の氏名・学年・記録は、収集の時点で読み取っていません。", {
   x: 1.0, y: 6.48, w: 11.4, h: 0.4, fontFace: F, fontSize: 13, color: C.muted, margin: 0 });
 
-/* ── 7. チームと、これから ─────────────────────────── */
+/* ── 7. チーム・システム ───────────────────────────
+   ⚠️ 白背景に変更（2026-08-23 西の指示）。濃紺のままだと表紙・8枚目と合わせて
+   濃い面が3枚になり、2〜6枚目の流れから浮いていた。濃紺は表紙と最終ページの
+   両端だけに残す。色は2〜6枚目と同じ組（白のカード＋C.line の枠）に揃える。
+   ⚠️ 「続け方」の行は西が削除。復活させないこと。 */
 s = p.addSlide();
-s.background = { color: C.navy };
-rose(s, 13.1, 7.3, 2.0, C.brassSoft, 90);
-s.addText("チーム", { x: 0.7, y: 0.5, w: 12, h: 0.85, fontFace: F, fontSize: 32, bold: true, color: C.heroInk, margin: 0 });
+s.background = { color: C.frame };
+title(s, "チーム・システム");
 [["西", "企画・データ整備", "塾で保護者と面談している立場から、\n必要な情報と伝え方を決めています。"],
  ["寒河江", "推薦ロジック・API", "区分の判定と並べ方、Cloudflare上の\n検索APIを担当しています。"],
  ["安田", "UI・画面設計", "保護者が迷わない画面と、\n印刷して使えるシートを設計しています。"],
 ].forEach(([n, r, d], i) => {
   const x = 0.7 + i * 4.1;
-  s.addShape("roundRect", { x, y: 1.55, w: 3.75, h: 2.15, rectRadius: 0.12, fill: { color: "141B2A" }, line: { color: "2B3650", width: 1 } });
-  s.addText(n, { x: x + 0.28, y: 1.75, w: 3.2, h: 0.45, fontFace: F, fontSize: 20, bold: true, color: C.heroInk, margin: 0 });
-  s.addText(r, { x: x + 0.28, y: 2.22, w: 3.2, h: 0.35, fontFace: F, fontSize: 12.5, color: C.brassSoft, margin: 0 });
-  s.addText(d, { x: x + 0.28, y: 2.65, w: 3.2, h: 0.9, fontFace: F, fontSize: 11.5, color: "93A1B9", margin: 0 });
+  s.addShape("roundRect", { x, y: 1.75, w: 3.75, h: 2.45, rectRadius: 0.12,
+    fill: { color: "FFFFFF" }, line: { color: C.line, width: 1 } });
+  s.addText(n, { x: x + 0.28, y: 1.99, w: 3.2, h: 0.45, fontFace: F, fontSize: 20, bold: true, color: C.ink, margin: 0 });
+  s.addText(r, { x: x + 0.28, y: 2.47, w: 3.2, h: 0.35, fontFace: F, fontSize: 12.5, color: C.brass, margin: 0 });
+  s.addText(d, { x: x + 0.28, y: 2.95, w: 3.2, h: 1.0, fontFace: F, fontSize: 11.5, color: C.muted, margin: 0 });
 });
 
 /* 札の中身は読み上げない前提。目に飛び込む短さにしてある。
@@ -278,24 +282,23 @@ s.addText("チーム", { x: 0.7, y: 0.5, w: 12, h: 0.85, fontFace: F, fontSize: 
    指摘された（8/23 2回目）。実体である検索基盤を先に出す。 */
 function chips(sl, lab, items, y) {
   sl.addText(lab, { x: 0.7, y: y + 0.08, w: 1.35, h: 0.42, fontFace: F, fontSize: 14,
-    bold: true, color: C.brassSoft, margin: 0 });
+    bold: true, color: C.brass, margin: 0 });
   let x = 2.1;
   for (const it of items) {
     // 全角と半角で字幅が倍違う。全角1・半角0.5で数える（12pt の全角は約0.167インチ）
     const em = [...it].reduce((acc, ch) => acc + (/[\x20-\x7E]/.test(ch) ? 0.5 : 1), 0);
     const w = 0.30 + em * 0.17;
     sl.addShape("roundRect", { x, y, w, h: 0.58, rectRadius: 0.1,
-      fill: { color: "141B2A" }, line: { color: "2B3650", width: 1 } });
+      fill: { color: "FFFFFF" }, line: { color: C.line, width: 1 } });
     sl.addText(it, { x, y, w, h: 0.58, align: "center", valign: "middle",
-      fontFace: F, fontSize: 12, color: "C3CDDF", margin: 0 });
+      fontFace: F, fontSize: 12, color: C.ink, margin: 0 });
     x += w + 0.22;
   }
 }
-chips(s, "つくり方", ["検索は Cloudflare Workers + D1", "配布用デモは単一HTMLで完結",
-                     "通学時間 10.5万通りを事前計算", "自動テスト 51項目"], 4.15);
-chips(s, "続け方", ["データ更新は GitHub Actions で自動", "運用費 月数百円"], 5.15);
+chips(s, "システム", ["検索は Cloudflare Workers + D1", "配布用デモは単一HTMLで完結",
+                     "通学時間 10.5万通りを事前計算", "自動テスト 51項目"], 4.90);
 s.addText("年に一度の入試情報の更新を、少人数のまま回せる形にしてあります。", {
-  x: 0.7, y: 6.15, w: 12, h: 0.4, fontFace: F, fontSize: 13, color: "93A1B9", margin: 0 });
+  x: 0.7, y: 5.98, w: 12, h: 0.4, fontFace: F, fontSize: 13, color: C.muted, margin: 0 });
 
 /* ── 8. これから ─────────────────────────── */
 s = p.addSlide();
