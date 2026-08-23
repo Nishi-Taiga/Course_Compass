@@ -289,10 +289,13 @@ console.log("\n── スマホ: シートは表のまま並べて比べる ─�
   check("表の形のまま出す", disp === "table", `display:${disp}`);
   /* ⚠️ ここは指示が二転している。いったん「1画面に収める（横スクロールを出さない）」
      としたが、PR #42 のテスト指摘で「倍率の図と操作が読める最低幅」を優先し、
-     min-width:560px を敷いて超過分は横スクロールに回す形に戻した。
-     いまは後者が実装。検査もそれに合わせ、際限なく広がっていないことだけ見る。 */
+     超過分は横スクロールに回す形に戻した。いまは後者が実装。
+     ⚠️ その最低幅は 560px では足りなかった。倍率の列に96pxしか回らず、
+        図が90×27に潰れて点も年度も読めない（2026-08-23 指摘）。
+        図の素の大きさ 200px を列に確保し、前の3列を詰めて 610px にしている。
+        検査は際限なく広がっていないことだけ見る。 */
   const w = await pg.locator("#sheetBody .cmpwrap").evaluate((e) => [e.scrollWidth, e.clientWidth]);
-  check("横幅は最低幅までに収まっている", w[0] <= 560 + 1, `${w[0]} <= 560`);
+  check("横幅は最低幅までに収まっている", w[0] <= 610 + 1, `${w[0]} <= 610`);
   const labels = await pg.locator("#sheetBody .cmpsheet tr:not(.cmphead)").first()
     .evaluate((tr) => [...tr.querySelectorAll("td[data-l]")].map((td) => td.dataset.l));
   check("各項目に見出しが付く", labels.includes("合格の目安") && labels.includes("倍率5年推移"), labels.join("/"));
@@ -361,6 +364,112 @@ console.log("\n── 部活の男女 ──");
 }
 
 check("2026-08-23の画面でJSの例外が出ていない", errors.length === 0, errors[0] ?? "");
+
+console.log("\n── スマホの操作まわり（2026-08-23 指摘3件） ──");
+{
+  /* ① いちばん押してほしい「くらべるに追加」が省略記号で切られ、押すと
+        「✓ …追加済み」に伸びて切れ方が変わっていた（360pxで102px<108px、
+        320pxでは62px）。狭い画面では1行占有させて全文を出す。 */
+  for (const w of [390, 360, 320]) {
+    const pg = await seeded({ width: w, height: 844 });
+    const read = () => pg.evaluate(() => [...document.querySelectorAll("#chat .card .cardops > *")]
+      .map((e) => ({ t: e.innerText.trim(), cut: e.scrollWidth > e.clientWidth + 1,
+                     w: Math.round(e.getBoundingClientRect().width) })));
+    const before = await read();
+    await pg.locator("#chat .card .cmp").first().click();
+    await pg.waitForTimeout(250);
+    const after = await read();
+    check(`${w}px: ボタンの文字が切れない`,
+      !before.some((x) => x.cut) && !after.some((x) => x.cut),
+      [...before, ...after].filter((x) => x.cut).map((x) => x.t).join("・") || "切れなし");
+    check(`${w}px: 押しても幅が動かない`,
+      before.map((x) => x.w).join() === after.map((x) => x.w).join(),
+      `${before.map((x) => x.w).join("/")} → ${after.map((x) => x.w).join("/")}`);
+    await pg.close();
+  }
+
+  /* ② #sheet は .phone の**兄弟**なのに `.phone .overlay.open` で出そうとしていて、
+        「全体から探す」から詳細表示を押すと z-index:12 のボードの下に潜り、
+        画面が変わらずボタンが死んで見えた。 */
+  const pg = await seeded({ width: 390, height: 844 });
+  await pg.evaluate(() => document.getElementById("input").blur());
+  await pg.waitForTimeout(400);
+  await pg.locator('.mobtab-btn[data-view="all"]').click();
+  await pg.waitForTimeout(900);
+  await pg.locator(".browse-detail-btn").first().click();
+  await pg.waitForTimeout(800);
+  const front = await pg.evaluate(() => {
+    const sheet = document.getElementById("sheet");
+    const at = document.elementFromPoint(innerWidth / 2, innerHeight / 2);
+    return { open: sheet.classList.contains("open"),
+             手前にあるか: !!at && sheet.contains(at),
+             見出し: document.getElementById("sheetTitle").innerText };
+  });
+  check("全体から探す→詳細表示がボードの手前に出る",
+    front.open && front.手前にあるか && front.見出し === "詳細表示", JSON.stringify(front));
+  await pg.close();
+
+  /* ③ 倍率の図が 90×58 まで潰れ、5年分の点も年度も読めなかった。
+        図の素の大きさ(200×60)が入る幅を列に与える。 */
+  const pg3 = await seeded({ width: 390, height: 844 });
+  await pg3.evaluate(() => window.openCompare());
+  await pg3.waitForTimeout(800);
+  const g = await pg3.evaluate(() => {
+    const wrap = document.querySelector("#sheetBody .cmpwrap");
+    const svg = document.querySelector('#sheetBody td[data-l="倍率5年推移"] svg');
+    const wr = wrap.getBoundingClientRect(), sr = svg.getBoundingClientRect();
+    return { w: Math.round(sr.width), h: Math.round(sr.height),
+             見える: Math.round(Math.max(0, Math.min(sr.right, wr.right) - Math.max(sr.left, wr.left))) };
+  });
+  check("スマホでも倍率の図が素の大きさで出る", g.w >= 180 && g.h >= 50, `${g.w}x${g.h}`);
+  check("スクロール前から図が読み始められる", g.見える >= 100, `${g.見える}px 見えている`);
+  await pg3.close();
+}
+
+console.log("\n── 印刷（A4の1枚） ──");
+{
+  /* このシートは「学校見学・面談に持っていける1枚」。紙に出たときに
+     中身が欠けていたり、押せないボタンが並んでいたりしてはいけない。 */
+  const pg = await seeded({ width: 794, height: 1123 });   // A4相当
+  await pg.evaluate(() => window.openSheet());
+  await pg.waitForTimeout(500);
+  const collapsed = await pg.locator("#sheetBody .alist.collapsed").count();
+  await pg.emulateMedia({ media: "print" });
+  await pg.waitForTimeout(300);
+
+  const vis = (sel) => pg.locator(sel).evaluateAll((els) => els.filter((e) => {
+    const s = getComputedStyle(e);
+    return s.display !== "none" && s.visibility !== "hidden" && e.getBoundingClientRect().width > 0;
+  }).length);
+
+  /* ⚠️ 折りたたんだ実績が紙から落ちていた（8件のうち4件）。画面は「もっと見る」で
+     開けるが紙は開けない。黙って減るのは、載っていない理由を書き添えるという
+     このシートの方針に反する。 */
+  const ach = await pg.locator("#sheetBody .alist").evaluateAll((uls) => uls.map((u) => ({
+    total: u.children.length,
+    shown: [...u.children].filter((li) => getComputedStyle(li).display !== "none").length,
+  })));
+  check("折りたたんだ実績も全部印刷される",
+    ach.length > 0 && ach.every((u) => u.shown === u.total),
+    ach.map((u) => `${u.shown}/${u.total}`).join(" "));
+  check("検査対象に折りたたみが実際にあった", collapsed > 0, `${collapsed}件`);
+
+  // 紙で押せないものを出さない（とくに「削除」は持ち歩く1枚に並ぶと紛らわしい）
+  check("削除ボタンが紙に出ない", (await vis("#sheetBody .sheet-remove")) === 0);
+  check("♡が紙に出ない", (await vis("#sheetBody .sheet-heart")) === 0);
+  check("詳細表示が紙に出ない", (await vis("#sheetBody .sheet-detail")) === 0);
+  check("「もっと見る」が紙に出ない", (await vis("#sheetBody .alist-toggle")) === 0);
+  check("空になる詳細の列は見出しごと消す", (await vis("#sheetBody th.cmpops")) === 0);
+  // 手書きするための欄なので、これは残さないといけない
+  check("メモ欄は紙に残る", (await vis("#sheet textarea")) === 1);
+
+  const w = await pg.evaluate(() => {
+    const t = document.querySelector("#sheetBody .cmpsheet table");
+    return [Math.round(t.getBoundingClientRect().width), document.documentElement.clientWidth];
+  });
+  check("表がA4の幅に収まる", w[0] <= w[1], `${w[0]} <= ${w[1]}`);
+  await pg.close();
+}
 
 await browser.close();
 const ng = results.filter((r) => !r.ok);
