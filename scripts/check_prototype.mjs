@@ -287,8 +287,12 @@ console.log("\n── スマホ: シートは表のまま並べて比べる ─�
   check("スマホは全画面シート", await isOpen(pg));
   const disp = await pg.locator("#sheetBody .cmpsheet table").evaluate((e) => getComputedStyle(e).display);
   check("表の形のまま出す", disp === "table", `display:${disp}`);
+  /* ⚠️ ここは指示が二転している。いったん「1画面に収める（横スクロールを出さない）」
+     としたが、PR #42 のテスト指摘で「倍率の図と操作が読める最低幅」を優先し、
+     min-width:560px を敷いて超過分は横スクロールに回す形に戻した。
+     いまは後者が実装。検査もそれに合わせ、際限なく広がっていないことだけ見る。 */
   const w = await pg.locator("#sheetBody .cmpwrap").evaluate((e) => [e.scrollWidth, e.clientWidth]);
-  check("横スクロールが要らない", w[0] <= w[1] + 1, `${w[0]} <= ${w[1]}`);
+  check("横幅は最低幅までに収まっている", w[0] <= 560 + 1, `${w[0]} <= 560`);
   const labels = await pg.locator("#sheetBody .cmpsheet tr:not(.cmphead)").first()
     .evaluate((tr) => [...tr.querySelectorAll("td[data-l]")].map((td) => td.dataset.l));
   check("各項目に見出しが付く", labels.includes("合格の目安") && labels.includes("倍率5年推移"), labels.join("/"));
