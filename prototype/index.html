@@ -103,6 +103,11 @@
   /* ⚠️ 540px で止めたままボードだけ広げると、地図の左右に新しい空白ができる。
      ボードの広がりに合わせて上限も上げる（SVGは幅100%で追従する） */
   #mapwrap{margin:8px auto 0; width:100%; max-width:min(760px,100%)}
+  .mapmode{display:flex; gap:0; justify-content:center; margin:2px auto 0; width:fit-content;
+    border:1px solid var(--line); border-radius:18px; overflow:hidden; background:var(--frame)}
+  .mapmode button{border:none; background:none; padding:6px 16px; font-size:12.5px; cursor:pointer;
+    color:var(--muted); font-family:inherit}
+  .mapmode button[aria-selected="true"]{background:var(--accent); color:var(--accent-ink); font-weight:600}
   #mapwrap svg{width:100%; height:auto; display:block}
   .ringlbl{fill:var(--faint); font-size:10px}
   .ring{fill:none; stroke:var(--line); stroke-dasharray:3 4}
@@ -1427,6 +1432,7 @@ document.getElementById('form').addEventListener('submit',e=>{
 // ---------- 探索ボード（右パネル） ----------
 const TIER_COLOR={c:'var(--challenge)',m:'var(--match)',s:'var(--safe)'};
 let boardTab='map';
+let mapMode='compass';   // 'compass'（通学時間の同心円）| 'geo'（実際の地図）
 function boardSummary(){
   const el=document.getElementById('bsum');
   const chips=[];
@@ -1450,6 +1456,54 @@ function eligibleSchools(){
   for(const s of D.schools){ if(s.x) continue;
     const m=commuteMin(s); if(m==null||m>S.limit) continue; out.push({s,m}); }
   return out;
+}
+/* マップタブの実地図ビュー（西の要望 8/23）。
+   コンパス表示（距離=通学時間）と切り替えて使う。既定はコンパス —
+   タイルはOSMからのリアルタイム読み込みで、会場の回線が悪いと
+   灰色になるため、ネットに依存しない表示を先に見せる。
+   ⚠️ こちらは距離=実際の位置。近く見えても通学時間は駅・路線で変わる
+      ことを注記で必ず言う（コンパスと逆の割り切り）。 */
+function geoMap(){
+  const all=eligibleSchools();
+  if(!all.length||!D.xy[S.station]) return compassMap();
+  const home=D.xy[S.station];
+  const box=document.getElementById('bbody');
+  const W=Math.max(280,Math.min(720,((box&&box.clientWidth)||560)-16));
+  const H=Math.round(Math.min(W*0.9,520));
+  const pts=[home,...all.map(({s})=>[s.la,s.lo])];
+  const v=fitView(pts,W,H,40);
+  const P=(la,lo)=>{ const [x,y]=lonlatToPx(la,lo,v.z); return [x-v.left,y-v.top]; };
+  const shownNames=new Map(S.shown.map(c=>[c.s.n,c.tier]));
+  let dots='', recs=[];
+  for(const {s,m} of all){
+    const [x,y]=P(s.la,s.lo);
+    if(shownNames.has(s.n)) recs.push({s,m,x,y,tier:shownNames.get(s.n)});
+    else dots+=`<g class="sdot dim" data-school="${s.n}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="var(--faint)"><title>${s.n}（${rangeText(m)}）</title></circle></g>`;
+  }
+  const [hx,hy]=P(home[0],home[1]);
+  const labels=[];
+  for(const p of recs){
+    const col=p.tier?TIER_COLOR[p.tier]:'var(--accent)';
+    const cands=[[p.x,p.y-11,'middle'],[p.x,p.y+22,'middle'],[p.x+12,p.y+4,'start'],[p.x-12,p.y+4,'end']];
+    const clash=(lx,ly)=>labels.some(q=>Math.abs(q.x-lx)<76&&Math.abs(q.y-ly)<16)
+      || (Math.abs(hx-lx)<40&&Math.abs(hy-ly)<26)
+      || recs.some(q=>q.s!==p.s&&Math.abs(q.x-lx)<38&&Math.abs(q.y-ly)<12);
+    let pick=cands[cands.length-1];
+    for(const c of cands){ if(!clash(c[0],c[1])){ pick=c; break; } }
+    labels.push({x:pick[0],y:pick[1]});
+    dots+=`<g class="sdot" data-school="${p.s.n}">
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="${col}" stroke="#fff" stroke-width="1.6"/>
+      <text x="${pick[0].toFixed(1)}" y="${pick[1].toFixed(1)}" text-anchor="${pick[2]}" class="mlbl" fill="var(--ink)" style="fill:#1A2333">${p.s.n}</text></g>`;
+  }
+  return `<div id="mapwrap"><div class="amap" style="width:${W}px;height:${H}px;margin:0 auto">${tileLayer(v,W,H)}
+    <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-label="自宅の最寄駅と圏内の都立高校の実際の位置">
+      ${dots}${homePin(hx.toFixed(1),hy.toFixed(1),S.station+'駅')}</svg>
+    ${ATTR}</div>
+    <div class="maplegend"><span><i style="background:var(--challenge)"></i>挑戦圏</span>
+      <span><i style="background:var(--match)"></i>適正圏</span>
+      <span><i style="background:var(--safe)"></i>安全圏</span>
+      <span><i style="background:var(--accent)"></i>ご提案中</span><span><i style="background:var(--faint);opacity:.5"></i>圏内のほかの都立（${all.length}校）</span></div>
+    <div class="mapnote">実際の位置です。近く見えても通学時間は駅・路線で変わります（時間はコンパス表示で）</div></div>`;
 }
 function hashAngle(name){ let h=0; for(const ch of name) h=(h*31+ch.charCodeAt(0))>>>0; return (h%360); }
 function compassMap(){
@@ -1625,7 +1679,14 @@ function renderBoard(){
   bar.classList.toggle('on', S.compare.size>0);
   if(S.compare.size) document.getElementById('cmpbarBtn').textContent=`比べるシート（${S.compare.size}校）`;
   const body=document.getElementById('bbody');
-  body.innerHTML = boardTab==='map' ? compassMap() : boardTab==='cmp' ? compareBody() : boardTab==='liked' ? likedBody() : browseAllBody();
+  const mapToggle=`<div class="mapmode" role="tablist">
+    <button role="tab" aria-selected="${mapMode==='compass'}" data-mm="compass">通学時間で見る</button>
+    <button role="tab" aria-selected="${mapMode==='geo'}" data-mm="geo">地図で見る</button></div>`;
+  body.innerHTML = boardTab==='map' ? mapToggle+(mapMode==='geo'?geoMap():compassMap())
+    : boardTab==='cmp' ? compareBody() : boardTab==='liked' ? likedBody() : browseAllBody();
+  if(boardTab==='map'){
+    body.querySelectorAll('.mapmode button').forEach(b=>b.onclick=()=>{ mapMode=b.dataset.mm; renderBoard(); });
+  }
   if(boardTab==='map'){
     body.querySelectorAll('.sdot').forEach(el=>{
       const name=el.dataset.school;
