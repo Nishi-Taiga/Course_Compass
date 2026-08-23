@@ -1862,7 +1862,14 @@ document.getElementById('input').addEventListener('focus',()=>{
   document.getElementById('cmpbar').classList.remove('on');
 });
 document.getElementById('input').addEventListener('blur',()=>{
-  document.getElementById('mobtab').style.display='';
-  if(S.compare.size) document.getElementById('cmpbar').classList.add('on');
+  /* ⚠️ 即座に戻さない。入力欄に文字を打ったあとチップをタップすると、
+     指が離れる前に blur → タブバーが戻る → チップが56px跳ね上がり、
+     タップが外れて1回目が効かない（モバイル幅の実測で再現）。
+     タップが確定するまで待ってから戻す。 */
+  setTimeout(()=>{
+    if(document.activeElement===document.getElementById('input')) return;  // 戻ってきたら何もしない
+    document.getElementById('mobtab').style.display='';
+    if(S.compare.size) document.getElementById('cmpbar').classList.add('on');
+  },320);
 });
 </script>

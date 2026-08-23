@@ -205,6 +205,30 @@ check("届きそう最優先は安全圏が先頭で挑戦圏を勧めない",
   pr2.rows.length > 0 && pr2.rows[0].tier === "s" && pr2.rows.every((r) => r.tier !== "c"),
   pr2.rows.map((r) => `${r.n}:${r.tier}`).join("・"));
 
+/* モバイル幅でのチップのタップ（2026-08-23 実測バグ）。
+   入力欄に打ったあとチップを押すと、blurでタブバーが戻ってレイアウトが
+   56px跳ね、1回目のタップが外れて会話が止まっていた。 */
+console.log("\n── モバイル幅のチップ操作 ──");
+const mob = await browser.newPage({ viewport: { width: 430, height: 900 }, reducedMotion: "reduce" });
+mob.on("pageerror", (e) => errors.push(String(e)));
+await mob.route("**://tile.openstreetmap.org/**", (r) => r.abort());
+await mob.goto(FILE);
+await mob.click("#startBtn");
+for (const t of ["練馬", "45分以内", "22", "16", "380", "吹奏楽をやりたい"]) {
+  await mob.fill("#input", t);
+  await mob.press("#input", "Enter");
+  await mob.waitForTimeout(300);
+}
+await mob.waitForTimeout(500);
+// 入力直後（キーボードが出ている状態）にチップを1回タップする
+await mob.locator("#chips button", { hasText: "通学の近さ" }).click();
+await mob.waitForTimeout(2500);
+const mobState = await mob.evaluate(() => ({ state: S.state, cards: document.querySelectorAll(".card").length }));
+await mob.close();
+check("モバイル幅で入力直後のチップが1回で効く",
+  mobState.state === "S6" && mobState.cards > 0,
+  `state=${mobState.state} cards=${mobState.cards}`);
+
 check("追加シナリオでJSの例外が出ていない", errors.length === 0, errors[0] ?? "");
 
 await browser.close();
