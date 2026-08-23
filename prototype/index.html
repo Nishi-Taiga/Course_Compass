@@ -122,8 +122,12 @@
   .maplegend i{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:4px; vertical-align:-1px}
   .mapnote{text-align:center; font-size:10.5px; color:var(--faint); margin-top:4px}
   button{font-family:inherit}
-  .browse-toggle, .browse-cmp{background:#fff;border:1px solid var(--line);border-radius:16px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--ink);font-weight:600;transition:transform .15s,box-shadow .15s;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-  .browse-toggle:hover, .browse-cmp:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1)}
+  /* ⚠️ 背景が #fff 直書きだった。ダークでは文字色 --ink が #E8ECF4 になるため、
+     白地に白文字（コントラスト比 約1.1）で読めなくなっていた。
+     隣の「詳細表示」は背景なしなので無事で、この2つだけが沈んでいた。 */
+  .browse-toggle, .browse-cmp{background:var(--frame);border:1px solid var(--line);border-radius:16px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--ink);font-weight:600;transition:transform .15s,box-shadow .15s;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .browse-toggle:hover, .browse-cmp:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1);
+    border-color:var(--accent)}
   .browse-toggle:active, .browse-cmp:active{transform:translateY(0);box-shadow:0 1px 3px rgba(0,0,0,.06)}
   .browse-detail-btn{background:none;border:1px solid var(--accent);border-radius:16px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--accent);font-weight:600;transition:background .15s}
   .browse-detail-btn:hover{background:rgba(51,82,126,.08)}
@@ -563,7 +567,7 @@ function setStep(n,label){ const sp=document.getElementById('stepper');
   sp.innerHTML=[1,2,3].map(i=>`<span class="dot${i<=n?' on':''}"></span>`).join('')+`<b>質問 ${n}/3 ・ ${label}</b>`; }
 
 // ---------- 状態 ----------
-const S={ state:'S1', station:null, limit:null, noCommuteLimit:false, detail:false, detailBack:0,
+const S={ state:'S1', station:null, limit:null, noCommuteLimit:false, detail:false, detailBack:0, askingClub:false,
   naishin:null, naishin5:null, naishinJ:null, naishinRough:false,
   toujitsu:null, toujitsuRough:false, score:null, scoreRough:false, level:null,
   wants:{dept:null, academic:false, club:null, teiji:false, uf:null, priority:null}, shown:[], compare:new Set(), liked:new Set() };
@@ -604,10 +608,6 @@ const gapSet=()=> (S.scoreRough||S.naishinRough) ? GAP_ROUGH : GAP;
    辞書に無い語を推測で当てない — 実在する部だけに反応する。
    「男子バスケットボール」のような接頭辞は外した本体で当て、
    「バスケ」「パソコン」のような言い換えは別名表で吸収する。 */
-const CLUB_ALIAS={ 'バスケ':['バスケットボール'], 'バレー':['バレーボール'],
-  'パソコン':['コンピューター','パソコン','情報'], 'プログラミング':['コンピューター','パソコン','情報'],
-  '情報':['コンピューター','パソコン','情報'], 'IT':['コンピューター','パソコン','情報'],
-  '軽音':['軽音楽'], 'ブラスバンド':['吹奏楽'], 'お茶':['茶道'], 'ダンス':['ダンス'] };
 const DEPT_RE=/工業|ものづくり|機械|電気|商業|ビジネス|簿記|農業|園芸|動物/g;
 /* 部活名を画面に出すときの形。
    ⚠️ 部活名の一覧には「CAS部」「CG部」のように**既に「部」で終わるもの**が
@@ -615,7 +615,67 @@ const DEPT_RE=/工業|ものづくり|機械|電気|商業|ビジネス|簿記|�
 function clubLabel(name){
   return /(部|同好会|愛好会|班|クラブ)$/.test(name) ? name : name+'部';
 }
+/* 部活名の略称・言い換え。保護者と中学生が口にする言い方を、学校サイトの
+   表記に寄せる。仕様書の「正規化辞書」の入口側にあたる部分。
+
+   ⚠️ **この表を先に見る**のが肝。あとに回すと「バスケ部」が、たまたま
+      「バスケ部」という名前の1校だけに当たって終わる（実測: 179校 → 1校）。
+      学校サイトの表記をそのまま探すより、言い換えの解決を先に済ませる。
+
+   ⚠️ 値は「探す語」の配列。clubMatch が部分一致で照合するので、
+      「バスケットボール」と書けば「男子バスケットボール部」にも当たる。
+
+   ⚠️ 1文字のキーは作らない（「絵」が「絵本」に当たるような誤爆を避ける）。
+      実測で取りこぼしていたのは バド／ブラバン／漫研／生け花／習字／
+      スイミング／ハンド の7語と、当たっても校数が激減する
+      バスケ部(1校)・ブラスバンド(5校)・コーラス(12校) の3語。 */
+const CLUB_ALIAS = {
+  // 球技
+  'バスケットボール':['バスケットボール'], 'バスケット':['バスケットボール'], 'バスケ':['バスケットボール'],
+  'バレーボール':['バレーボール'], 'バレー':['バレーボール'],
+  'バドミントン':['バドミントン'], 'バド':['バドミントン'],
+  'ハンドボール':['ハンドボール'], 'ハンド':['ハンドボール'],
+  'ソフトテニス':['ソフトテニス'], 'テニス':['テニス'],
+  'ソフトボール':['ソフトボール'],
+  'サッカー':['サッカー'], 'フットサル':['サッカー','フットサル'],
+  'ラグビー':['ラグビー'], '卓球':['卓球'],
+  '野球':['野球'], '軟式野球':['軟式野球'], '硬式野球':['硬式野球'],
+  // 陸上・水泳
+  '陸上':['陸上'], 'マラソン':['陸上'], '駅伝':['陸上'],
+  '水泳':['水泳'], 'スイミング':['水泳'], '競泳':['水泳'], '水球':['水球','水泳'],
+  // 武道
+  '剣道':['剣道'], '柔道':['柔道'], '弓道':['弓道'], '空手':['空手'],
+  'なぎなた':['なぎなた'], '相撲':['相撲'], '合気道':['合気道'],
+  // 音楽
+  '吹奏楽':['吹奏楽'], 'ブラスバンド':['吹奏楽'], 'ブラバン':['吹奏楽'], '吹部':['吹奏楽'],
+  '軽音楽':['軽音楽'], '軽音':['軽音楽'], 'バンド':['軽音楽'],
+  '合唱':['合唱','コーラス'], 'コーラス':['合唱','コーラス'], '和太鼓':['和太鼓'], '太鼓':['和太鼓'],
+  'オーケストラ':['オーケストラ','管弦楽'], '箏曲':['箏曲'], '琴':['箏曲'],
+  // 文化
+  '演劇':['演劇'], '芝居':['演劇'], 'ダンス':['ダンス'], 'チアリーディング':['チアリーディング'], 'チア':['チアリーディング'],
+  '美術':['美術'], '書道':['書道'], '習字':['書道'],
+  '写真':['写真'], 'カメラ':['写真'],
+  '漫画研究':['漫画研究'], '漫研':['漫画研究'], '漫画':['漫画研究'], 'マンガ':['漫画研究'], 'イラスト':['漫画研究','美術'],
+  '茶道':['茶道'], 'お茶':['茶道'], '華道':['華道'], '生け花':['華道'], 'いけばな':['華道'],
+  '放送':['放送'], '文芸':['文芸'], '文学':['文芸'],
+  '天文':['天文'], '天体':['天文'],
+  '料理':['クッキング','家庭科'], 'クッキング':['クッキング','家庭科'], '調理':['クッキング','家庭科'],
+  'ボランティア':['ボランティア'],
+  /* ⚠️「園芸」「情報」は入れない。DEPT_RE が学科の言い回しとして先に扱う語で、
+        ここへ入れると「園芸をやりたい」が農業系の希望ではなく園芸部の指名になる。
+        「園芸部」と部まで言われた場合は、下の学校サイト表記の照合が拾う。 */
+  'かるた':['かるた'], '百人一首':['かるた'], '将棋':['将棋'], '囲碁':['囲碁'],
+  'パソコン':['パソコン','コンピューター','情報'], 'プログラミング':['パソコン','コンピューター','情報'],
+  'eスポーツ':['eスポーツ','パソコン'], 'ＩＴ':['パソコン','コンピューター','情報'], 'IT':['パソコン','コンピューター','情報'],
+  '英語':['英語','ESS'], 'ESS':['英語','ESS'],
+  '科学':['科学','理科'], '生物':['生物'], '化学':['化学'], '物理':['物理'], '地学':['地学'],
+};
+// 長いキーから見る。「バスケットボール」を「バスケ」で切り上げないため
+const CLUB_ALIAS_KEYS = Object.keys(CLUB_ALIAS).sort((a,b)=>b.length-a.length);
+
 function findClubWords(text){
+  // ① 略称・言い換えを先に解く（上のコメントの理由）
+  for(const k of CLUB_ALIAS_KEYS) if(text.includes(k)) return CLUB_ALIAS[k];
   let best=null;
   // 「◯◯部」と明示されたら、学科の言い回しと重なる語でも部活として拾う
   // （「ものづくり部に入りたい」は部活の指名）
@@ -632,7 +692,6 @@ function findClubWords(text){
     if(b.length>=2 && rest.includes(b) && (!best||b.length>best.length)) best=b;
   }
   if(best) return [best];
-  for(const [k,v] of Object.entries(CLUB_ALIAS)) if(rest.includes(k)) return v;
   return null;
 }
 function clubsOf(s){ return (s.cb||[]).map(i=>D.cw[i]); }
@@ -1282,8 +1341,15 @@ function extractWish(text){
   const got=[];
   const club=findClubWords(text);
   if(club){ S.wants.club=club; got.push(`${clubLabel(club[0])}のある学校`); }
-  else if(/部活|運動部|文化部/.test(text)){
-    aiSay('部活のご希望ですね。「吹奏楽」「サッカー」のように部活名で教えていただくと、その部がある学校に絞ってお探しします。');
+  else if(/部活|運動部|文化部|クラブ/.test(text)){
+    /* ⚠️ 部活名を聞き返した回は、続けて重視軸まで聞かない（2026-08-22 指示）。
+          「部活を重視したい」と言っただけで
+            ・部活名を教えてください
+            ・他に重視したい条件はありますか
+          が同時に出て、どちらに答えればいいのか分からなくなっていた。
+          印を立てて handleWish 側で止め、**部活名をもらってから**次を聞く。 */
+    S.askingClub=true;
+    aiSay('部活のご希望ですね。「バスケ」「吹奏楽」のように部活名で教えていただくと、その部がある学校に絞ってお探しします。');
   }
   if(/定時制|夜間|昼夜間|チャレンジスクール/.test(text)){ S.wants.teiji=true; got.push('定時制も含める'); }
   if(/制服が(?:ない|無い)|私服|服装.{0,3}自由/.test(text)){ S.wants.uf='no'; got.push('制服なしの学校'); }
@@ -1304,7 +1370,10 @@ function extractWish(text){
 }
 function handleWish(text){
   const before=JSON.stringify(S.wants);
+  S.askingClub=false;
   const got=extractWish(text);
+  // 部活名を聞き返したところ。答えを待つので、ここで止める
+  if(S.askingClub) return;
   if(got.length) aiSay(`承知しました。${got.join('・')}でお探ししますね。`);
   const changed=JSON.stringify(S.wants)!==before;
   if(S.shown.length && !changed && !got.length){
