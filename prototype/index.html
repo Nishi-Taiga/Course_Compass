@@ -233,7 +233,7 @@
   .card.open .cardbody{display:block}
   .card h3{font-size:17px; letter-spacing:.02em}
   .tier{font-size:10px; font-weight:700; letter-spacing:.1em; color:#fff; border-radius:3px;
-    padding:2px 8px; flex:none; margin-left:auto}
+    padding:2px 8px; flex:none; width:56px; text-align:center; margin-left:auto}
   .tier.c{background:var(--challenge)} .tier.m{background:var(--match)} .tier.s{background:var(--safe)}
   .card .meta{font-size:12px; color:var(--muted); margin-top:1px}
   .factgrid{display:grid; grid-template-columns:1fr 1fr auto; gap:8px 14px; margin-top:12px; align-items:end}
@@ -1297,6 +1297,7 @@ function finishLevel(){
   if(S.naishinRough){
     aiSay('内申は9教科の合計からの概算です。実技4教科の点数が分かると正確になり、判定の幅も狭められます。');
   }
+  if(S.shown.length){ runSearch(); return; }
   askWish();
 }
 function askLimit(){
@@ -1686,8 +1687,8 @@ function browseAllBody(){
     }
     return `${header}<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
       <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
+      <span style="flex:none;width:56px;text-align:center">${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}</span>
       <span style="font-size:11px;color:var(--muted)">${m?'通学時間'+rangeText(m):(S.station?'—':'')}</span>
-      ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
       <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
       <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}${(function(){ if(!S.wants.club) return ''; const hit=clubMatch(s,S.wants.club); return hit?` <span style="font-size:10px;color:#2e7d32">✓ ${hit}部あり</span>`:''; })()}</div>
       <div style="display:flex;gap:6px;margin-top:6px">
@@ -1714,7 +1715,7 @@ function likedBody(){
     const z=tierOf(s);
     return `<div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;background:var(--frame)">
       <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:14px">${s.n}</b>
-      ${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}
+      <span style="flex:none;width:56px;text-align:center">${z?`<span class="tier ${ZONE[z][1]}" style="font-size:9px">${ZONE[z][0]}</span>`:''}</span>
       <span style="font-size:11px;color:var(--muted)">${m?rangeText(m):''}</span>
       <span style="font-size:11px;color:var(--muted);margin-left:auto">${s.w}</span></div>
       <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}${(function(){ if(!S.wants.club) return ''; const hit=clubMatch(s,S.wants.club); return hit?` <span style="font-size:10px;color:#2e7d32">✓ ${hit}部あり</span>`:''; })()}</div>
@@ -1807,8 +1808,7 @@ function renderBoard(){
 }
 function selectTab(t){
   if(t==='cmp'){ openSheet(); return; }
-  boardTab=t;
-  document.getElementById('tabMap').setAttribute('aria-selected',t==='map');
+  boardTab=t;.setAttribute('aria-selected',t==='map');
   document.getElementById('tabCmp').setAttribute('aria-selected',t==='cmp');
   document.getElementById('tabAll').setAttribute('aria-selected',t==='all');
   document.getElementById('tabLiked').setAttribute('aria-selected',t==='liked');
