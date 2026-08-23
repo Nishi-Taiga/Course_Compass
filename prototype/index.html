@@ -102,7 +102,7 @@
   }
   /* ⚠️ 540px で止めたままボードだけ広げると、地図の左右に新しい空白ができる。
      ボードの広がりに合わせて上限も上げる（SVGは幅100%で追従する） */
-  #mapwrap{margin:auto; width:100%; max-width:min(760px,100%)}
+  #mapwrap{margin:8px auto 0; width:100%; max-width:min(760px,100%)}
   #mapwrap svg{width:100%; height:auto; display:block}
   .ringlbl{fill:var(--faint); font-size:10px}
   .ring{fill:none; stroke:var(--line); stroke-dasharray:3 4}
@@ -1458,9 +1458,11 @@ function compassMap(){
     <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="var(--line)" stroke-width="2"/><path d="M27 8 L31.5 25 L27 22.2 L22.5 25 Z" fill="var(--line)"/></svg>
     <div>会話が進むと、ここに<br>「自宅からの通学マップ」が育ちます。</div></div>`;
   const shownNames=new Map(S.shown.map(c=>[c.s.n,c.tier]));
-  const W=520,C=W/2,outer=Math.max(60,S.limit),R=C-46;
+  /* 外周は通学上限に合わせる。60分固定だと「30分以内」の相談で全学校が
+     半径の半分に押し込められ、点とラベルが中心で団子になる（8/23 実機で発覚） */
+  const W=520,C=W/2,outer=S.noCommuteLimit?90:Math.max(S.limit,30),R=C-46;
   const rr=m=>18+(m/outer)*(R-18);
-  const rings=[15,30,45,60].filter(v=>v<=outer);
+  const rings=[15,30,45,60,75,90].filter(v=>v<=outer);
   let g='';
   rings.forEach(v=>{ g+=`<circle class="ring" cx="${C}" cy="${C}" r="${rr(v)}"/>
     <text class="ringlbl" x="${C+4}" y="${C-rr(v)-4}">${v}分</text>`; });
@@ -1471,17 +1473,37 @@ function compassMap(){
     if(b&&b.km<1.5) deg=hashAngle(s.n);
     const rec=shownNames.has(s.n);
     const tier=shownNames.get(s.n);
-    const x=C+rr(m)*Math.sin(deg*Math.PI/180), y=C-rr(m)*Math.cos(deg*Math.PI/180);
+    // 方位は区の代表駅から取るため、同じ区・同じ時間帯の学校は座標が
+    // ほぼ一致して重なる。近接していたら角度を少しずつ回して離す（決定的）
+    let x,y;
+    for(let k=0;k<10;k++){
+      const d=deg+k*((hashAngle(s.n)%2)?7:-7);
+      x=C+rr(m)*Math.sin(d*Math.PI/180); y=C-rr(m)*Math.cos(d*Math.PI/180);
+      const minGap=rec?15:9;
+      if(!placed.some(q=>Math.hypot(q.x-x,q.y-y)<minGap)) break;
+    }
     placed.push({s,m,x,y,tier,rec});
   }
   placed.sort((a,b)=>(a.rec?1:0)-(b.rec?1:0));
   let dots='';
+  const labels=[];   // 置いたラベルの位置。重なるときは点の下へ逃がす
   for(const p of placed){
     if(p.rec){
       const col=p.tier?TIER_COLOR[p.tier]:'var(--accent)';
+      // ラベルは 上→下→右→左 の順で、他のラベル・他の提案点・自宅表記と
+      // 重ならない置き場を探す（中央付近は提案校が団子になりやすい）
+      const cands=[[p.x,p.y-11,'middle'],[p.x,p.y+22,'middle'],
+                   [p.x+12,p.y+4,'start'],[p.x-12,p.y+4,'end']];
+      const clash=(lx,ly)=>labels.some(q=>Math.abs(q.x-lx)<76&&Math.abs(q.y-ly)<16)
+        || Math.hypot(C-lx,C-ly)<40
+        || placed.some(q=>q.rec&&q.s!==p.s&&Math.abs(q.x-lx)<38&&Math.abs(q.y-ly)<12);
+      let pick=cands[cands.length-1];
+      for(const c of cands){ if(!clash(c[0],c[1])){ pick=c; break; } }
+      const [lx,ly,anc]=pick;
+      labels.push({x:lx,y:ly});
       dots+=`<g class="sdot" data-school="${p.s.n}">
         <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="${col}"/>
-        <text x="${p.x.toFixed(1)}" y="${(p.y-11).toFixed(1)}" text-anchor="middle">${p.s.n}</text></g>`;
+        <text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}">${p.s.n}</text></g>`;
     } else {
       dots+=`<g class="sdot dim" data-school="${p.s.n}"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="var(--faint)"><title>${p.s.n}（${rangeText(p.m)}）</title></circle></g>`;
     }
