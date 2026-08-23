@@ -67,7 +67,7 @@
        410pxずつ灰色の帯が残っていた。1600pxまで伸ばすと、よくあるノートPC
        （1440・1536px）では帯が消え、大きな外部モニタでも160px程度に収まる。
        ⚠️ 全幅まで伸ばさないのは、対話が読みにくくなるため。チャットは
-       560pxで止め、**広がったぶんはボードに渡す**。地図も比べるシートの表も
+       560pxで止め、**広がったぶんはボードに渡す**。地図もくらべるシートの表も
        横に広いほうが読みやすく、余った幅が活きるのはこちら側。 */
     .app{width:min(1600px,100%)}
     .phone{width:min(560px,50%); flex:none; border-right:1px solid var(--line)}
@@ -103,11 +103,6 @@
   /* ⚠️ 540px で止めたままボードだけ広げると、地図の左右に新しい空白ができる。
      ボードの広がりに合わせて上限も上げる（SVGは幅100%で追従する） */
   #mapwrap{margin:8px auto 0; width:100%; max-width:min(760px,100%)}
-  .mapmode{display:flex; gap:0; justify-content:center; margin:2px auto 0; width:fit-content;
-    border:1px solid var(--line); border-radius:18px; overflow:hidden; background:var(--frame)}
-  .mapmode button{border:none; background:none; padding:6px 16px; font-size:12.5px; cursor:pointer;
-    color:var(--muted); font-family:inherit}
-  .mapmode button[aria-selected="true"]{background:var(--accent); color:var(--accent-ink); font-weight:600}
   #mapwrap svg{width:100%; height:auto; display:block}
   .ringlbl{fill:var(--faint); font-size:10px}
   .ring{fill:none; stroke:var(--line); stroke-dasharray:3 4}
@@ -248,12 +243,15 @@
   .anote{font-size:10.5px; color:var(--muted); line-height:1.8; margin-top:10px;
     border-left:3px solid var(--line); padding-left:10px}
   /* 制服 */
+  /* ⚠️ 背景が #fff 直書きだった。ダークでは文字色 --ink が #E8ECF4 になるため、
+     白地に白文字で読めなくなっていた。隣の「学校の言葉」カード（.spcard）は
+     テーマ変数を使っていて無事だったので、この欄だけが沈んでいた。 */
   .ufcard{border:1px solid var(--line); border-radius:8px; padding:12px 14px;
-    background:#fff; width:300px}
+    background:var(--frame); color:var(--ink); width:300px}
   .uftype{font-size:13px; font-weight:700; margin:2px 0 6px}
   .ufc{font-size:10px; font-weight:400; color:var(--accent); border:1px solid var(--accent);
     border-radius:3px; padding:1px 5px; margin-left:7px; vertical-align:1px}
-  /* 比べるシートの地図 */
+  /* くらべるシートの地図 */
   .mttl2{font-weight:700; font-size:14px; margin:20px 0 10px; display:flex; align-items:center; gap:8px;
     padding-bottom:6px; border-bottom:2px solid var(--brass)}
   .mttl2::before{content:""; width:4px; height:16px; background:var(--brass); border-radius:2px}
@@ -272,6 +270,11 @@
   .amap img{position:absolute; width:256px; height:256px; display:block; max-width:none}
   .amap svg{position:absolute; left:0; top:0}
   .mlbl{font-size:10.5px; font-weight:700; stroke:#fff; stroke-width:3; paint-order:stroke}
+  /* ⚠️ 地図タイル（OpenStreetMap）はテーマに関わらず**常に明るい**。その上に
+     載るラベルは、ダークでも「濃い文字＋白い縁取り」で固定しないと読めない。
+     .sdot text{stroke:var(--frame)} のほうが .mlbl より詳細度が高いため、
+     ダークでは縁取りまで暗くなり、文字と同化して黒い塊になっていた。 */
+  .amap .sdot text, .amap .mlbl{fill:#1A2333; stroke:#fff}
   .mbadge{position:absolute; left:6px; top:6px; background:rgba(255,255,255,.94);
     border:1px solid #D7DDE8; border-radius:4px; padding:2px 8px; font-size:11px; font-weight:700;
     color:#1A2333}  /* 背景が白固定なので文字も固定。継承だとダークで白地に白文字になる */
@@ -322,7 +325,7 @@
   .ayr{font-size:10px; color:var(--faint); margin-left:6px}
   .asr{font-size:9.5px; color:var(--muted); margin-left:6px; border:1px solid var(--line);
     border-radius:3px; padding:0 4px}
-  /* 比べるシートから詳細表示へ飛ぶボタン。削除ボタンと同じ寸法に揃える */
+  /* くらべるシートから詳細表示へ飛ぶボタン。削除ボタンと同じ寸法に揃える */
   .sheet-detail{background:none;border:1px solid var(--accent);border-radius:16px;
     padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent);white-space:nowrap}
   .sheet-detail:hover{background:var(--accent);color:#fff}
@@ -351,7 +354,7 @@
   .card-toggle::after{content:"▶"; font-size:8px; transition:transform .15s}
   .card-toggle.open::after{transform:rotate(90deg)}
 
-  /* ---------- 比べるバー（チャット⇄シートの行き来） ---------- */
+  /* ---------- くらべるバー（チャット⇄シートの行き来） ---------- */
   .cmpbar{display:none; flex:none; padding:7px 14px 0}
   .cmpbar.on{display:block}
   .cmpbar button{width:100%; display:flex; align-items:center; justify-content:center; gap:7px;
@@ -459,7 +462,7 @@
   </header>
 
   <div id="chat" aria-live="polite"></div>
-  <div class="cmpbar" id="cmpbar"><button type="button" id="cmpbarBtn" onclick="openSheet()">比べるシート</button></div>
+  <div class="cmpbar" id="cmpbar"><button type="button" id="cmpbarBtn" onclick="openSheet()">くらべるシート</button></div>
   <div class="chips" id="chips"></div>
   <form id="form" autocomplete="off">
     <input type="text" id="input" placeholder="メッセージを入力" aria-label="メッセージを入力">
@@ -468,7 +471,7 @@
   <nav class="mobtab" id="mobtab">
     <button class="mobtab-btn" data-view="chat" aria-selected="true"><span class="mobtab-icon">💬</span>チャット</button>
     <button class="mobtab-btn" data-view="map"><span class="mobtab-icon">🗺</span>マップ</button>
-    <button class="mobtab-btn" data-view="cmp"><span class="mobtab-icon">📊</span>比べるシート</button>
+    <button class="mobtab-btn" data-view="cmp"><span class="mobtab-icon">📊</span>くらべるシート</button>
     <button class="mobtab-btn" data-view="all"><span class="mobtab-icon">📋</span>全体</button>
     <button class="mobtab-btn" data-view="liked"><span class="mobtab-icon">❤</span>いいね</button>
   </nav>
@@ -479,7 +482,7 @@
     <div class="bsum" id="bsum"><span class="t">EXPLORER BOARD</span></div>
     <div class="btabs" role="tablist">
       <button class="btab" role="tab" id="tabMap" aria-selected="true">マップ</button>
-      <button class="btab" role="tab" id="tabCmp" aria-selected="false">比べるシート</button>
+      <button class="btab" role="tab" id="tabCmp" aria-selected="false">くらべるシート</button>
       <button class="btab" role="tab" id="tabAll" aria-selected="false">全体から探す</button>
       <button class="btab" role="tab" id="tabLiked" aria-selected="false">いいね</button>
     </div>
@@ -492,7 +495,7 @@
       <span class="sp"></span>
       <button class="ghost" onclick="window.print()">印刷する</button>
     </div>
-    <h2 class="serif" id="sheetTitle">比べるシート</h2>
+    <h2 class="serif" id="sheetTitle">くらべるシート</h2>
     <div class="note">学校見学・面談に持っていける1枚。印刷して使えます。対話に戻っても内容は残ります。</div>
     <div id="sheetBody"></div>
     <div style="margin-top:14px"><b style="font-size:13px">確認したいことメモ</b>
@@ -503,7 +506,7 @@
     </div>
     <!-- ⚠️ 対話画面のフッターにあった断り書きをここへ移した（2026-08-22 指示）。
          チャットの下に常時出ていて、会話の邪魔になっていた。出典と並べたほうが
-         読む場面も揃う（比べるシートは印刷して持っていく1枚なので、断り書きが
+         読む場面も揃う（くらべるシートは印刷して持っていく1枚なので、断り書きが
          いちばん要るのもここ）。 -->
     <div class="note">公開データに基づく参考情報です。最終確認は学校公式サイト・説明会で。合否の判定は行いません。</div>
     <div class="note">出典: 東京都教育委員会 公開資料（学校一覧・入学者選抜応募状況）を加工／学校位置は「国土数値情報（学校データ）」（国土交通省）を加工／地図は © OpenStreetMap contributors／交通案内・校風は各校公式サイト／部の実績は東京都高等学校体育連盟・東京都高等学校吹奏楽連盟・高校生国際美術展の公式記録<br>入力された情報の取り扱いについては <a href="./privacy.html" target="_blank" rel="noopener">こちら</a></div>
@@ -927,7 +930,7 @@ function card(c){
       :(s.st==='teiji'?`<span class="tier" style="background:var(--line);color:var(--muted)">定時制</span>`:'')))}</div>
     <div class="meta">${s.w}・${s.d?('学科: '+s.d):'普通科'}${s.g?`・${s.g}`:''}${STU[s.n]?`・生徒数${STU[s.n]}名`:''}${tag&&!(s.g&&tag.startsWith('進学'))?`<span style="margin-left:8px;font-size:10px;color:var(--brass);border:1px solid var(--brass);border-radius:10px;padding:1px 7px">${tag}</span>`:''}${(function(){ if(!S.wants.club) return ''; const hit=clubMatch(s,S.wants.club); return hit?`<span style="margin-left:8px;font-size:10px;color:#2e7d32;border:1px solid #2e7d32;border-radius:10px;padding:1px 7px">✓ ${hit}部あり</span>`:''; })()}</div>
     <div class="factgrid"><div class="fact">通学の目安<b>${rangeText(m)}</b></div></div>
-    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ 比べるシートに追加</button><button type="button" class="heart" aria-pressed="false">♡</button><button type="button" class="detail-btn" onclick="showDetail('${s.n}')">詳細表示</button><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
+    <div class="cardops"><button type="button" class="cmp" aria-pressed="false">＋ くらべるシートに追加</button><button type="button" class="heart" aria-pressed="false">♡</button><button type="button" class="detail-btn" onclick="showDetail('${s.n}')">詳細表示</button><button type="button" class="card-toggle" aria-expanded="false">もっと見る</button></div>
     <div class="card-details">
       ${s.sn?`<div class="note" style="margin:6px 0;font-size:11px">ℹ️ ${s.sn}</div>`:''}
       <div class="factgrid">
@@ -948,7 +951,7 @@ function card(c){
     tgl.setAttribute('aria-expanded',on); tgl.textContent=on?'閉じる':'もっと見る'; };
   const btn=node.querySelector('.cmp');
   btn.onclick=()=>{ const on=btn.getAttribute('aria-pressed')!=='true';
-    btn.setAttribute('aria-pressed',on); btn.textContent=on?'✓ 比べるシートに追加済み':'＋ 比べるシートに追加';
+    btn.setAttribute('aria-pressed',on); btn.textContent=on?'✓ くらべるシートに追加済み':'＋ くらべるシートに追加';
     on?S.compare.add(s.n):S.compare.delete(s.n); renderBoard(); };
   const hrt=node.querySelector('.heart');
   hrt.onclick=()=>{ const on=hrt.getAttribute('aria-pressed')!=='true';
@@ -963,7 +966,7 @@ function card(c){
 
 // ---------- 比較シート ----------
 
-/* === 比べるシート用の地図 ==========================================
+/* === くらべるシート用の地図 ==========================================
    OpenStreetMapの標準タイルを、必要な枚数だけ並べてピンを重ねる。
    地図ライブラリは使わない（読み込むものを増やさないため）。
 
@@ -982,7 +985,7 @@ function lonlatToPx(la,lo,z){
 }
 
 /* 与えた地点が全部おさまる縮尺と原点を返す。
-   2点だけでなく「自宅の最寄→乗換先→学校」の3点、比べるシートの
+   2点だけでなく「自宅の最寄→乗換先→学校」の3点、くらべるシートの
    「自宅＋比較中の全校」のような多点にも使うので、点数を限定しない。 */
 function fitView(pts,w,h,pad){
   for(let z=17;z>=8;z--){
@@ -1067,7 +1070,7 @@ function targetLabel(s){
 }
 function openSheet(){
   const names=[...S.compare]; const body=document.getElementById('sheetBody');
-  if(!names.length){ body.innerHTML='<div class="note">カードの「比べるシートに追加」を押すと、ここに並びます。</div>'; }
+  if(!names.length){ body.innerHTML='<div class="note">カードの「くらべるシートに追加」を押すと、ここに並びます。</div>'; }
   else{
     const rows=names.map(n=>{ const s=D.schools.find(x=>x.n===n); const m=commuteMin(s);
       const lastR=[...(s.r||[])].reverse().find(v=>v!=null);
@@ -1118,10 +1121,10 @@ function openSheet(){
       ${ufs?`<div class="mttl2">制服<span class="sub2">各校公式サイトの記述から。写真は公式サイトでご覧ください</span></div><div class="sps">${ufs}</div>`:''}
       ${sps?`<div class="mttl2">学校の言葉<span class="sub2">学校の公式サイトから引用。合否の判定には使っていません</span></div><div class="sps">${sps}</div>
         ${noSp.length?`<div class="anote">${noSp.map(esc).join('・')} は、公式サイトに教育目標にあたる記述が見つかりませんでした。<b>校風が無いという意味ではありません</b>。学校説明会でご確認ください。</div>`:''}`:''}
-      ${S.detail&&S.detailBack?`<div style="margin-top:12px"><button type="button" id="backToCmp" class="sheet-detail">← 比べるシートに戻る（${S.detailBack}校）</button></div>`:''}
+      ${S.detail&&S.detailBack?`<div style="margin-top:12px"><button type="button" id="backToCmp" class="sheet-detail">← くらべるシートに戻る（${S.detailBack}校）</button></div>`:''}
       <div class="note" style="margin-top:10px;font-size:11px">合格の目安は塾講師の監修による参考値です。面接・調査書・傾斜配点・実技などの選抜要素は考慮していません。</div>`;
   }
-  document.getElementById('sheetTitle').textContent='比べるシート';
+  document.getElementById('sheetTitle').textContent='くらべるシート';
   document.getElementById('sheet').scrollTop=0;
   document.getElementById('sheet').classList.add('open');
   body.querySelectorAll('.sheet-remove').forEach(b=>b.onclick=()=>{
@@ -1129,7 +1132,7 @@ function openSheet(){
   });
   /* 特色・選抜方式の隣から、その学校だけの詳細表示へ。
      ⚠️ 「全体から探す」「いいね」は onclick="showDetail('◯◯')" と校名を
-        文字列に埋めているが、比べるシートは data 属性で渡す。校名は
+        文字列に埋めているが、くらべるシートは data 属性で渡す。校名は
         エスケープ済みでも ' が入ると壊れる書き方で、増やしたくないため。 */
   body.querySelectorAll('.sheet-detail').forEach(b=>b.onclick=()=>showDetail(b.dataset.name));
   const back=document.getElementById('backToCmp');
@@ -1153,7 +1156,7 @@ function closeSheet(){ document.getElementById('sheet').classList.remove('open')
 function showDetail(name){
   const saved=new Set(S.compare);
   S.compare=new Set([name]);
-  /* ⚠️ 詳細表示と比べるシートは同じ openSheet で描いている。印を立てて
+  /* ⚠️ 詳細表示とくらべるシートは同じ openSheet で描いている。印を立てて
         見分けないと、詳細表示の中にその学校自身への「詳細表示」ボタンが出る。 */
   S.detail=true;
   /* ⚠️ 描画中の S.compare はこの1校に差し替わっている。戻り先の校数は
@@ -1378,7 +1381,7 @@ function handleWish(text){
   if(got.length) aiSay(`承知しました。${got.join('・')}でお探ししますね。`);
   const changed=JSON.stringify(S.wants)!==before;
   if(S.shown.length && !changed && !got.length){
-    aiSay('ありがとうございます。気になる学校があれば「＋ 比べるシートに追加」を押してみてください。条件を変えたいときは「もっと近い学校がいい」なども使えます。');
+    aiSay('ありがとうございます。気になる学校があれば「＋ くらべるシートに追加」を押してみてください。条件を変えたいときは「もっと近い学校がいい」なども使えます。');
     return;
   }
   if(S.shown.length) runSearch(); else askPriority();
@@ -1502,7 +1505,9 @@ document.getElementById('form').addEventListener('submit',e=>{
 // ---------- 探索ボード（右パネル） ----------
 const TIER_COLOR={c:'var(--challenge)',m:'var(--match)',s:'var(--safe)'};
 let boardTab='map';
-let mapMode='compass';   // 'compass'（通学時間の同心円）| 'geo'（実際の地図）
+/* ⚠️ 以前は「通学時間で見る（同心円）」と「地図で見る」を切り替えていたが、
+   地図だけにした（2026-08-22 指示）。同心円は compassMap() として残してある。
+   駅の座標が無いときに geoMap() が落ちる先が要るため、消してはいけない。 */
 function boardSummary(){
   const el=document.getElementById('bsum');
   const chips=[];
@@ -1563,7 +1568,7 @@ function geoMap(){
     labels.push({x:pick[0],y:pick[1]});
     dots+=`<g class="sdot" data-school="${p.s.n}">
       <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="${col}" stroke="#fff" stroke-width="1.6"/>
-      <text x="${pick[0].toFixed(1)}" y="${pick[1].toFixed(1)}" text-anchor="${pick[2]}" class="mlbl" fill="var(--ink)" style="fill:#1A2333">${p.s.n}</text></g>`;
+      <text x="${pick[0].toFixed(1)}" y="${pick[1].toFixed(1)}" text-anchor="${pick[2]}" class="mlbl">${p.s.n}</text></g>`;
   }
   return `<div id="mapwrap"><div class="amap" style="width:${W}px;height:${H}px;margin:0 auto">${tileLayer(v,W,H)}
     <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-label="自宅の最寄駅と圏内の都立高校の実際の位置">
@@ -1573,7 +1578,7 @@ function geoMap(){
       <span><i style="background:var(--match)"></i>適正圏</span>
       <span><i style="background:var(--safe)"></i>安全圏</span>
       <span><i style="background:var(--accent)"></i>ご提案中</span><span><i style="background:var(--faint);opacity:.5"></i>圏内のほかの都立（${all.length}校）</span></div>
-    <div class="mapnote">実際の位置です。近く見えても通学時間は駅・路線で変わります（時間はコンパス表示で）</div></div>`;
+    <div class="mapnote">実際の位置です。近く見えても通学時間は駅・路線で変わります</div></div>`;
 }
 function hashAngle(name){ let h=0; for(const ch of name) h=(h*31+ch.charCodeAt(0))>>>0; return (h%360); }
 function compassMap(){
@@ -1645,7 +1650,7 @@ function compassMap(){
 }
 function compareBody(){
   const names=[...S.compare];
-  if(!names.length) return `<div class="bempty">カードの「＋ 比べるシートに追加」を押すと<br>ここで横並びに比較できます。</div>`;
+  if(!names.length) return `<div class="bempty">カードの「＋ くらべるシートに追加」を押すと<br>ここで横並びに比較できます。</div>`;
   const rows=names.map(n=>{ const s=D.schools.find(x=>x.n===n); const m=commuteMin(s);
     const tgt = targetLabel(s);
     const z=tierOf(s);
@@ -1694,7 +1699,7 @@ function browseAllBody(){
       <div style="display:flex;gap:6px;margin-top:6px">
         <button class="browse-toggle" data-uid="${uid}">もっと見る</button>
         <button class="browse-detail-btn" onclick="showDetail('${s.n}')">詳細表示</button>
-        <button class="browse-cmp" data-name="${s.n}">${S.compare.has(s.n)?'✓ 比べるシートへ追加済み':'＋ 比べるシートへ追加'}</button>
+        <button class="browse-cmp" data-name="${s.n}">${S.compare.has(s.n)?'✓ くらべるシートへ追加済み':'＋ くらべるシートへ追加'}</button>
         <button class="browse-heart" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button>
       </div>
       <div class="browse-detail" id="${uid}" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);font-size:12px">
@@ -1721,13 +1726,13 @@ function likedBody(){
       <div style="font-size:12px;color:var(--faint);margin-top:4px">${s.d||'普通科'}${s.g?'・'+s.g:''}${tag?` <span style="color:var(--brass);font-size:10px">${tag}</span>`:''}${STU[s.n]?` <span style="font-size:10px;color:var(--muted)">｜ 生徒数 ${STU[s.n]}名</span>`:''}${(function(){ if(!S.wants.club) return ''; const hit=clubMatch(s,S.wants.club); return hit?` <span style="font-size:10px;color:#2e7d32">✓ ${hit}部あり</span>`:''; })()}</div>
       <div style="display:flex;gap:6px;margin-top:6px">
         <button onclick="showDetail('${s.n}')" style="background:none;border:1px solid var(--accent);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:var(--accent)">詳細表示</button>
-        <button class="liked-cmp" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:${S.compare.has(s.n)?'var(--accent)':'var(--muted)'}">${S.compare.has(s.n)?'✓ 追加済み':'＋ 比べるシートへ追加'}</button>
+        <button class="liked-cmp" data-name="${s.n}" style="background:none;border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:11px;cursor:pointer;color:${S.compare.has(s.n)?'var(--accent)':'var(--muted)'}">${S.compare.has(s.n)?'✓ 追加済み':'＋ くらべるシートへ追加'}</button>
         <button class="liked-remove" data-name="${s.n}" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 8px;min-width:28px;color:#e8889a">♥</button>
       </div>
     </div>`; }).join('');
   return `<div>${cards}</div>`;
 }
-/* いいねと比べるシートはブラウザに残す（#21レビューで判明: リロードで全消え）。
+/* いいねとくらべるシートはブラウザに残す（#21レビューで判明: リロードで全消え）。
    デモ中の誤リロードでも、いいね・比較リストからやり直せる。
    会話の条件は保存しない — 相談は毎回はじめから聞くのがこのツールの形。 */
 function saveSets(){
@@ -1743,19 +1748,15 @@ loadSets();
 function renderBoard(){
   saveSets();
   boardSummary();
-  document.getElementById('tabCmp').textContent=`比べるシート${S.compare.size?`（${S.compare.size}）`:''}`;
+  document.getElementById('tabCmp').textContent=`くらべるシート${S.compare.size?`（${S.compare.size}）`:''}`;
   document.getElementById('tabLiked').textContent=`いいね${S.liked.size?`（${S.liked.size}）`:''}`;
   const bar=document.getElementById('cmpbar');
   bar.classList.toggle('on', S.compare.size>0);
-  if(S.compare.size) document.getElementById('cmpbarBtn').textContent=`比べるシート（${S.compare.size}校）`;
+  if(S.compare.size) document.getElementById('cmpbarBtn').textContent=`くらべるシート（${S.compare.size}校）`;
   const body=document.getElementById('bbody');
-  const mapToggle=`<div class="mapmode" role="tablist">
-    <button role="tab" aria-selected="${mapMode==='compass'}" data-mm="compass">通学時間で見る</button>
-    <button role="tab" aria-selected="${mapMode==='geo'}" data-mm="geo">地図で見る</button></div>`;
-  body.innerHTML = boardTab==='map' ? mapToggle+(mapMode==='geo'?geoMap():compassMap())
+  body.innerHTML = boardTab==='map' ? geoMap()
     : boardTab==='cmp' ? compareBody() : boardTab==='liked' ? likedBody() : browseAllBody();
   if(boardTab==='map'){
-    body.querySelectorAll('.mapmode button').forEach(b=>b.onclick=()=>{ mapMode=b.dataset.mm; renderBoard(); });
   }
   if(boardTab==='map'){
     body.querySelectorAll('.sdot').forEach(el=>{
@@ -1808,7 +1809,8 @@ function renderBoard(){
 }
 function selectTab(t){
   if(t==='cmp'){ openSheet(); return; }
-  boardTab=t;.setAttribute('aria-selected',t==='map');
+  boardTab=t;
+  document.getElementById('tabMap').setAttribute('aria-selected',t==='map');
   document.getElementById('tabCmp').setAttribute('aria-selected',t==='cmp');
   document.getElementById('tabAll').setAttribute('aria-selected',t==='all');
   document.getElementById('tabLiked').setAttribute('aria-selected',t==='liked');
