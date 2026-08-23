@@ -276,18 +276,23 @@ console.log("\n── デスクトップ: くらべるシートは右のボー�
   await pg.close();
 }
 
-console.log("\n── スマホ: シートの学校情報を縦に積む ──");
+console.log("\n── スマホ: シートは表のまま並べて比べる ──");
 {
-  /* 横スクロールの表のままだと、校名の列しか見えず「合格の目安」も倍率も
-     指で送らないと出てこない（持ち歩く1枚の代わりに読む画面なので致命的） */
+  /* 一度は1校ずつの縦カードに組み替えたが、8/23 に表へ戻した。
+     縦に積むと1校ずつ読む画面になり、学校どうしを同じ行で見比べる
+     という「くらべる」の目的そのものができなくなるため。 */
   const pg = await seeded({ width: 390, height: 844 });
   await pg.evaluate(() => window.openCompare());
   await pg.waitForTimeout(700);
   check("スマホは全画面シート", await isOpen(pg));
   const disp = await pg.locator("#sheetBody .cmpsheet table").evaluate((e) => getComputedStyle(e).display);
-  check("表がカードに組み替わる", disp === "block", `display:${disp}`);
+  check("表の形のまま出す", disp === "table", `display:${disp}`);
+  /* ⚠️ ここは指示が二転している。いったん「1画面に収める（横スクロールを出さない）」
+     としたが、PR #42 のテスト指摘で「倍率の図と操作が読める最低幅」を優先し、
+     min-width:560px を敷いて超過分は横スクロールに回す形に戻した。
+     いまは後者が実装。検査もそれに合わせ、際限なく広がっていないことだけ見る。 */
   const w = await pg.locator("#sheetBody .cmpwrap").evaluate((e) => [e.scrollWidth, e.clientWidth]);
-  check("横スクロールが要らない", w[0] <= w[1] + 1, `${w[0]} <= ${w[1]}`);
+  check("横幅は最低幅までに収まっている", w[0] <= 560 + 1, `${w[0]} <= 560`);
   const labels = await pg.locator("#sheetBody .cmpsheet tr:not(.cmphead)").first()
     .evaluate((tr) => [...tr.querySelectorAll("td[data-l]")].map((td) => td.dataset.l));
   check("各項目に見出しが付く", labels.includes("合格の目安") && labels.includes("倍率5年推移"), labels.join("/"));
@@ -356,6 +361,51 @@ console.log("\n── 部活の男女 ──");
 }
 
 check("2026-08-23の画面でJSの例外が出ていない", errors.length === 0, errors[0] ?? "");
+
+console.log("\n── 印刷（A4の1枚） ──");
+{
+  /* このシートは「学校見学・面談に持っていける1枚」。紙に出たときに
+     中身が欠けていたり、押せないボタンが並んでいたりしてはいけない。 */
+  const pg = await seeded({ width: 794, height: 1123 });   // A4相当
+  await pg.evaluate(() => window.openSheet());
+  await pg.waitForTimeout(500);
+  const collapsed = await pg.locator("#sheetBody .alist.collapsed").count();
+  await pg.emulateMedia({ media: "print" });
+  await pg.waitForTimeout(300);
+
+  const vis = (sel) => pg.locator(sel).evaluateAll((els) => els.filter((e) => {
+    const s = getComputedStyle(e);
+    return s.display !== "none" && s.visibility !== "hidden" && e.getBoundingClientRect().width > 0;
+  }).length);
+
+  /* ⚠️ 折りたたんだ実績が紙から落ちていた（8件のうち4件）。画面は「もっと見る」で
+     開けるが紙は開けない。黙って減るのは、載っていない理由を書き添えるという
+     このシートの方針に反する。 */
+  const ach = await pg.locator("#sheetBody .alist").evaluateAll((uls) => uls.map((u) => ({
+    total: u.children.length,
+    shown: [...u.children].filter((li) => getComputedStyle(li).display !== "none").length,
+  })));
+  check("折りたたんだ実績も全部印刷される",
+    ach.length > 0 && ach.every((u) => u.shown === u.total),
+    ach.map((u) => `${u.shown}/${u.total}`).join(" "));
+  check("検査対象に折りたたみが実際にあった", collapsed > 0, `${collapsed}件`);
+
+  // 紙で押せないものを出さない（とくに「削除」は持ち歩く1枚に並ぶと紛らわしい）
+  check("削除ボタンが紙に出ない", (await vis("#sheetBody .sheet-remove")) === 0);
+  check("♡が紙に出ない", (await vis("#sheetBody .sheet-heart")) === 0);
+  check("詳細表示が紙に出ない", (await vis("#sheetBody .sheet-detail")) === 0);
+  check("「もっと見る」が紙に出ない", (await vis("#sheetBody .alist-toggle")) === 0);
+  check("空になる詳細の列は見出しごと消す", (await vis("#sheetBody th.cmpops")) === 0);
+  // 手書きするための欄なので、これは残さないといけない
+  check("メモ欄は紙に残る", (await vis("#sheet textarea")) === 1);
+
+  const w = await pg.evaluate(() => {
+    const t = document.querySelector("#sheetBody .cmpsheet table");
+    return [Math.round(t.getBoundingClientRect().width), document.documentElement.clientWidth];
+  });
+  check("表がA4の幅に収まる", w[0] <= w[1], `${w[0]} <= ${w[1]}`);
+  await pg.close();
+}
 
 await browser.close();
 const ng = results.filter((r) => !r.ok);

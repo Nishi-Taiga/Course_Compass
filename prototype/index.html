@@ -90,6 +90,10 @@
   .mobtab{display:none}
   @media (max-width:939px){
     .mobtab{display:flex; border-top:1px solid var(--line); background:var(--frame); flex:none; z-index:15}
+    /* ⚠️ 下のタブバーは flex の兄弟なので普段は重ならないが、シートやボードを
+       全画面に重ねている間（.mob-open）はタブバーが被さり、いちばん下の
+       「いいね」「詳細表示」が押せなくなる。中身の末尾に逃げ場を作る。 */
+    .app.mob-open .overlay.open, .app.mob-open .board .bbody{padding-bottom:76px}
     .mobtab-btn{flex:1; background:none; border:none; border-top:2px solid transparent; color:var(--faint);
       font-size:10px; padding:7px 0 9px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px}
     .mobtab-btn .mobtab-icon{font-size:17px}
@@ -283,6 +287,24 @@
   .mattr a{color:#556; text-decoration:none}
   .mdt{font-size:10.5px; color:var(--muted); margin-top:6px; max-width:280px; line-height:1.6;
     padding:4px 8px; background:var(--surface); border-radius:4px}
+  /* ⚠️ 横向きのスマホ（844×390 など）は幅ではモバイル扱いだが、**高さが足りない**。
+     向き（orientation）ではなく高さで見る。ヘッダー・チップ・タブバーを薄くして、
+     会話と候補の見える面積を残す（2026-08-23 テストで「横画面非対応」の指摘）。 */
+  @media (max-height:520px){
+    header{padding-top:6px; padding-bottom:6px}
+    header .sub, .steps3{display:none}
+    #chips{padding-top:5px; padding-bottom:5px; max-height:34vh; overflow-y:auto}
+    #form{padding-top:5px; padding-bottom:5px}
+    .mobtab-btn{font-size:9px; padding:3px 0 4px}
+    .mobtab-btn .mobtab-icon{font-size:13px}
+    .app.mob-open .overlay.open, .app.mob-open .board .bbody{padding-bottom:56px}
+    .land-hero{padding-top:8px}
+    .landing h1{font-size:20px}
+    .logo{width:22px; height:22px}
+    .t-name{font-size:13px}
+    #chat{padding-top:6px; padding-bottom:6px}
+  }
+
   @media print{ .amap img{ -webkit-print-color-adjust:exact; print-color-adjust:exact } }
   /* 自宅の最寄駅から先の区間を、バッジの2行目に小さく添える */
   .mbadge .mb2{display:block; font-weight:400; font-size:10px; color:var(--muted); margin-top:1px}
@@ -338,7 +360,17 @@
     border-left:3px solid var(--brass); padding-left:12px}
   .spsrc{font-size:11px; color:var(--accent); text-decoration:none; font-weight:600}
   .spsrc:hover{text-decoration:underline}
-  .cardops{margin-top:11px; display:flex; align-items:center; gap:8px}
+  /* ⚠️ 狭い画面でボタンが折り返し、♡を押すと文字数が変わって行が組み替わって
+     いた（2026-08-23 テストで指摘）。折り返さない大きさに固定し、♡は幅を
+     決め打ちにして、押しても隣がずれないようにする。 */
+  .cardops{margin-top:11px; display:flex; align-items:center; gap:8px; flex-wrap:nowrap}
+  .cardops>*{flex:none; white-space:nowrap}
+  .cardops .cmp{flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis}
+  .cardops .heart{width:34px; text-align:center}
+  @media (max-width:479px){
+    .cardops{gap:5px}
+    .cardops button{font-size:11px; padding:5px 8px}
+  }
   .cmp{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);
     border:1px solid var(--line); border-radius:20px; padding:4px 13px; cursor:pointer; background:none}
   .cmp[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
@@ -360,7 +392,10 @@
   /* ⚠️ デスクトップでは出さない（2026-08-23 指示）。右のボードに「くらべる」
      タブが常にあるので、チャットの下にもう1つ入口を置く意味がない。
      モバイルはボードが隠れているため、ここが唯一の入口になるので残す。 */
-  @media (min-width:940px){ .cmpbar, .cmpbar.on{display:none} }
+  /* ⚠️ デスクトップは右のボードのタブ、モバイルは下のタブバーに「くらべる」が
+     あるので、チャットの下のバーはどちらでも不要（2026-08-23 テスト結果）。
+     要素は残してあるが、常に出さない。 */
+  .cmpbar, .cmpbar.on{display:none}
   .cmpbar button{width:100%; display:flex; align-items:center; justify-content:center; gap:7px;
     background:var(--accent); color:var(--accent-ink); border:none; border-radius:22px;
     padding:9px 16px; font-size:13.5px; font-weight:600; cursor:pointer; box-shadow:var(--shadow-soft)}
@@ -405,7 +440,9 @@
      横スクロールがあると、右端の「詳細」まで指で送らないと見えない。
      文字と余白を落として1画面に収める。倍率の図も幅に追従させる。 */
   @media (max-width:719px){
-    .cmpsheet table{min-width:0; table-layout:fixed; width:100%}
+    /* ⚠️ 幅を詰めきらない。倍率の図と操作が読める最低幅を確保して、
+       あふれるぶんは .cmpwrap の横スクロールに任せる。 */
+    .cmpsheet table{min-width:560px; table-layout:fixed; width:100%}
     .cmpsheet th,.cmpsheet td{padding:6px 3px; font-size:11px; word-break:break-word}
     /* ⚠️ 共通の th{white-space:nowrap} が効いていて、見出しが列からはみ出し
        隣の見出しと重なっていた（「倍率5年推移特色・選抜方式詳細」と続いて見える）。
@@ -413,9 +450,10 @@
     .cmpsheet th{font-size:10px; line-height:1.4; white-space:normal}
     .cmpsheet th span{display:none}          /* 見出しの補足（「1020点満点」等）は省く */
     .cmpsheet td:first-child{white-space:normal}
-    /* ⚠️ 倍率の折れ線は、この幅では潰れて読めない（列は約59px）。図は隠して
-       言葉だけ残す。「定員100人に168人が出願」のほうが幅も要らず正確に伝わる。 */
-    .cmpsheet .v svg{display:none}
+    /* ⚠️ 倍率の折れ線は隠さない（2026-08-23 テストで差し戻し）。潰れるからと
+       消していたが、5年の動きは目で見るための情報で、言葉では代わりにならない。
+       図が読める幅を確保し、**あふれるぶんは横スクロールを許す**。 */
+    .cmpsheet .v svg{display:block; width:100%; height:auto}
     /* ⚠️ table-layout:fixed は列を等分するので、中のボタンが列より広いと
        そこだけはみ出す（実測: 詳細表示ボタン66px > 列59px）。操作の列だけ
        少し広く取り、ボタン自体も列に収まる大きさに落とす。 */
@@ -430,7 +468,7 @@
      以前は「詳細」と操作ボタンで2列を使っており、横に伸びて
      スクロールしないと右端まで読めなかった。縦に積めば1列で足りる。 */
   .cmpsheet td.cmpops .v{display:flex; flex-direction:column; gap:6px; align-items:flex-start}
-  .cmpsheet .cmpops-sub{display:flex; align-items:center; gap:2px}
+  .cmpsheet .cmpops-sub{display:flex; align-items:center; gap:2px; margin-top:6px}
   .cmpsheet .sheet-remove{background:none; border:1px solid var(--line); border-radius:16px;
     padding:3px 10px; font-size:11px; cursor:pointer; color:var(--muted); font-family:inherit;
     white-space:nowrap}   /* ⚠️ 付けないと列幅しだいで「削／除」の2行に折れる */
@@ -474,6 +512,16 @@
     .cmpsheet tr,.cmpsheet tr.cmphead{display:table-row}
     .cmpsheet td{display:table-cell; padding:8px 6px; border-bottom:1px solid var(--line)}
     .cmpsheet td::before{content:none}
+    /* ⚠️ 折りたたんだ実績が紙から落ちていた（2026-08-23）。画面は「もっと見る」で
+       開けるが紙は開けない。8件のうち4件が黙って消えるのは、
+       「載っていないものは理由を書き添える」というこのシートの方針に反する。
+       印刷では折りたたみを解いて全件出す。 */
+    .cmpsheet .alist.collapsed li:nth-child(n+5){display:list-item}
+    /* 紙で押せないものは出さない。とくに「削除」が各校に並ぶと、
+       持ち歩く1枚として何をするボタンなのか紛らわしい。
+       詳細の列は中身が消えると空欄になるので、見出しごと落とす。 */
+    .cmpsheet .cmpops-sub,.cmpsheet td.cmpops,.cmpsheet th.cmpops,
+    .cmpsheet .alist-toggle,.cmpsheet .sheet-back{display:none}
   }
 </style>
 
@@ -749,6 +797,8 @@ const CLUB_ALIAS = {
 };
 // 長いキーから見る。「バスケットボール」を「バスケ」で切り上げないため
 const CLUB_ALIAS_KEYS = Object.keys(CLUB_ALIAS).sort((a,b)=>b.length-a.length);
+/* 部活らしい言い方だが、こちらのデータに無いもの。名前だけ取り出して伝える。 */
+const NOT_FOUND_CLUB=/([ぁ-んァ-ヴー一-龥A-Za-z]{2,12})(?:部|同好会|クラブ)|([ァ-ヴー]{3,12})(?:がやりたい|をやりたい|がしたい|に入りたい)/;
 
 function findClubWords(text){
   // ① 略称・言い換えを先に解く（上のコメントの理由）
@@ -810,14 +860,6 @@ function commuteMin(school){
   const m=row[wi]; return m>0?m:null;
 }
 const rangeText=m=>{ const lo=Math.max(5,Math.floor(m/15)*15); return `${lo}〜${lo+15}分`; };
-function bearingTo(school){
-  const a=D.xy[S.station], rep=D.rep[school.w], b=rep&&D.xy[rep];
-  if(!a||!b) return null;
-  const dLng=(b[1]-a[1])*Math.cos((a[0]+b[0])/2*Math.PI/180);
-  const deg=Math.atan2(dLng, b[0]-a[0])*180/Math.PI;
-  const km=Math.hypot(b[0]-a[0], dLng)*111;
-  return {deg, km};
-}
 
 // ---------- 検索（S5） ----------
 function search(){
@@ -1180,15 +1222,18 @@ function sheetBodyHtml(names){
     const lastR=[...(s.r||[])].reverse().find(v=>v!=null);
     const tgt = targetLabel(s);
     const z = tierOf(s);
-    return `<tr><td><b>${s.n}</b><br><span style="color:var(--muted);font-size:11px">${s.w}${STU[s.n]?'・生徒数'+STU[s.n]+'名':''}</span></td>
+    /* ⚠️ 削除と♡は**いちばん左の列**に置く（2026-08-23 テストで指摘）。
+          右端に置くと、狭い画面で「横に送る→削除→また送る」の繰り返しになる。
+          学校名の真下なら、どの学校を消すのかも取り違えない。 */
+    return `<tr><td><b>${s.n}</b><br><span style="color:var(--muted);font-size:11px">${s.w}${STU[s.n]?'・生徒数'+STU[s.n]+'名':''}</span>
+    <div class="cmpops-sub"><button class="sheet-remove" data-name="${s.n}">削除</button>
+    <button class="sheet-heart" data-name="${s.n}" style="color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button></div></td>
     <td data-l="最寄駅から"><div class="v">${s.ac?`${s.ac.st}駅から<br><b>${s.ac.md==='bus'?'バス':'徒歩'}${s.ac.mi!=null?s.ac.mi+'分':''}</b>`:'—'}${m?`<br><span style="font-size:10px;color:var(--faint)">自宅から${rangeText(m)}</span>`:''}</div></td>
     <td data-l="合格の目安"><div class="v">${tgt}${z?`<br><span class="tier ${ZONE[z][1]}" style="font-size:10px">${ZONE[z][0]}</span>`:''}</div></td>
     <td data-l="倍率5年推移"><div class="v">${spark(s.r)}<br><span style="font-size:10px;color:var(--faint)">${lastR!=null?ratioWords(lastR):''}</span>${s.ly?`<br><span style="font-size:10px;color:var(--faint)">${lyLabel(s.ly)}</span>`:''}</div></td>
     <td data-l="特色・選抜方式"><div class="v">${s.g||'—'}${s.sn?`<br><span style="font-size:10px;color:var(--faint)">${s.sn}</span>`:''}</div></td>
     <td data-l="詳細" class="cmpops"><div class="v">
       ${S.detail?'':`<button type="button" class="sheet-detail" data-name="${esc(s.n)}">詳細表示</button>`}
-      <div class="cmpops-sub"><button class="sheet-remove" data-name="${s.n}">削除</button>
-      <button class="sheet-heart" data-name="${s.n}" style="color:${S.liked.has(s.n)?'#e8889a':'var(--muted)'}">${S.liked.has(s.n)?'♥':'♡'}</button></div>
     </div></td></tr>`; }).join('');
 
   /* ⚠️ 学校の言葉が無い学校は、黙って欄から消さない。並べて比べている最中に
@@ -1225,7 +1270,7 @@ function sheetBodyHtml(names){
     }).filter(Boolean).join('');
   return `<div class="cmpsheet"><div class="cmpwrap"><table>
     <tr class="cmphead"><th>学校</th><th>最寄駅から<br><span style="font-weight:400;font-size:10px">各校公式サイト</span></th><th>合格の目安<br><span style="font-weight:400;font-size:10px">1020点満点</span></th>
-    <th>倍率5年推移<br><span style="font-weight:400;font-size:10px">点線＝定員ちょうど</span></th><th>特色・選抜方式</th><th>詳細</th></tr>${rows}</table></div>
+    <th>倍率5年推移<br><span style="font-weight:400;font-size:10px">点線＝定員ちょうど</span></th><th>特色・選抜方式</th><th class="cmpops">詳細</th></tr>${rows}</table></div>
     <div class="mttl2">位置関係<span class="sub2">比較中の学校を同じ縮尺で1枚に。番号は上の表の並び順</span></div>
     <div class="ovmapslot"></div>
     ${cls?`<div class="mttl2">ご希望の部活<span class="sub2">${esc(clubLabel(S.wants.club[0]))}を各校サイトの部活動一覧で照合。男女で分かれている部はその別も</span></div><div class="sps">${cls}</div>`:''}
@@ -1351,8 +1396,25 @@ function askLevel(){
       setChips([{label:'まだ分からない',fn:skipLevel}]);}},
     {label:'まだ分からない',fn:skipLevel}]);
 }
+/* 「オール4」「ぜんぶ3」のような言い方から内申を組み立てる。
+   ⚠️ 素直に数字だけ拾うと、オール4の「4」が5教科の合計として読まれ、
+      「5〜25の範囲です」と突き返される（2026-08-23 テストで指摘）。
+      評定は1〜5なので、5教科＝評定×5、実技4教科＝評定×4 で埋める。 */
+const ALL_RE=/(?:オール|ぜんぶ|全部|全て|すべて|平均(?:して)?)\s*([1-5１-５])|([1-5１-５])\s*(?:ばかり|くらい|ぐらい)(?:です|だ)?$/;
+function allGrade(text){
+  const m=ALL_RE.exec(text.replace(/[１-５]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)));
+  if(!m) return null;
+  const g=+(m[1]||m[2]);
+  return (g>=1&&g<=5)?g:null;
+}
 function handleLevel(text){
   if(/わから|未定|不明|まだ/.test(text)){ skipLevel(); return; }
+  const g=allGrade(text);
+  if(g){
+    S.naishin5=g*5; S.naishinJ=g*4;
+    aiSay(`オール${g}ですね。5教科が<b>${g*5}点</b>、実技4教科が<b>${g*4}点</b>として計算します。`);
+    afterJitsugi(); return;
+  }
   const num=text.match(/(\d{1,2})/); if(!num){
     aiSay('5教科の合計を数字で教えてください。たとえば「18」のように。「9教科の合計しか分からない」でも大丈夫です。'); return; }
   const v=+num[1];
@@ -1373,9 +1435,15 @@ function handleJitsugi(text){
   const v=+num[1];
   if(v<4||v>20){ aiSay('実技4教科の合計は4〜20の範囲です。もう一度教えてください。'); return; }
   S.naishinJ=v;
-  S.naishin=S.naishin5+v*2;                       // 換算内申（65点満点）＝正確な値
+  aiSay(`実技で${v}点。`);
+  afterJitsugi();
+}
+/* 5教科と実技がそろったあとの共通処理。換算して当日点を聞きに行く。
+   オール◯の経路からも同じところに合流させる（計算式を2か所に置かない）。 */
+function afterJitsugi(){
+  S.naishin=S.naishin5+S.naishinJ*2;              // 換算内申（65点満点）＝正確な値
   S.naishinRough=false;
-  aiSay(`実技で${v}点。都立の計算では実技を2倍するので、<b>換算内申は ${S.naishin5} ＋ ${v}×2 ＝ ${S.naishin}点</b>（65点満点）です。`);
+  aiSay(`都立の計算では実技を2倍するので、<b>換算内申は ${S.naishin5} ＋ ${S.naishinJ}×2 ＝ ${S.naishin}点</b>（65点満点）です。`);
   askToujitsu();
 }
 function handleLevelSum(text){                     // 9教科の合計しか分からない場合の概算経路
@@ -1498,6 +1566,19 @@ function extractWish(text){
         + `${GENDER_LABEL[g]}の受け入れが確認できないため、今回は外しています。`);
     }
   }
+  /* ⚠️ 「カーリング」のように都立に無い部を言われても、これまでは何も起きず
+        無言で次へ進んでいた。無いことをはっきり伝えて、言い直すか外すかを
+        選べるようにする（2026-08-23 テストで指摘）。 */
+  else if(NOT_FOUND_CLUB.test(text)){
+    const m=NOT_FOUND_CLUB.exec(text); const w=m[1]||m[2]||'';
+    S.askingClub=true;
+    aiSay(`都立高校の部活動のデータに「${esc(w)}」は見つかりませんでした。都立には無いか、名前が違うかもしれません。`);
+    setChips([
+      {label:'ほかの部活を言う',fn:()=>{aiSay('部活名を教えてください。「バスケ」「吹奏楽」のような言い方で大丈夫です。');}},
+      {label:'部活は指定しない',fn:()=>{S.wants.club=null;S.wants.clubGender=0;
+        sysSay('条件変更: 部活の指定なし'); if(S.shown.length) runSearch(); else askPriority();}},
+    ]);
+  }
   else if(/部活|運動部|文化部|クラブ/.test(text)){
     /* ⚠️ 部活名を聞き返した回は、続けて重視軸まで聞かない（2026-08-22 指示）。
           「部活を重視したい」と言っただけで
@@ -1562,14 +1643,28 @@ function runSearch(){
         + '（令和8年度の実施方法にもとづく参考値です）');
     }
     aiSay('気に入りましたか？条件を変えたいときは下のボタンから。');
-    setChips([
-      {label:'通学時間を変えたい',fn:()=>{askLimit();}},
-      {label:'点数を入力/変更したい',fn:()=>{askLevel();}},
-      {label:'希望を変えたい（部活や校風、学びたい分野など）',fn:()=>{askWish();}},
-      {label:'最初からやり直す',fn:()=>{location.reload();}},
-    ]);
+    showS6Chips();
     S.state='S6';
   });
+}
+/* 候補が出たあとに、いつでも出しておく選択肢。
+   ⚠️ 送信のたびに $chips を空にしているため、これを呼び直さないと
+      一度自由入力しただけでボタンが消え、二度と戻らない
+      （2026-08-23 テストで指摘。条件の変え方が分からなくなる）。
+   ⚠️ 駅を変える導線が無かったので足した。駅だけ変えたい人は多い。 */
+function showS6Chips(){
+  setChips([
+    {label:'最寄り駅を変えたい',fn:()=>{askStation();}},
+    {label:'通学時間を変えたい',fn:()=>{askLimit();}},
+    {label:'点数を入力/変更したい',fn:()=>{askLevel();}},
+    {label:'希望を変えたい（部活や校風、学びたい分野など）',fn:()=>{askWish();}},
+    {label:'最初からやり直す',fn:()=>{location.reload();}},
+  ]);
+}
+/* 最寄り駅の聞き直し。初回と同じ入口（S2）に戻すだけ。 */
+function askStation(){
+  S.state='S2'; setStep(1,'最寄り駅');
+  aiSay('新しい最寄り駅を教えてください。（例: 三鷹、池袋）');
 }
 function relax(){
   S.state='S7'; setStep(null,'条件の見直し');
@@ -1610,18 +1705,23 @@ function handleFreeInput(text){
       runSearch(); return;
     }
     aiSay('点数を教えてください。たとえば「内申30点」や「当日点350点」のように。');
-    return;
+    showS6Chips(); return;
   }
   {
     const before=JSON.stringify(S.wants);
+    S.askingClub=false;
     const got=extractWish(text);
+    /* ⚠️ extractWish が聞き返し（部活名・見つからない部活）に入ったときは、
+          そこで出した文とボタンを後段の定型文で上書きしない。 */
+    if(S.askingClub) return;
     if(JSON.stringify(S.wants)!==before){ sysSay(`条件変更: ${got.join('・')}`); runSearch(); return; }
   }
   if(/部活の?条件|部活.{0,4}外/.test(text)){ S.wants.club=null; S.wants.clubGender=0;
     sysSay('条件をゆるめました: 部活の指定なし'); runSearch(); return; }
   if(/学科|希望/.test(text)){ S.wants.dept=null; S.wants.academic=false;
     sysSay('条件変更: 学科の指定なし'); runSearch(); return; }
-  aiSay('条件を変えたいときは「通学時間を変えたい」「点数を入力したい」「希望を変えたい」などのチップを選んでください。');
+  aiSay('条件を変えたいときは、下のボタンから選ぶか、「30分以内」「内申22」のように送ってください。');
+  showS6Chips();
 }
 
 // ---------- 入出力 ----------
@@ -1658,9 +1758,6 @@ document.getElementById('form').addEventListener('submit',e=>{
 // ---------- 探索ボード（右パネル） ----------
 const TIER_COLOR={c:'var(--challenge)',m:'var(--match)',s:'var(--safe)'};
 let boardTab='map';
-/* ⚠️ 以前は「通学時間で見る（同心円）」と「地図で見る」を切り替えていたが、
-   地図だけにした（2026-08-22 指示）。同心円は compassMap() として残してある。
-   駅の座標が無いときに geoMap() が落ちる先が要るため、消してはいけない。 */
 function boardSummary(){
   const el=document.getElementById('bsum');
   const chips=[];
@@ -1685,15 +1782,15 @@ function eligibleSchools(){
     const m=commuteMin(s); if(m==null||m>S.limit) continue; out.push({s,m}); }
   return out;
 }
-/* マップタブの実地図ビュー（西の要望 8/23）。
-   コンパス表示（距離=通学時間）と切り替えて使う。既定はコンパス —
-   タイルはOSMからのリアルタイム読み込みで、会場の回線が悪いと
-   灰色になるため、ネットに依存しない表示を先に見せる。
-   ⚠️ こちらは距離=実際の位置。近く見えても通学時間は駅・路線で変わる
-      ことを注記で必ず言う（コンパスと逆の割り切り）。 */
+/* マップタブの表示。以前は同心円（距離=通学時間）と切り替えていたが、
+   地図だけに一本化した（2026-08-22 指示、8/23 削除確定）。
+   ⚠️ 距離は実際の位置。近く見えても通学時間は駅・路線で変わるため、
+      その注記を画面から外さないこと。 */
 function geoMap(){
   const all=eligibleSchools();
-  if(!all.length||!D.xy[S.station]) return compassMap();
+  if(!all.length||!D.xy[S.station]) return `<div class="bempty">
+    <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="var(--line)" stroke-width="2"/><path d="M27 8 L31.5 25 L27 22.2 L22.5 25 Z" fill="var(--line)"/></svg>
+    <div>会話が進むと、ここに<br>「自宅からの通学マップ」が育ちます。</div></div>`;
   const home=D.xy[S.station];
   const box=document.getElementById('bbody');
   const W=Math.max(280,Math.min(720,((box&&box.clientWidth)||560)-16));
@@ -1712,16 +1809,41 @@ function geoMap(){
   const labels=[];
   for(const p of recs){
     const col=p.tier?TIER_COLOR[p.tier]:'var(--accent)';
-    const cands=[[p.x,p.y-11,'middle'],[p.x,p.y+22,'middle'],[p.x+12,p.y+4,'start'],[p.x-12,p.y+4,'end']];
-    const clash=(lx,ly)=>labels.some(q=>Math.abs(q.x-lx)<76&&Math.abs(q.y-ly)<16)
-      || (Math.abs(hx-lx)<40&&Math.abs(hy-ly)<26)
-      || recs.some(q=>q.s!==p.s&&Math.abs(q.x-lx)<38&&Math.abs(q.y-ly)<12);
-    let pick=cands[cands.length-1];
-    for(const c of cands){ if(!clash(c[0],c[1])){ pick=c; break; } }
-    labels.push({x:pick[0],y:pick[1]});
+    /* ⚠️ 置き場所は4通りでは足りず、全部ぶつかっても最後の候補で描いていた。
+          そのため学校が密集する区部で名前が重なって読めなくなる
+          （2026-08-23 テストで指摘）。候補を8方向×2距離に増やし、
+          **どこにも置けないときは名前を描かない**。読めない字を重ねるより、
+          点だけ出してホバー/タップで名前を見せるほうがよい。 */
+    // ⚠️ 余裕を持って見積もる。実測ぴったりにすると、丸め誤差のぶんだけ
+    //    細い重なりが残る（モバイルで1件残った）。
+    const W=p.s.n.length*12+10;
+    const cands=[];
+    for(const d of [0,1]){
+      const r1=11+d*13, r2=22+d*13, r3=12+d*14;
+      cands.push([p.x,p.y-r1,'middle'],[p.x,p.y+r2,'middle'],
+                 [p.x+r3,p.y+4,'start'],[p.x-r3,p.y+4,'end'],
+                 [p.x+r3,p.y-r1+4,'start'],[p.x-r3,p.y-r1+4,'end'],
+                 [p.x+r3,p.y+r2-4,'start'],[p.x-r3,p.y+r2-4,'end']);
+    }
+    /* 幅は文字数から見積もる。text-anchor で左右にどう伸びるかが変わるので、
+       始点・終点・中央それぞれで占める範囲を出す。 */
+    const span=(lx,anchor,w)=>anchor==='start'?[lx,lx+w]:anchor==='end'?[lx-w,lx]:[lx-w/2,lx+w/2];
+    const HW=((S.station||'').length+1)*12/2+8;   // 「◯◯駅」ラベルの半分の幅
+    const clash=(lx,ly,anchor)=>{
+      const [a1,a2]=span(lx,anchor,W);
+      return labels.some(q=>!(a2<q.x1-4||a1>q.x2+4)&&Math.abs(q.y-ly)<17)
+        /* ⚠️ 自宅のピンは、点の中心だけでなく**駅名のラベル**も場所を取る
+              （「三鷹駅」で約60px）。中心から40pxで見ていたため、駅名と
+              学校名が重なって残っていた。駅名の幅で見る。 */
+        || (!(a2<hx-HW||a1>hx+HW)&&Math.abs(hy+21-ly)<17)
+        || (Math.abs(hx-lx)<26&&Math.abs(hy-ly)<26)
+        || recs.some(q=>q.s!==p.s&&q.x>a1-6&&q.x<a2+6&&Math.abs(q.y-ly)<12);
+    };
+    const pick=cands.find(c=>!clash(c[0],c[1],c[2]))||null;
+    if(pick){ const [x1,x2]=span(pick[0],pick[2],W); labels.push({x1,x2,y:pick[1]}); }
     dots+=`<g class="sdot" data-school="${p.s.n}">
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="${col}" stroke="#fff" stroke-width="1.6"/>
-      <text x="${pick[0].toFixed(1)}" y="${pick[1].toFixed(1)}" text-anchor="${pick[2]}" class="mlbl">${p.s.n}</text></g>`;
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="${col}" stroke="#fff" stroke-width="1.6"><title>${p.s.n}</title></circle>
+      ${pick?`<text x="${pick[0].toFixed(1)}" y="${pick[1].toFixed(1)}" text-anchor="${pick[2]}" class="mlbl">${p.s.n}</text>`:''}</g>`;
   }
   return `<div id="mapwrap"><div class="amap" style="width:${W}px;height:${H}px;margin:0 auto">${tileLayer(v,W,H)}
     <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-label="自宅の最寄駅と圏内の都立高校の実際の位置">
@@ -1733,77 +1855,6 @@ function geoMap(){
       <span><i style="background:var(--accent)"></i>ご提案中</span><span><i style="background:var(--faint);opacity:.5"></i>圏内のほかの都立（${all.length}校）</span></div>
     <div class="mapnote">実際の位置です。近く見えても通学時間は駅・路線で変わります</div></div>`;
 }
-function hashAngle(name){ let h=0; for(const ch of name) h=(h*31+ch.charCodeAt(0))>>>0; return (h%360); }
-function compassMap(){
-  const all=eligibleSchools();
-  if(!all.length) return `<div class="bempty">
-    <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="var(--line)" stroke-width="2"/><path d="M27 8 L31.5 25 L27 22.2 L22.5 25 Z" fill="var(--line)"/></svg>
-    <div>会話が進むと、ここに<br>「自宅からの通学マップ」が育ちます。</div></div>`;
-  const shownNames=new Map(S.shown.map(c=>[c.s.n,c.tier]));
-  /* 外周は通学上限に合わせる。60分固定だと「30分以内」の相談で全学校が
-     半径の半分に押し込められ、点とラベルが中心で団子になる（8/23 実機で発覚） */
-  const W=520,C=W/2,outer=S.noCommuteLimit?90:Math.max(S.limit,30),R=C-46;
-  const rr=m=>18+(m/outer)*(R-18);
-  const rings=[15,30,45,60,75,90].filter(v=>v<=outer);
-  let g='';
-  rings.forEach(v=>{ g+=`<circle class="ring" cx="${C}" cy="${C}" r="${rr(v)}"/>
-    <text class="ringlbl" x="${C+4}" y="${C-rr(v)-4}">${v}分</text>`; });
-  const placed=[];
-  for(const {s,m} of all){
-    const b=bearingTo(s);
-    let deg=b?b.deg:hashAngle(s.n);
-    if(b&&b.km<1.5) deg=hashAngle(s.n);
-    const rec=shownNames.has(s.n);
-    const tier=shownNames.get(s.n);
-    // 方位は区の代表駅から取るため、同じ区・同じ時間帯の学校は座標が
-    // ほぼ一致して重なる。近接していたら角度を少しずつ回して離す（決定的）
-    let x,y;
-    for(let k=0;k<10;k++){
-      const d=deg+k*((hashAngle(s.n)%2)?7:-7);
-      x=C+rr(m)*Math.sin(d*Math.PI/180); y=C-rr(m)*Math.cos(d*Math.PI/180);
-      const minGap=rec?15:9;
-      if(!placed.some(q=>Math.hypot(q.x-x,q.y-y)<minGap)) break;
-    }
-    placed.push({s,m,x,y,tier,rec});
-  }
-  placed.sort((a,b)=>(a.rec?1:0)-(b.rec?1:0));
-  let dots='';
-  const labels=[];   // 置いたラベルの位置。重なるときは点の下へ逃がす
-  for(const p of placed){
-    if(p.rec){
-      const col=p.tier?TIER_COLOR[p.tier]:'var(--accent)';
-      // ラベルは 上→下→右→左 の順で、他のラベル・他の提案点・自宅表記と
-      // 重ならない置き場を探す（中央付近は提案校が団子になりやすい）
-      const cands=[[p.x,p.y-11,'middle'],[p.x,p.y+22,'middle'],
-                   [p.x+12,p.y+4,'start'],[p.x-12,p.y+4,'end']];
-      const clash=(lx,ly)=>labels.some(q=>Math.abs(q.x-lx)<76&&Math.abs(q.y-ly)<16)
-        || Math.hypot(C-lx,C-ly)<40
-        || placed.some(q=>q.rec&&q.s!==p.s&&Math.abs(q.x-lx)<38&&Math.abs(q.y-ly)<12);
-      let pick=cands[cands.length-1];
-      for(const c of cands){ if(!clash(c[0],c[1])){ pick=c; break; } }
-      const [lx,ly,anc]=pick;
-      labels.push({x:lx,y:ly});
-      dots+=`<g class="sdot" data-school="${p.s.n}">
-        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7.5" fill="${col}"/>
-        <text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}">${p.s.n}</text></g>`;
-    } else {
-      dots+=`<g class="sdot dim" data-school="${p.s.n}"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="var(--faint)"><title>${p.s.n}（${rangeText(p.m)}）</title></circle></g>`;
-    }
-  }
-  const home=`<g><circle cx="${C}" cy="${C}" r="10" fill="var(--frame)" stroke="var(--brass)" stroke-width="2"/>
-    <path class="homeglyph" d="M${C} ${C-4.5} L${C+2.6} ${C+3} L${C} ${C+1.4} L${C-2.6} ${C+3} Z"/>
-    <text x="${C}" y="${C+24}" text-anchor="middle" style="font-size:11px;fill:var(--ink);font-weight:600">${S.station}</text></g>`;
-  return `<div id="mapwrap"><svg viewBox="0 0 ${W} ${W}" role="img" aria-label="自宅からの通学マップ">
-      <text class="ringlbl" x="${C}" y="16" text-anchor="middle">N</text>${g}${dots}${home}</svg>
-    <div class="maplegend"><span><i style="background:var(--challenge)"></i>挑戦圏</span>
-      <span><i style="background:var(--match)"></i>適正圏</span>
-      <span><i style="background:var(--safe)"></i>安全圏</span>
-      <span><i style="background:var(--accent)"></i>ご提案中</span><span><i style="background:var(--faint);opacity:.5"></i>圏内のほかの都立（${all.length}校）</span></div>
-    <div class="mapnote">方位=学校のあるエリアの方角 / 距離=通学時間の目安（駅間概算）</div></div>`;
-}
-/* 右のボードの「くらべる」タブ。全画面シートと同じ中身を出す。
-   以前はここだけ簡易表で、同じ名前の画面なのに中身が違っていた。 */
-let boardDetail=null;          // ボードで詳細表示している校名（null なら一覧）
 function compareBody(){
   if(boardDetail && D.schools.some(x=>x.n===boardDetail)){
     S.detail=true; S.detailBack=S.compare.size;
