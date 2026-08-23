@@ -64,6 +64,9 @@ node scripts/check_prototype.mjs
 # 本番APIの通しテスト（20項目）
 cd projects/toritsu-compass-staging/worker && npm run smoke
 
+# ランディングページに載せるくらべるシートの図を撮り直す
+node scripts/shoot_landing_screenshots.mjs
+
 # デプロイ（GitHub Actions・手動起動。データ更新時は seed=true）
 gh workflow run deploy-worker.yml -f seed=false
 ```
