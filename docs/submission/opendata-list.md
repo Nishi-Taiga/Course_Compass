@@ -15,6 +15,12 @@
 | 9 | 東京都高等学校吹奏楽連盟 コンクール結果 | https://tokousuiren.com/c/competition/com_result/ |
 | 10 | 高校生国際美術展 入賞・佳作一覧 | https://www.ihsaf.net |
 
+⚠️ **OpenStreetMap が抜けている。** 4・5枚目の地図はOSMタイルで、画像内に
+© OpenStreetMap contributors が写っている。資料は「すべての表示に出典を付けています」と
+掲げているので、登録枠10件のどれかと入れ替えて登録するか判断が要る。
+候補: 10番「高校生国際美術展」を外して OpenStreetMap（https://www.openstreetmap.org/copyright ・ODbL）を入れる。
+資料側にはすでに6枚目へ脚注として記載済み。
+
 登録枠に収まらなかった利用データ（参考・提出資料内で言及）:
 - 日本高校ダンス部選手権 結果 https://dancestadium.com/high/
 - 東京都高等学校文化連盟演劇部門（都大会） https://tkek.org/totaikai/
