@@ -424,6 +424,35 @@ console.log("\n── スマホの操作まわり（2026-08-23 指摘3件） ─
   check("スマホでも倍率の図が素の大きさで出る", g.w >= 180 && g.h >= 50, `${g.w}x${g.h}`);
   check("スクロール前から図が読み始められる", g.見える >= 100, `${g.見える}px 見えている`);
   await pg3.close();
+
+  /* ④ くらべるシートを出したまま下部タブでマップ等へ切ると、シートが閉じず
+        ボード(z-index:12)の上(z-index:14)に残って、「比べるシートが出続ける」
+        状態になっていた（2026-08-26 指摘）。チャットだけは閉じていた。
+        どのタブに切っても、開いているシート（くらべる・詳細表示）は閉じる。 */
+  {
+    const pg4 = await seeded({ width: 390, height: 844 });
+    await pg4.evaluate(() => document.getElementById("input").blur());
+    await pg4.waitForTimeout(400);
+    await pg4.evaluate(() => window.openCompare());
+    await pg4.waitForTimeout(600);
+    for (const v of ["map", "all", "liked", "chat"]) {
+      await pg4.locator(`.mobtab-btn[data-view="${v}"]`).click();
+      await pg4.waitForTimeout(400);
+      check(`${v}へ切るとくらべるシートが閉じる`, !(await isOpen(pg4)));
+    }
+    await pg4.locator('.mobtab-btn[data-view="cmp"]').click();
+    await pg4.waitForTimeout(500);
+    check("もう一度「くらべる」でシートが出る", await isOpen(pg4));
+    // 詳細表示も同じ。ボード→詳細→マップでシートが残らないこと
+    await pg4.locator('.mobtab-btn[data-view="all"]').click();
+    await pg4.waitForTimeout(500);
+    await pg4.locator(".browse-detail-btn").first().click();
+    await pg4.waitForTimeout(600);
+    await pg4.locator('.mobtab-btn[data-view="map"]').click();
+    await pg4.waitForTimeout(400);
+    check("詳細表示→マップでもシートが閉じる", !(await isOpen(pg4)));
+    await pg4.close();
+  }
 }
 
 console.log("\n── 印刷（A4の1枚） ──");

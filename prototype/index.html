@@ -2061,9 +2061,13 @@ document.querySelectorAll('.mobtab-btn').forEach(b=>{
     b.setAttribute('aria-selected','true');
     const v=b.dataset.view;
     const app=document.querySelector('.app');
+    /* ⚠️ 画面を切り替えたら開いているシート（くらべる・詳細表示）は必ず閉じる。
+       チャット以外では閉じていなかったため、くらべるシートを出したまま
+       マップ等へ切ると、シート(z-index:14)がボード(z-index:12)の上に残って
+       「比べるシートが出続ける」状態になっていた（2026-08-26 指摘）。 */
+    closeSheet();
     if(v==='chat'){
       app.classList.remove('mob-open');
-      closeSheet();
     } else if(v==='cmp'){
       app.classList.remove('mob-open');
       openCompare();
